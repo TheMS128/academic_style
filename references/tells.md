@@ -48,7 +48,9 @@ significance; a real plan the sources name may stay.
 **T6. Догадка вместо факта.** «вероятно, ошибка связана с …», «по-видимому», «скорее
 всего» — a cause no source gives. Ask the author or leave it out. The mirror case is the
 same defect: two things that happened together written as cause and effect («благодаря
-индексу запрос ускорился») when only one run was made — say what was measured.
+индексу запрос ускорился») when only one run was made — say what was measured. A genre
+whose profile sets a limit for hedges permits one where the claim is really uncertain; a
+measured result is stated without it.
 
 **T7. Спор с воображаемым оппонентом.** «Можно было бы …, однако …», «Очевидным решением
 было бы …», «Казалось бы, …», «На первый взгляд …». A rejected option is written only
@@ -162,3 +164,9 @@ stays: «функция возвращает», «сервер отвечает�
 **T27. Вопрос и ответ.** «Чем это обусловлено? Тем, что …», «Почему так? Потому что …»,
 «Что это даёт? …» — a question staged for the next sentence to answer. State the answer.
 The text asks no questions of its own reader.
+
+**T28. Размытая атрибуция.** «Многие исследователи считают …», «как показывают
+исследования», «по мнению экспертов», «принято считать», «как известно» — a claim handed
+to nobody. Give the source the author actually has («[3]», «(Иванов, 2019)»), or state
+the claim as the author's own. Never invent a reference (F2); a claim with no source and
+no ground of the author's is cut, and the place goes to the author.

@@ -34,15 +34,16 @@ id and never restates the rule; its own rules use other letters.
 | F | `references/facts.md` | what the text may state | writing |
 | T | `references/tells.md` | signs of generated text and the fix for each | checking, never while drafting |
 | — | `references/rewrite.md` | rebuilding a text that already exists | rewrite mode |
-| — | `references/profile.md` | the genre profile; the default genre when none is given | always |
+| — | `references/profile.md` | the format of a genre profile | always |
+| — | `profiles/general.json` | the profile used when none is given: a general academic text | no profile was passed |
 
 ## The profile
 
 A genre skill passes a **profile** — a JSON file naming the reader, the sources, the
 sections taken word for word, and the rules it switches off for a section
-(`profile.md`). The profile only switches and scopes rules by id; it carries no rule text
-of its own. Called with no profile, the skill works in the default genre described in
-`profile.md`.
+(`profile.md`). The profile only switches, scopes and limits rules by id; it carries no rule text
+of its own. Called with no profile, the skill takes `profiles/general.json` — a general
+academic text — and treats it like any other profile.
 
 ## Mode A — writing from facts
 

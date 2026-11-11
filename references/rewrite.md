@@ -11,8 +11,8 @@ are applied to a finished text.
   the document is rebuilt; the text is edited there, never in the output file. The
   genre's profile stays in force: its `verbatim` sections are not touched.
 - **Any other text** — a `.docx`, a file or pasted prose: курсовая, ВКР, реферат, эссе,
-  статья, пояснительная записка, a report made elsewhere. The default genre applies
-  (`profile.md`) unless the user names another.
+  статья, пояснительная записка, a report made elsewhere. The general profile applies
+  (`profiles/general.json`) unless the user names another genre.
 
 A file is edited in place only when the user asks for that; otherwise the text comes back
 in the reply.
@@ -34,7 +34,7 @@ reader still feels it.
    they already work. Rhythm (V4) and V12 shape it from the start. Every list and table
    of the draft is put to L2–L5: generated texts carry far more of them than the content
    needs, and most go back to prose.
-4. **Проверка** of the new text against T1–T27, V13 and V9, then the lint
+4. **Проверка** of the new text against T1–T28, V13 and V9, then the lint
    (`node <assets>/bin/lint.js <file> [--profile <profile.json>]`). Then compare with the
    inventory: every item is there and means the same — a softened «может» turned into
    «делает», or a dropped limitation, is an error.

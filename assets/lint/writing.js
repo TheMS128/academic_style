@@ -1,7 +1,7 @@
 // Wording: writing.md (V) and tells.md (T).
 
 const { where, sentences, tally } = require("./util");
-const { STOCK, CONNECTIVES } = require("./phrases");
+const { STOCK, CONNECTIVES, VAGUE } = require("./phrases");
 
 const RIDER = /,\s*(?:что|тем самым)\s+(?:обеспечива|позволя|повыша|улучша|упроща|облегча|подчёркива|способству)|,\s*(?:обеспечивая|позволяя|повышая|улучшая|упрощая|облегчая|подчёркивая|способствуя)(?=[^а-яё])/gi;
 const CLOSING = /^(Это|Таким образом|В результате|В итоге|Всё|Все|Благодаря этому|Тем самым|Данный подход|Такой подход)(?=[\s,])/;
@@ -32,13 +32,15 @@ module.exports = function writing(d, r) {
       r.warn("T1", `противопоставление «не X, а Y» — скажите прямо, что есть: ${where(p)}`, p);
     // T2: closing sentence that retells or grades the paragraph
     const lastS = ss[ss.length - 1] || "";
-    if (ss.length > 1 && CLOSING.test(lastS) && !/рис(ун|\.)|табл(иц|\.)/i.test(lastS))
+    const opener = (lastS.match(CLOSING) || [""])[0];
+    if (ss.length > 1 && opener && !r.limited("T2", opener) &&!/рис(ун|\.)|табл(иц|\.)/i.test(lastS))
       r.warn("T2", `замыкающая фраза «${lastS.slice(0, 50)}» — удалите или замените фактом: ${where(p)}`, p);
     // T5: empty rider «…, что обеспечивает …» — every one
     const riders = p.text.match(RIDER);
     if (riders) r.warn("T5", `хвост «${riders[0].trim()}…»${riders.length > 1 ? ` ×${riders.length}` : ""} — оценка удаляется, проверяемый эффект остаётся: ${where(p)}`, p);
     // T6: a guess instead of a fact
-    if (/(^|[^а-яё])(вероятно|возможно, (?:из-за|это|причина))(?=[^а-яё]|$)/i.test(p.text)) r.warn("T6", `догадка о причине — спросите автора или не пишите: ${where(p)}`, p);
+    const guess = p.text.match(/(?<![а-яё])(вероятно|возможно, (?:из-за|это|причина))(?![а-яё])/i);
+    if (guess && !r.limited("T6", guess[1])) r.warn("T6", `догадка о причине — спросите автора или не пишите: ${where(p)}`, p);
     // T9: three sentences in a row with the same opening
     const firsts = ss.map((s) => s.split(/\s+/)[0].toLowerCase().replace(/[^а-яёa-z]/g, "").replace(/^был[аои]?$/, "был…"));
     if (firsts.some((w, i) => i >= 2 && w && w === firsts[i - 1] && w === firsts[i - 2])) r.warn("T9", `три предложения подряд начинаются одинаково: ${where(p)}`, p);
@@ -75,9 +77,16 @@ module.exports = function writing(d, r) {
   for (const [id, phrases] of Object.entries(STOCK)) {
     const lower = own.filter((p) => !r.silent(id, p)).map((p) => p.text.toLowerCase()).join("\n");
     for (const phrase of phrases) {
+      if (r.limited(id, phrase)) continue; // counted by limits.js
       const n = lower.split(phrase).length - 1;
       if (n) r.warn(id, `«${phrase}…»${n > 1 ? ` ×${n}` : ""} — перепишите вокруг факта, не синонимом`);
     }
+  }
+
+  // T28: an attribution to nobody — unless the paragraph carries a reference
+  for (const p of own) {
+    const vague = VAGUE.find((v) => p.text.toLowerCase().includes(v));
+    if (vague && !/\[\d+[^\]]*\]|\([^()]*\d{4}[^()]*\)/.test(p.text)) r.warn("T28", `«${vague}…» без ссылки — назовите источник или скажите от себя: ${where(p)}`, p);
   }
 
   // V7: each paragraph-opening connective at most twice

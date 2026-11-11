@@ -13,18 +13,4 @@ const tally = (keys) => keys.filter(Boolean).reduce((m, k) => m.set(k, (m.get(k)
 // отражает …» is a reference sentence
 const isCaptionText = (t) => /^(Рисунок|Таблица|Продолжение таблицы) \d+\s*(?:[–—-]|\.)\s/.test(t);
 
-// The profile, compiled: which entries are someone else's words, which rule is off where.
-function compile(profile = {}) {
-  const re = (s) => new RegExp(s, "i");
-  const under = (p, rx) => (p.heads || []).some((h) => rx.test(h));
-  const verbatim = (profile.verbatim || []).map((v) => re(v.section));
-  const exempt = (profile.exempt || []).map((e) => ({ rule: e.rule, rx: re(e.section) }));
-  const off = new Set((profile.off || []).map((o) => (typeof o === "string" ? o : o.rule)));
-  return {
-    isVerbatim: (p) => verbatim.some((rx) => under(p, rx)),
-    // a rule is silent when the genre switched it off, or exempted the section the entry is in
-    silent: (id, p) => off.has(id) || (!!p && exempt.some((e) => e.rule === id && under(p, e.rx))),
-  };
-}
-
-module.exports = { where, sentences, tally, isCaptionText, compile };
+module.exports = { where, sentences, tally, isCaptionText };

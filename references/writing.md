@@ -8,14 +8,16 @@ is whoever the profile names; «the sources» are whatever the profile lists (F1
 к»). No «я», «давайте», «вот ваш отчёт», filler or hedging — «В ходе работы я научился…»
 is a grade-losing first person, the form is «были получены навыки…». No markdown inside a
 sentence, no emoji. No Latin c / o / e / a / p inside Russian words. Maximally concise.
+Where the profile's `norms` admit the authorial «мы» next to the impersonal passive, a
+text keeps the one it already uses and does not switch between them.
 
 **V2. No definitions.** «X — это …», «X (расшифровка) — …» are not written, and «Для
 начала следует понять, что такое X» never opens a paragraph — the reader set the term
 and knows it. A new entity comes in through the action that brought it and the reason it
 is there: «для переходов между экранами подключена библиотека
 @react-navigation/native, её навигатор native-stack держит открытые экраны стопкой».
-Exempt: the sections a profile exempts. In the default genre the rule is off
-(`profile.md`).
+Exempt: the sections a profile exempts; a profile may switch the rule off for a genre
+where definitions are the norm.
 
 **V3. Concrete over general.** Say what exactly happens and with what, instead of
 «обеспечивает удобный доступ», «интуитивно понятно», «играет важную роль». Real details
@@ -117,7 +119,7 @@ and then cleaned; it is built from an inventory:
    in the order the logic of this unit asks for, not the order of the previous one. An
    item the inventory lacks is not filled with wording: the paragraph gets shorter or
    merges with its neighbour (V12).
-3. **Потом признаки** (T1–T27) — as a check of the written text, not as the way to write
+3. **Потом признаки** (T1–T28) — as a check of the written text, not as the way to write
    it.
 
 The same holds for a text that already exists (`rewrite.md`): the draft is evidence of
@@ -132,7 +134,7 @@ what the author meant, not a template.
 3. **Жанр** — the form the reader expects: the profile's `norms`, the structure the genre
    skill sets, the stock references (V6), the impersonal passive, the authorial plural.
 4. **Понятность** — the reader gets the point on the first read.
-5. **Признаки генерации** — T1–T27.
+5. **Признаки генерации** — T1–T28.
 
 A sign that would distort a fact, break the genre or make a sentence harder to read
 yields. «Результат представлен на рисунке 3» stays, however stock it sounds.
@@ -170,3 +172,17 @@ about; every next sentence is tied to the previous one by a connective or a repe
 word. A connective is chosen by the relation it marks — consequence, addition, contrast,
 reason, sequence — never to sound varied; bookish ones («вследствие чего», «ввиду
 вышеизложенного») are not added for colour.
+
+**V14. Введение и заключение.** The two places where a generated text is most general.
+
+- *Введение, актуальность.* One concrete problem of one object: who runs into it, where,
+  what it costs. «Актуальность темы обусловлена стремительным развитием информационных
+  технологий» fits any topic and says nothing about this one. When the sources name no
+  such problem, the paragraph is cut to a sentence and the place goes to the author (F2).
+- *Заключение, выводы.* What was done, the main result with its number, an honest
+  limitation. Not a retelling of the sections, and not a verdict on the work's own value:
+  «Таким образом, можно с уверенностью утверждать …», «открывает широкие перспективы»,
+  «работа вносит значительный вклад» are T2 / T4.
+
+A genre that fixes the form of these sections itself (a conclusion built from the stated
+aim) marks them in its profile, and this rule steps aside.

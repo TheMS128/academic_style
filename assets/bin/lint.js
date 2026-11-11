@@ -1,23 +1,43 @@
 #!/usr/bin/env node
 // node lint.js <text.md | text.txt | -> [--profile <profile.json>]
-// «-» reads the text from stdin. Exit code 1 when there is an «ОШИБКА».
+// node lint.js --check-profile <profile.json>
+// «-» reads the text from stdin. With no --profile the general academic genre applies
+// (profiles/general.json). Exit code: 1 — there is an «ОШИБКА», 2 — bad call or profile.
 
 const fs = require("fs");
-const { lintText, formatProblem } = require("../lint");
+const { lintText, formatProblem, loadProfile, validateProfile } = require("../lint");
 
+const fail = (msg) => { console.error(msg); process.exit(2); };
 const args = process.argv.slice(2);
-const at = args.indexOf("--profile");
-const profilePath = at >= 0 ? args.splice(at, 2)[1] : null;
-const file = args[0];
+const take = (flag) => {
+  const at = args.indexOf(flag);
+  if (at < 0) return null;
+  const [, value] = args.splice(at, 2);
+  if (!value) fail(`${flag}: нужен путь к профилю`);
+  return value;
+};
 
-if (!file || (at >= 0 && !profilePath)) {
-  console.error("usage: node lint.js <text.md | - > [--profile <profile.json>]");
-  process.exit(2);
+const readProfile = (file) => {
+  let profile;
+  try { profile = loadProfile(file); } catch (e) { fail(`профиль ${file}: ${e.message}`); }
+  const bad = validateProfile(profile);
+  if (bad.length) fail(`профиль ${file} не принят:\n  ${bad.join("\n  ")}`);
+  return profile;
+};
+
+const only = take("--check-profile");
+if (only) {
+  const profile = readProfile(only);
+  console.log(`профиль «${profile.genre}» принят`);
+  process.exit(0);
 }
 
-const profile = profilePath ? JSON.parse(fs.readFileSync(profilePath, "utf8")) : undefined;
-const src = fs.readFileSync(file === "-" ? 0 : file, "utf8");
-const problems = lintText(src, profile);
+const profilePath = take("--profile");
+const file = args[0];
+if (!file) fail("usage: node lint.js <text.md | -> [--profile <profile.json>]\n       node lint.js --check-profile <profile.json>");
+
+const profile = profilePath ? readProfile(profilePath) : undefined;
+const problems = lintText(fs.readFileSync(file === "-" ? 0 : file, "utf8"), profile);
 
 if (!problems.length) console.log("lint: замечаний нет");
 for (const x of problems) console.log(formatProblem(x));
