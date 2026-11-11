@@ -1,5 +1,5 @@
 ---
-name: academic-style
+name: core
 description: >-
   Core writing rules for Russian academic and study texts: writes a text from a set of
   facts, or rebuilds an existing one so it stops reading as generated. Use directly when
