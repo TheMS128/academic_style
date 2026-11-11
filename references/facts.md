@@ -9,6 +9,12 @@ else: the profile's `sources` (notes, an inventory of the code, the assignment),
 being rebuilt, the user's answers in the conversation. How those sources are collected is
 the genre skill's business.
 
+A section the genre writes from the subject itself — theory, answers to questions on the
+course — has that subject as its source: what a textbook on it states is not an invented
+fact. Whatever such a section says about this particular work is still checked against
+the work's own sources, and a claim the subject does not settle (a date, a version, who
+said what) is treated like any other fact without a source (F2).
+
 **F2. Every detail is true.** A fact no source gives is asked about or left out — never
 invented, never «typical for such work». The same in the other direction: a fact,
 limitation or doubt the sources have is not dropped, softened or hardened. A place that

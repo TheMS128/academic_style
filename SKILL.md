@@ -50,8 +50,8 @@ academic text — and treats it like any other profile.
 1. **Take the input**: the profile, the outline (which sections, in what order — the
    genre skill's business, not this one's) and the facts for each section. No facts for a
    section → ask for them or return the section marked empty; never fill it (F2).
-2. **Inventory** each section before any prose (V10). Keep it as notes next to the draft:
-   step 4 checks the text against it.
+2. **Inventory** each section before any prose (V10), in a file next to the draft —
+   `<draft>.inventory.md`, plain bullets per section. Step 4 checks the text against it.
 3. **Write** from the inventory with `writing.md`, `layout.md` and `facts.md` open.
    Prose is the default; every list and every table has to earn its place (L1, L6).
    `tells.md` stays closed: a text written against a list of banned phrases comes out as
@@ -60,13 +60,24 @@ academic text — and treats it like any other profile.
    draft:
    `node <assets>/bin/lint.js <draft.md> [--profile <profile.json>]`.
    Fix every «ОШИБКА». Fix a «замечание» or leave it with a reason; a phrase is rewritten
-   around the concrete fact, never swapped for a synonym.
-5. **Return** the text in the draft format below, then — separately — the places that
-   still need a fact, a number or a source from the author, each quoted, and the facts of
-   the sources that were left out on purpose, each with the rule that kept it out.
+   around the concrete fact, never swapped for a synonym. «Замечаний нет» does not end
+   the check: the lint sees phrases, sizes and shapes only (see below).
+5. **Return** the text in the draft format below, and next to it `<draft>.open.md` with
+   two lists: the places that still need a fact, a number or a source from the author,
+   each quoted; and the facts of the sources that were left out on purpose, each with the
+   rule that kept it out.
 
 A genre skill that can spare a subagent runs step 4 in one that sees only the draft, the
 inventory, the profile and `tells.md` — a reader who did not write the text finds more.
+
+## What the lint checks and what it cannot
+
+| Checked by the lint | Left to the reader of step 4 |
+| --- | --- |
+| V1, V2, V4 (rhythm, equal items), V5 (a figure with no paragraph), V6, V7, V12 (three paragraphs of one size) | V3, V8–V11, V13, V14, the rest of V12 |
+| L1, L2, L3, L5 | L4, L6, L7 |
+| F4 | F1–F3: every fact against the inventory |
+| T1, T2, T5, T6, T9, T13, T15–T18, T23, T25, T27, T28 and the stock phrases of T3, T4, T7, T8, T10, T11, T14, T21, T24, T26 | T12, T19, T20, T22, and every tell in a wording the lists do not hold |
 
 ## Mode B — rebuilding an existing text
 

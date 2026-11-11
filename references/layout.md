@@ -83,16 +83,24 @@ the code does not say about itself.
 
 - *The idea, not a retelling.* The paragraph says what the fragment is for and how it is
   arranged — a sentence or two: «Карточка сдвигается за пальцем, а после отпускания
-  сообщает направление свайпа через `onSwipe`». It does not walk through the lines («сначала
-  объявляется переменная …, затем вызывается …») and does not list what the listing
-  already shows — its parameters, its branches, its calls in order.
-- *A non-standard solution gets its reason.* Where the code leaves the usual way —
-  reflection, JNI, a suppressed warning, a manual cast, a workaround for a defect, an
-  idiom the course does not teach — the text says why, in the same sentence as the
-  solution or right after it: «Проверка идёт через свойство `hasDiscoverer`, после
-  которого компилятор тип не сужает, поэтому значение приводится к `String` оператором
-  `!!`». The reason is the one the sources give (F2); with no reason in the sources the
-  place goes to the author, it is not guessed.
-- *Standard code is not defended.* An ordinary loop, a data class, a call the assignment
-  prescribes need no justification, and code given by the assignment is not explained
-  back to the reader who wrote it — only what was changed in it, and why.
+  сообщает направление свайпа через `onSwipe`». What goes is the walk through the lines
+  («сначала объявляется переменная …, затем вызывается …») and the list of what the
+  listing already shows — its parameters, its branches, its calls in order.
+- *Cutting the retelling cuts nothing else.* Everything the listing cannot show stays:
+  the reason for a decision when the sources give one, what the user sees as a result,
+  which requirement of the assignment the fragment answers, what was changed in the code
+  the assignment gave and why. A paragraph that lost its retelling and with it a fact of
+  the inventory is an error (F2), not a tighter text.
+- *A non-standard call gets its reason.* Non-standard means one thing only: a call to a
+  low-level or obsolete API of the language or platform — reflection, `sun.misc.Unsafe`,
+  JNI, a deprecated API — that the assignment prescribes neither directly (in its own
+  words) nor indirectly (in its example). The text says why it is there, in the same
+  sentence as the call or right after it. The reason is the one the sources give (F2);
+  when they give none, the place goes to the author as an open one — it is neither guessed
+  nor passed over in silence.
+- *Everything else is standard* and needs no defence: how the code is split into classes
+  and screens, how the screens are switched, an ordinary annotation, an idiom of the
+  language. A reason the sources do give for such a decision is a fact and is written
+  like any other (F3); the absence of one is not a gap. Code given by the assignment is
+  not explained back to the reader who wrote it; a fragment the sources do not attribute
+  is treated as the author's own.

@@ -117,7 +117,8 @@ module.exports = function writing(d, r) {
     else if (before.kind === "item" || before.kind === "table" || before.kind === "figure") r.warn("V5", `перед рисунком нет абзаца-описания: ${where(before)}`, p);
     else if (before.kind === "p") {
       beforeFigure.push(before);
-      if (before.text.trim().length < 120) r.warn("V5", `абзац перед рисунком короче двух строк — что показано и какие элементы важны: ${where(before)}`, before);
+      // one sentence is enough when the figure gives content for one (V5); only a stub is reported
+      if (before.text.trim().length < 40) r.warn("V5", `абзац перед рисунком не говорит, что на нём показано: ${where(before)}`, before);
     }
   });
   for (const [word, n] of tally(beforeFigure.map((p) => p.text.split(/\s+/)[0]))) {
