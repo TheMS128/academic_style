@@ -1,0 +1,8 @@
+{
+  "name": "academic-style",
+  "displayName": "Academic Style",
+  "description": "Skills for Russian academic and study texts: a core of writing rules and report skills built on it (lab reports as .docx).",
+  "author": { "name": "TheMS128", "url": "https://github.com/TheMS128" },
+  "repository": "https://github.com/TheMS128/academic_style",
+  "keywords": ["russian", "academic-writing", "lab-report", "docx", "humanizer"]
+}

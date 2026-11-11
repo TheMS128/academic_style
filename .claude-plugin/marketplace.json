@@ -1,0 +1,12 @@
+{
+  "name": "academic-style",
+  "description": "Skills for Russian academic and study texts",
+  "owner": { "name": "TheMS128" },
+  "plugins": [
+    {
+      "name": "academic-style",
+      "source": "./",
+      "description": "A core of writing rules for Russian academic texts and report skills built on it"
+    }
+  ]
+}
