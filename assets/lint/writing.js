@@ -5,7 +5,10 @@ const { STOCK, CONNECTIVES, VAGUE, CAPTURE } = require("./phrases");
 
 const RIDER = /,\s*(?:что|тем самым)\s+(?:обеспечива|позволя|повыша|улучша|упроща|облегча|подчёркива|способству)|,\s*(?:обеспечивая|позволяя|повышая|улучшая|упрощая|облегчая|подчёркивая|способствуя)(?=[^а-яё])/gi;
 const CLOSING = /^(Это|Таким образом|В результате|В итоге|Всё|Все|Благодаря этому|Тем самым|Данный подход|Такой подход)(?=[\s,])/;
-const isFigure = (p, prev) => p.kind === "figure" || (p.kind === "caption" && /^Рисунок/.test(p.text) && prev?.kind !== "figure");
+// code inside a sentence is written in backticks; its quotes, dots and question marks
+// are not the prose's
+const bare = (t) => t.replace(/`[^`]*`/g, "код");
+const isFigure =(p, prev) => p.kind === "figure" || (p.kind === "caption" && /^Рисунок/.test(p.text) && prev?.kind !== "figure");
 
 module.exports = function writing(d, r) {
   const { body, own } = d;
@@ -13,7 +16,7 @@ module.exports = function writing(d, r) {
 
   for (const p of own) {
     // V1: register and spelling
-    const mixed = p.text.match(/[A-Za-z]*[А-Яа-яЁё]+[A-Za-z]+[А-Яа-яЁё]*|[А-Яа-яЁё]*[A-Za-z]+[А-Яа-яЁё]+[A-Za-z]*/);
+    const mixed = bare(p.text).match(/[A-Za-z]*[А-Яа-яЁё]+[A-Za-z]+[А-Яа-яЁё]*|[А-Яа-яЁё]*[A-Za-z]+[А-Яа-яЁё]+[A-Za-z]*/);
     if (mixed) r.err("V1", `кириллица и латиница в одном слове «${mixed[0]}»: ${where(p)}`, p);
     if (/(^|[^А-Яа-яЁё])(я|мне|меня|мной|давайте|вот ваш)(?=[^А-Яа-яЁё]|$)/i.test(p.text)) r.err("V1", `первое лицо или разговорная форма: ${where(p)}`, p);
     if (/\*\*|__|\p{Extended_Pictographic}/u.test(p.text)) r.err("V1", `разметка или эмодзи внутри текста: ${where(p)}`, p);
@@ -33,7 +36,9 @@ module.exports = function writing(d, r) {
     // T2: closing sentence that retells or grades the paragraph
     const lastS = ss[ss.length - 1] || "";
     const opener = (lastS.match(CLOSING) || [""])[0];
-    if (ss.length > 1 && opener && !r.limited("T2", opener) &&!/рис(ун|\.)|табл(иц|\.)/i.test(lastS))
+    // a sentence that names an identifier or a number states a fact, it does not grade
+    const factual = /[A-Za-z]{2,}|\d/.test(lastS);
+    if (ss.length > 1 && opener && !factual && !r.limited("T2", opener) && !/рис(ун|\.)|табл(иц|\.)/i.test(lastS))
       r.warn("T2", `замыкающая фраза «${lastS.slice(0, 50)}» — удалите или замените фактом: ${where(p)}`, p);
     // T5: empty rider «…, что обеспечивает …» — every one
     const riders = p.text.match(RIDER);
@@ -41,6 +46,9 @@ module.exports = function writing(d, r) {
     // T6: a guess instead of a fact
     const guess = p.text.match(/(?<![а-яё])(вероятно|возможно, (?:из-за|это|причина))(?![а-яё])/i);
     if (guess && !r.limited("T6", guess[1])) r.warn("T6", `догадка о причине — спросите автора или не пишите: ${where(p)}`, p);
+    // T3: «…, то есть …» that says the same thing again; «т. е.» with a number is a fact
+    const again = p.text.match(/,\s+то есть\s+([^.!?]*)/i);
+    if (again && !/\d/.test(again[1])) r.warn("T3", `«то есть» с пересказом — оставьте одну, более точную формулировку: ${where(p)}`, p);
     // T9: three sentences in a row with the same opening
     const firsts = ss.map((s) => s.split(/\s+/)[0].toLowerCase().replace(/[^а-яёa-z]/g, "").replace(/^был[аои]?$/, "был…"));
     if (firsts.some((w, i) => i >= 2 && w && w === firsts[i - 1] && w === firsts[i - 2])) r.warn("T9", `три предложения подряд начинаются одинаково: ${where(p)}`, p);
@@ -50,9 +58,10 @@ module.exports = function writing(d, r) {
     const dannyi = (p.text.match(/(^|[^а-яё])данн(ый|ая|ое|ого|ой|ом|ому|ую)(?=[^а-яё]|$)/gi) || []).length;
     if (dannyi >= 2) r.warn("T15", `«данный» ×${dannyi} в абзаце — «этот» или название: ${where(p)}`, p);
     // T16: quotes
-    if (/(^|[\s(])"[^"=]+"|”/.test(p.text) || /^[^„]*“/.test(p.text)) r.warn("T16", `прямые или английские кавычки — нужны «ёлочки»: ${where(p)}`, p);
+    const prose = bare(p.text);
+    if (/(^|[\s(])"[^"=]+"|”/.test(prose) || /^[^„]*“/.test(prose)) r.warn("T16", `прямые или английские кавычки — нужны «ёлочки»: ${where(p)}`, p);
     // T17: decimal point in a value
-    if (/(^|[\s(])\d+\.\d+\s?(%|мс|с|сек|мин|ч|МБ|ГБ|КБ|кБ|Мб|Гб|см|мм|px|раз)(?=[^а-яёa-z]|$)/i.test(p.text))
+    if (/(^|[\s(])\d+\.\d+\s?(%|мс|с|сек|мин|ч|МБ|ГБ|КБ|кБ|Мб|Гб|см|мм|px|раз)(?=[^а-яёa-z]|$)/i.test(prose))
       r.warn("T17", `десятичная точка в значении — нужна запятая (0,65): ${where(p)}`, p);
     // T23: a softener before an adjective or adverb («достаточно удобный»), not
     // «достаточно указать» or «относительно родительского блока» (-ого / -его end in «о» too)
@@ -66,7 +75,7 @@ module.exports = function writing(d, r) {
     const range = p.text.match(/(^|[^а-яё])от [а-яё]+(ых|их) [а-яё]+ до [а-яё]+(ых|их) [а-яё]+/i);
     if (range) r.warn("T25", `ложный диапазон «${range[0].trim()}» — назовите случай этой работы: ${where(p)}`, p);
     // T27: a question the next sentence answers
-    if (/\?\s+[А-ЯЁ]/.test(p.text)) r.warn("T27", `вопрос с ответом в следующем предложении — дайте ответ сразу: ${where(p)}`, p);
+    if (/\?\s+[А-ЯЁ]/.test(prose)) r.warn("T27", `вопрос с ответом в следующем предложении — дайте ответ сразу: ${where(p)}`, p);
     // V4: even rhythm — every sentence within a few words of the others
     const lens = ss.map((s) => s.split(/\s+/).filter(Boolean).length);
     if (lens.length >= 4 && Math.max(...lens) - Math.min(...lens) <= 5)

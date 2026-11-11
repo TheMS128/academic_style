@@ -67,3 +67,10 @@ for (const text of ["нет правила «V99»", "не регулярное 
 assert.throws(() => lintText("Текст.", { genre: "x", reader: "y", off: [{ rule: "V2" }] }), /не принят/);
 
 console.log(`ok — bad.md: ${bad.length} замечаний [${ids(bad).join(", ")}]; general.md: [${ids(general).join(", ")}]`);
+
+// 8. code in backticks is not prose; an escaped number makes a numbered paragraph, not a list
+const code = lintText(read("code.md"), profile);
+assert.deepStrictEqual(code, [], `code.md: замечаний быть не должно\n${show(code)}`);
+const { parseText } = require("../lint");
+assert(!parseText(read("code.md")).some((p) => p.kind === "item"), "code.md: «1\.» — абзац, а не пункт списка");
+assert(has(lintText("Карточка смахнута вправо, то есть дан ответ позже.\n"), "T3"), "«то есть» с пересказом");

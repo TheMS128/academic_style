@@ -96,7 +96,7 @@ elsewhere. *Слабый.*
 «тщательно», «синергия», «раскрыть потенциал», «ландшафт» in the figurative sense,
 «гибкий» and «надёжный» in the figurative sense, «ключевой» outside a term («ключевое
 слово» and «первичный ключ» are terms), «в рамках данной работы», «на сегодняшний день»,
-«стоит отметить» in every paragraph, «данный» more than once per paragraph (→ «этот», the
+«данный» more than once per paragraph (→ «этот», the
 thing's own name, or a rebuilt sentence). Not model vocabulary here: the figure-paragraph
 openers of V5 — they belong to the genre. *Слабый.*
 
@@ -146,8 +146,8 @@ data are not this. *Слабый.*
 **T24. Пустые обороты.** A long form of a short word: «для того чтобы» → «чтобы», «в
 связи с тем, что» → «так как», «имеет возможность» → «может», «на данный момент» →
 «сейчас», «в том случае, если» → «если», «что касается X, то …» → «X …», «с точки зрения»
-where no point of view is meant → «по» or cut, «следует отметить, что» → cut and state
-it. *Слабый.*
+where no point of view is meant → «по» or cut, «следует отметить, что», «стоит отметить, что» →
+cut and state it. *Слабый.*
 
 **T25. Ложный диапазон.** «от простых лендингов до сложных веб-приложений», «от
 проектирования до внедрения» — a span with no scale between its ends, written for width.

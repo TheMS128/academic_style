@@ -7,7 +7,9 @@ is whoever the profile names; «the sources» are whatever the profile lists (F1
 **V1. Register.** Impersonal; the authorial plural is fine («рассмотрим», «перейдём
 к»). No «я», «давайте», «вот ваш отчёт», filler or hedging — «В ходе работы я научился…»
 is a grade-losing first person, the form is «были получены навыки…». No markdown inside a
-sentence, no emoji. No Latin c / o / e / a / p inside Russian words. Maximally concise.
+sentence, no emoji; the one exception is backticks around code — an identifier, an
+operator, a literal (`String?`, `?:`, `"неизвестен"`) — so that its characters do not
+merge with the punctuation of the sentence. No Latin c / o / e / a / p inside Russian words. Maximally concise.
 Where the profile's `norms` admit the authorial «мы» next to the impersonal passive, a
 text keeps the one it already uses and does not switch between them.
 
@@ -44,10 +46,12 @@ where definitions are the norm.
   > добавлен блок навигации; ширину контейнера ограничивает `max-width: 960px`, поэтому
   > на широком экране по краям остаются поля.
 
-**V5. Figure paragraph.** One paragraph directly before each figure, at least 2–3 lines:
-what it shows and which elements matter — `alt` / `opt` / `loop` fragments, branch
+**V5. Figure paragraph.** One paragraph directly before each figure, as a rule two or
+three sentences: what it shows and which elements matter — `alt` / `opt` / `loop` fragments, branch
 nodes, actors, placeholder blocks — ending with or carrying the reference (V6). No
-second paragraph restating the first; no heading directly above a figure. Openings vary
+second paragraph restating the first; no heading directly above a figure. A figure that
+gives content for one sentence gets one sentence — the paragraph is not padded to a size
+(V12). Openings vary
 between figures:
 
 - verb first, 3rd person singular, when the previous sentence names the subject:
@@ -72,7 +76,7 @@ text.
   перечислены …»; «Характеристики классов описаны в таблице N, отдельной строкой —
   \<исключение\>».
 
-**V7. Connectives** between steps: «Теперь …», «Далее …», «Стоит отметить, что…», «Как
+**V7. Connectives** between steps: «Теперь …», «Далее …», «Как
 уже было сказано выше, …», «Если обратиться к документации…», «На основании
 вышеописанного, …» — each at most twice per text, and only in a sentence that already
 carries content (T8).
@@ -95,8 +99,9 @@ of V6.
    goes (T8). Name each paragraph's job in two words and its concrete detail; a paragraph
    with no job or no detail is cut or merged. Compare the blocks: the same movement in
    every one, or three paragraphs of one size in a row, is rebuilt (V12).
-4. *Списки и таблицы.* Name the ground of each one in a word (L6); one without a ground
-   goes back to prose.
+4. *Списки, таблицы, листинги.* Name the ground of each list and table in a word (L6);
+   one without a ground goes back to prose. A paragraph that retells its listing line by
+   line is cut down to the idea (L7).
 5. *Финально:* every «—» is grammatical or replaced (T13); quotes, numbers and headings
    follow T16–T18; one name per thing (T20).
 

@@ -1,4 +1,4 @@
-# Layout — prose, lists and tables
+# Layout — prose, lists, tables and listings
 
 A generated text reaches for structure: every enumeration becomes a list, every pair of
 attributes a table. It looks organised and reads as a slide. A person writing a report by
@@ -77,3 +77,22 @@ look at there («Характеристики классов описаны в �
 >
 > Right: «Переходы между экранами построены на Stack Navigator: по нажатию на карточку в
 > BooksScreen открывается DetailsScreen с данными выбранной книги.»
+
+**L7. A listing and the text around it.** The reader sees the code; the text gives what
+the code does not say about itself.
+
+- *The idea, not a retelling.* The paragraph says what the fragment is for and how it is
+  arranged — a sentence or two: «Карточка сдвигается за пальцем, а после отпускания
+  сообщает направление свайпа через `onSwipe`». It does not walk through the lines («сначала
+  объявляется переменная …, затем вызывается …») and does not list what the listing
+  already shows — its parameters, its branches, its calls in order.
+- *A non-standard solution gets its reason.* Where the code leaves the usual way —
+  reflection, JNI, a suppressed warning, a manual cast, a workaround for a defect, an
+  idiom the course does not teach — the text says why, in the same sentence as the
+  solution or right after it: «Проверка идёт через свойство `hasDiscoverer`, после
+  которого компилятор тип не сужает, поэтому значение приводится к `String` оператором
+  `!!`». The reason is the one the sources give (F2); with no reason in the sources the
+  place goes to the author, it is not guessed.
+- *Standard code is not defended.* An ordinary loop, a data class, a call the assignment
+  prescribes need no justification, and code given by the assignment is not explained
+  back to the reader who wrote it — only what was changed in it, and why.

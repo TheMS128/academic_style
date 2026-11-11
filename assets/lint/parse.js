@@ -45,7 +45,8 @@ function parseText(src) {
     const block = [item ? item[1] : line.trim()];
     // an item or a paragraph runs to the next blank line or the next construct
     while (n + 1 < lines.length && lines[n + 1].trim() && !/^\s*(?:\d+[.)]|[-*•–])\s+|^#{1,6}\s|^\s*\||^\s*(```|~~~)|^\s*!\[/.test(lines[n + 1])) block.push(lines[++n].trim());
-    const text = block.join(" ");
+    // «1\. …» is a numbered paragraph, not a list item: the escape is dropped, the number stays
+    const text = block.join(" ").replace(/^(\d+)\\([.)])/, "$1$2");
     if (item) push("item", text);
     else if (isCaptionText(text)) push("caption", text);
     else push("p", text);
