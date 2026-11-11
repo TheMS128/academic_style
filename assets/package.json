@@ -1,0 +1,10 @@
+{
+  "name": "academic-style-assets",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Text lint of the academic-style skill. No dependencies.",
+  "main": "lint/index.js",
+  "scripts": {
+    "test": "node test/run.js"
+  }
+}
