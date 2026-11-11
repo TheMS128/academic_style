@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 
 const range = (letter, n) => Array.from({ length: n }, (_, k) => `${letter}${k + 1}`);
-const RULES = new Set([...range("V", 14), ...range("L", 6), ...range("F", 3), ...range("T", 28)]);
+const RULES = new Set([...range("V", 14), ...range("L", 6), ...range("F", 4), ...range("T", 28)]);
 const FIELDS = ["genre", "reader", "sources", "verbatim", "exempt", "off", "limits", "norms", "extends"];
 const SCOPES = ["paragraph", "section", "text"];
 const LISTS = ["sources", "verbatim", "exempt", "off", "limits", "norms"];
@@ -14,7 +14,7 @@ const LISTS = ["sources", "verbatim", "exempt", "off", "limits", "norms"];
 function validate(profile) {
   const bad = [];
   const str = (v) => typeof v === "string" && v.trim();
-  const rule = (at, v) => { if (!RULES.has(v)) bad.push(`${at}: нет правила «${v}» — ядру принадлежат V1–V14, L1–L6, F1–F3, T1–T28`); };
+  const rule = (at, v) => { if (!RULES.has(v)) bad.push(`${at}: нет правила «${v}» — ядру принадлежат V1–V14, L1–L6, F1–F4, T1–T28`); };
   const why = (at, e) => { if (!str(e.why)) bad.push(`${at}: нет поля why — переключатель без причины не принимается`); };
   const section = (at, v) => {
     if (!str(v)) return bad.push(`${at}: нет поля section`);

@@ -81,7 +81,7 @@
 | `SKILL.md` | порядок работы ядра, два режима, формат черновика |
 | `references/writing.md` | правила V — как написан текст |
 | `references/layout.md` | правила L — проза, списки и таблицы |
-| `references/facts.md` | правила F — что текст вправе утверждать |
+| `references/facts.md` | правила F — что текст вправе утверждать и о чём молчит |
 | `references/tells.md` | правила T — признаки сгенерированного текста |
 | `references/rewrite.md` | правка готового текста |
 | `references/profile.md` | формат профиля жанра |

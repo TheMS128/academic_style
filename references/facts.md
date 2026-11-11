@@ -24,3 +24,17 @@ the author in the list of open places.
   командой …».
 - Depth follows difficulty: more text on what was hard or non-obvious, a sentence on the
   trivial parts. Units of identical length read as a template (V12).
+
+**F4. How the document was made is never told.** The text is about the work, not about
+producing the text. Whatever was used to capture a figure or assemble the document stays
+out of it: a headless browser, Selenium, Puppeteer, `adb exec-out screencap`, ножницы
+Windows, PrintScreen, conversion to PNG, a preview renderer, copying code into Word — and
+the words «скриншот», «снимок экрана» with them. A figure is referred to by what it
+shows: «Результат представлен на рисунке 3», not a word on how the picture was taken. A
+sentence about the capture tells the reader that nobody read the report before handing it
+in.
+
+Not this rule: a tool that is the subject of the work (a lab on Selenium names Selenium),
+and commands inside a listing — they are code, not a mention. Whether the tools the work
+itself was done with are named — a compiler, an IDE, versions — is the genre's decision
+and lives in the genre skill.

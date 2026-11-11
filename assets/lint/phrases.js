@@ -60,6 +60,12 @@ const CONNECTIVES = [
   "как уже было сказано", "на основании вышеописанного",
 ];
 
+// facts.md → F4: what captured a figure or assembled the document is never named
+const CAPTURE = [
+  "headless", "selenium", "puppeteer", "playwright", "printscreen", "print screen", "ножниц", "скриншот",
+  "снимок экрана", "снимки экрана", "screencap", "exec-out", "docx-preview",
+];
+
 // tells.md → T28: a claim attributed to nobody in particular
 const VAGUE = [
   "многие исследователи", "многие авторы", "многие специалисты", "многие учёные", "ряд исследователей", "ряд авторов",
@@ -67,4 +73,4 @@ const VAGUE = [
   "эксперты считают", "специалисты отмечают", "учёные считают", "принято считать", "общеизвестно", "как известно",
 ];
 
-module.exports = { STOCK, CONNECTIVES, VAGUE };
+module.exports = { STOCK, CONNECTIVES, VAGUE, CAPTURE };

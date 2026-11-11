@@ -179,10 +179,8 @@ reason, sequence — never to sound varied; bookish ones («вследствие
   what it costs. «Актуальность темы обусловлена стремительным развитием информационных
   технологий» fits any topic and says nothing about this one. When the sources name no
   such problem, the paragraph is cut to a sentence and the place goes to the author (F2).
-- *Заключение, выводы.* What was done, the main result with its number, an honest
-  limitation. Not a retelling of the sections, and not a verdict on the work's own value:
-  «Таким образом, можно с уверенностью утверждать …», «открывает широкие перспективы»,
-  «работа вносит значительный вклад» are T2 / T4.
-
-A genre that fixes the form of these sections itself (a conclusion built from the stated
-aim) marks them in its profile, and this rule steps aside.
+- *Заключение, вывод.* The conclusion confirms that every task set in the introduction
+  is solved and the aim is reached by the chosen methods. It answers the introduction and
+  nothing else: no task appears that was not set, none that was set is left unanswered.
+  How it is written — its length, its stock opening, what it may and may not name — is
+  defined by the genre skill, not here.

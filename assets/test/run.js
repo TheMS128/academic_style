@@ -13,7 +13,7 @@ const has = (problems, id, text = "") => problems.some((x) => x.id === id && x.m
 
 // 1. a text that breaks the rules: each of these ids must be reported
 const bad = lintText(read("bad.md"));
-for (const id of ["T1", "T2", "T5", "T9", "T17", "T18", "T23", "T27", "V4", "V5", "L1", "L2", "L3", "L5"])
+for (const id of ["F4", "T1", "T2", "T5", "T9", "T17", "T18", "T23", "T27", "V4", "V5", "L1", "L2", "L3", "L5"])
   assert(has(bad, id), `bad.md: ожидалось [${id}]\n${show(bad)}`);
 
 // 2. a clean text under a genre profile: verbatim and exempt sections stay silent

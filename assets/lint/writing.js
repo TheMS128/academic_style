@@ -1,7 +1,7 @@
 // Wording: writing.md (V) and tells.md (T).
 
 const { where, sentences, tally } = require("./util");
-const { STOCK, CONNECTIVES, VAGUE } = require("./phrases");
+const { STOCK, CONNECTIVES, VAGUE, CAPTURE } = require("./phrases");
 
 const RIDER = /,\s*(?:что|тем самым)\s+(?:обеспечива|позволя|повыша|улучша|упроща|облегча|подчёркива|способству)|,\s*(?:обеспечивая|позволяя|повышая|улучшая|упрощая|облегчая|подчёркивая|способствуя)(?=[^а-яё])/gi;
 const CLOSING = /^(Это|Таким образом|В результате|В итоге|Всё|Все|Благодаря этому|Тем самым|Данный подход|Такой подход)(?=[\s,])/;
@@ -81,6 +81,12 @@ module.exports = function writing(d, r) {
       const n = lower.split(phrase).length - 1;
       if (n) r.warn(id, `«${phrase}…»${n > 1 ? ` ×${n}` : ""} — перепишите вокруг факта, не синонимом`);
     }
+  }
+
+  // F4: how a figure was captured or the document assembled
+  for (const p of own) {
+    const tool = CAPTURE.find((c) => p.text.toLowerCase().includes(c));
+    if (tool) r.err("F4", `способ съёмки или сборки документа «${tool}» — в тексте не описывается: ${where(p)}`, p);
   }
 
   // T28: an attribution to nobody — unless the paragraph carries a reference
