@@ -89,26 +89,6 @@ module.exports = function format(d, r) {
   if (withComments.length) r.warn("B7", `комментарии в ${withComments.length} листинг(ах), абз. ${at(withComments)} — удалите`);
   if (cyrillicNames.length) r.warn("B7", `кириллица в именах кода в ${cyrillicNames.length} листинг(ах), абз. ${at(cyrillicNames)} — код скилла только на английском`);
 
-  // tables (blocks.md → B5): a grid that carries no second axis is prose or a list
-  d.tables.forEach((rows, k) => {
-    if (rows.length < 2) return;
-    const name = `таблица ${k + 1} («${rows[0].join(" | ").slice(0, 40)}»)`;
-    const data = rows.slice(1);
-    const numbering = rows[0].map((h, c) => /^(№|N|п\/п)/i.test(h) || data.every((row) => /^\d+\.?$/.test(row[c] || "")));
-    const contentCols = rows[0].map((_, c) => c).filter((c) => !numbering[c]);
-    if (data.length <= 4 && contentCols.length <= 2)
-      r.warn("B5", `${name}: ${contentCols.length} смысловых колонки × ${data.length} строки — данные в одну ось, это абзац или список`);
-    for (const c of contentCols) {
-      const cells = data.map((row) => row[c] || "");
-      if (data.length >= 3 && new Set(cells).size === 1 && cells[0]) r.warn("B5", `${name}: колонка «${rows[0][c]}» повторяет одно значение`);
-      if (cells.filter((x) => !x).length * 2 > cells.length) r.warn("B5", `${name}: колонка «${rows[0][c]}» наполовину пуста`);
-    }
-    const last = contentCols[contentCols.length - 1];
-    if (contentCols.length === 2 && data.length >= 2 &&
-        data.every((row) => /\.$/.test(row[last] || "") && sentences(row[last]).length === 1 && (row[contentCols[0]] || "").length <= 40))
-      r.warn("B5", `${name}: строки вида «заголовок | одно предложение» — это список`);
-  });
-
   const prop = (tag) => (d.core.match(new RegExp(`<dcterms:${tag}[^>]*>([^<]+)<`)) || [])[1];
   if (prop("created") && prop("modified") && prop("created") >= prop("modified")) r.warn("B11", "docProps: дата создания не раньше даты изменения");
 };

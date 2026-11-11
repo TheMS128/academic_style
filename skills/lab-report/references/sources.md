@@ -1,11 +1,11 @@
-# Facts — what the text may state
+# Sources — where the facts of a lab come from and what the report says about them
 
-A generated report gives itself away mostly through its facts: everything smooth, equally
-deep and generic. A real one names what the student actually did — the problem met and
-how it was solved, the choice made and why, where the result departs from the
-methodichka, the real names, numbers and versions.
+What the text may state at all is the core's rule (F1–F4): nothing invented, nothing
+lost, facts used concretely, and not a word on how a figure was captured. This file adds
+what only a lab report has: where its facts are collected, deviations from the
+methodichka, the tools of the work, and the notes file.
 
-**F1. Sources**, in this order:
+**D1. Sources**, in this order — they are the `sources` of the profile (F1):
 
 1. `node <assets>/bin/facts.js reports/<lab> [--project <dir>]` — git history (dates and
    order of the work), dependencies, installed tools with versions, a code inventory
@@ -14,22 +14,15 @@ methodichka, the real names, numbers and versions.
 2. `CONTEXT.MD` — progress notes, errors, workarounds, deviations.
 3. The code itself, for what the inventory only hints at.
 4. The user's answers (I8), saved to `notes.md`.
+5. The methodichka: the assignment word for word, and its example code where it gives
+   one — so that the text can tell the student's code from the instructor's (L7).
 
-**F2. Every detail is true.** A fact no source gives is asked about or left out — never
-invented, never "typical for such labs". Versions come from `facts.js`; a tool it does
-not detect is asked about.
+Versions come from `facts.js`; a tool it does not detect is asked about (F2).
+`Теоретические сведения` and the answers to `Контрольные вопросы` are written from the
+subject of the course, as F1 allows; whatever they say about this work is checked against
+the sources above.
 
-**F3. Using facts.**
-
-- Implementation paragraphs name the real files, identifiers and values: «компонент
-  BooksScreen», «размер 240×90», «в App.tsx».
-- A problem and its fix — one or two impersonal sentences where it arose: «При
-  инициализации проекта команда … выдала предупреждение …, поэтому проект был создан
-  командой …».
-- Depth follows difficulty: more text on what was hard or non-obvious, a sentence on the
-  trivial parts. Blocks of identical length read as a template.
-
-**F4. Deviations from the methodichka.** A deviation is a **requirement** left unmet:
+**D2. Deviations from the methodichka.** A deviation is a **requirement** left unmet:
 the lab's topic, the wording of the assignment, the mandatory items, a tool or
 technology prescribed outright («выполнить в StarUML», «на языке C#»). **An example in
 the methodichka is not a requirement** — a font, a palette, its screenshots, demo sites,
@@ -53,26 +46,23 @@ that makes it another lab. Only what the methodichka imposes in passing is repla
 library version, a component style, a particular IDE. Requirement or example unclear →
 I9.
 
-**F5. Tools in the text** appear by role, never for their own sake.
+**D3. Tools of the work** appear by role, never for their own sake. The tool that only
+carried an observation into the document — a screenshot utility, a headless browser,
+conversion to PNG — is never mentioned at all: that is F4 of the core.
 
-- **Capture tool** — it only carried an observation into the document: ножницы Windows,
-  PrintScreen, `adb exec-out screencap`, a headless browser, «открыл страницу в Chrome»,
-  conversion to PNG, copying code into Word. **Never mentioned** — not «сделан скриншот
-  через ножницы», just «Результат представлен на рисунке 3».
-- **Production tool** — the graded result was obtained with it: compiler, DBMS,
-  emulator, `adb install`, an npm package, StarUML, Figma, IDE. Named once, where first
-  used, **through its consequence** and with the real version: «команда `npx
-  react-native init` выдала предупреждение об устаревании, поэтому проект создан через
-  `@react-native-community/cli`». No consequence, no sentence — there is no stock
-  sentence listing the IDE and versions. `npm i` counts only when a library changed or
-  was swapped.
+A **production tool** — the graded result was obtained with it: compiler, DBMS,
+emulator, `adb install`, an npm package, StarUML, Figma, IDE — is named once, where
+first used, **through its consequence** and with the real version: «команда `npx
+react-native init` выдала предупреждение об устаревании, поэтому проект создан через
+`@react-native-community/cli`». No consequence, no sentence — there is no stock sentence
+listing the IDE and versions. `npm i` counts only when a library changed or was swapped.
 
 The same tool falls on either side by role: «приложение установлено на устройство
 командой `adb install`» is written; the screenshot taken with `adb exec-out` is not.
 Hardware and environment follow the same rule: the machine is irrelevant, «IDE не
 запускалась, разметка писалась в текстовом редакторе» is not.
 
-**F6. notes.md** — plain bullets in the user's words, grouped by kind. Append new facts;
+**D4. notes.md** — plain bullets in the user's words, grouped by kind. Append new facts;
 never rewrite the user's own lines.
 
 ```

@@ -13,7 +13,7 @@ distinct in essence and in fact is `Задания`, a single task stated as a p
    explanation paragraph(s), the figure paragraph (V5), the figure.
 2. Sections or pages go into a table `№ | Раздел | Назначение (и содержание)` from five
    up, when the report refers back to the register; fewer, or a «раздел | одна строка»
-   shape, is a `list()` (B4, B5).
+   shape, is a `list()` (L4, L5).
 3. Every decision is tied to this particular site and its reason — «офис расположен в
    промышленной зоне, поэтому в разделе «Контакты» размещается карта с маршрутом» — not
    to websites in general. Reasons come from the assignment, the variant and `notes.md`.
@@ -27,6 +27,6 @@ distinct in essence and in fact is `Задания`, a single task stated as a p
 - Render with `render.js` (G3); embed `wide` (B8).
 - The caption and the prose call it a prototype — «Прототип макета главной страницы»,
   «эскиз раздела …» — never as if a built page is shown. How it was drawn is not
-  described (F5).
+  described (F4, D3).
 - A Figma / Balsamiq look is exported by the user and supplied as images.
 - In the Вывод, what was designed is named by its kind and counted (S11).

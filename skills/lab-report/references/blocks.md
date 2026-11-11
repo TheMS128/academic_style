@@ -1,28 +1,33 @@
-# Blocks — the build.js API and how each block is used
+# Blocks — from the draft to build.js
 
-**B1. build.js** holds content only. The skill lives outside the project, so the
-require resolves it from the user's home: `<skill-from-home>` is `<skill>` written
-relative to the home directory with forward slashes (a standard install gives
-`.claude/skills/<skill name>`). No drive letter, user name or absolute path goes into
-the project — the same `build.js` works on any machine with the same install:
+The text of the report is written by the core and arrives as a draft, `text.md`. This
+file says how that draft becomes `build.js` and what the builder does with each block.
+Whether a piece of content is a list, a table or prose is decided earlier and elsewhere —
+by the core's L1–L7; nothing here reopens that decision.
+
+**B1. build.js** holds content only and no path to the skill. It exports a function that
+receives the block calls and returns the report:
 
 ```js
-const { run, chapter, subchapter, p, list, figure, table, listing } =
-  require(require("path").join(require("os").homedir(), "<skill-from-home>/assets/lib"));
-
-const body = [
-  chapter("Цель работы"),
-  p("Изучить …"),
-  chapter("Выполнение работы"),
-  p("… Результат представлен на рисунке {fig:nav}."),
-  figure("nav", "fig1.png", "Постоянная навигация сайта"),
-  chapter("Вывод"),
-  p("В ходе выполнения лабораторной работы …"),
-];
-
-module.exports = { body };
-if (require.main === module) run({ reportDir: __dirname, body, description: "…", keywords: "…" });
+module.exports = ({ chapter, subchapter, p, list, figure, table, listing }) => ({
+  description: "…",
+  keywords: "…",
+  body: [
+    chapter("Цель работы"),
+    p("Изучить …"),
+    chapter("Выполнение работы"),
+    p("… Результат представлен на рисунке {fig:nav}."),
+    figure("nav", "fig1.png", "Постоянная навигация сайта"),
+    chapter("Вывод"),
+    p("В ходе выполнения лабораторной работы …"),
+  ],
+});
 ```
+
+It is built with `node <assets>/bin/build.js reports/<lab>`. The same `build.js` works on
+any machine and with any way the skill is installed. A `build.js` of the older kind — one
+that `require`s the builder itself — still runs directly (`node reports/<lab>/build.js`)
+and is rewritten to this form when the report is next edited.
 
 | Call | Produces |
 | --- | --- |
@@ -39,25 +44,32 @@ Worked examples: the `reports/lab*/build.js` of the project at hand, when it has
 
 **B2. Numbers are never typed** — figures and tables are referred to by key.
 
-**B3. Lists** — always `list()`. Each item is a complete sentence or a full clause,
-never a definition pair «Термин: пояснение» / «Термин — пояснение» (except S7); rework
-it into a sentence. A task item ending in an enumeration («Разработать элементы
-интерфейса: состояния ссылок, …») is fine.
+**B3. Carrying the draft over.** Each construct of the draft becomes one call, and the
+words are carried over as they stand — `build.js` is not the place where wording changes.
+A sentence that reads badly is fixed in `text.md` and carried over again.
 
-**B4. When a table.** Only for data with **two axes** — several objects described by
-the same attributes, read by lookup rather than in order: a comparison of alternatives
-against shared criteria; a register of five or more like entities the report refers
-back to (разделы, классы, сущности, поля, параметры); measured or computed numbers. A
-table the methodichka demands outright is written regardless.
+| In `text.md` | In `build.js` |
+| --- | --- |
+| `# Глава`, `## Подглава` | `chapter("…")`, `subchapter("…")` |
+| a paragraph | `p("…")` |
+| a numbered paragraph `1\. …` | `p("1. …")` — the number is part of the text |
+| a numbered list | `list([…])`, one string per item |
+| `![Название](figN.png)` | `figure(key, "figN.png", "Название")` |
+| «рисунок N», «таблица N» in a sentence | `{fig:key}`, `{tab:key}` (B2) |
+| a pipe table with its caption line | `table(key, "Название", { columns, rows })` |
+| a fenced block — the code, or a one-line pointer `file: fragment` to it | `listing(code)` with the fragment as it stands in the file (B6) |
+| backticks around code in a sentence | dropped: the code stands in the sentence as plain text |
 
-**B5. Table tests** — any one sends the content back to prose or `list()`: two to four
-items one sentence would carry; a column that repeats one value or stands half empty;
-the content already shown in a figure; rows shaped «заголовок | одно предложение».
+**B4, B5** are retired: when a table is justified and the tests it must pass are the
+core's L4 and L5.
 
-**B6. Listings.** The label is «Листинг:», always and only that — the file or component
-is named in the sentence before it («Разметка страницы задана в index.html.»). Several
-files → one listing per file, each after its own sentence. Paste a fragment as it
-stands in the file: the common indent is stripped by the builder.
+**B6. Listings.** The label is «Листинг:», always and only that. The file or component is
+named in the paragraph before the listing, inside a sentence that does other work
+(«Обработчик жестов в `EventCard` перезапускается с каждой новой карточкой …») — never in
+a sentence written only to point at the file («Код находится в файле …»). What that
+paragraph says about the code is the core's L7. Several files → one listing per file,
+each after its own paragraph. Paste a fragment as it stands in the file: the common
+indent is stripped by the builder.
 
 **B7. Listing code.** Code the skill writes is English-only — identifiers, string
 literals, printed text (`Сотрудник` → `Employee`) — and has no comments. The student's

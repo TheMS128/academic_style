@@ -15,7 +15,7 @@ or debugging a built file. Everything here is implemented in `assets/lib`; a rep
 | `lib/compose.js` | descriptors → docx: figure / table numbering, PNG size, table split |
 | `lib/meta.js` | title fields (RULES.MD / CONTEXT.MD → `meta.json`), their validation, the theory flag, document properties |
 | `lib/index.js` | `buildReport` / `run`: compose, pack, write, lint |
-| `lint/` | checks, one module per rule owner: `format.js` (B, docx), `structure.js` (S), `voice.js` (V, T, F5), `phrases.js` (phrase lists by rule id), `parse.js` (docx → paragraphs) |
+| `lint/` | checks, one module per rule owner: `format.js` (B, docx), `structure.js` (S), `text.js` (hands the document to the core lint for V, L, F, T with `profile.json`), `phrases.js` (phrase lists of S), `parse.js` (docx → paragraphs) |
 | `bin/lint.js` | lint CLI: `node lint.js <docx> [--project <dir>]` |
 | `bin/preview.js` | docx → PNG through docx-preview |
 | `bin/render.js` | HTML → PNG, cropped |

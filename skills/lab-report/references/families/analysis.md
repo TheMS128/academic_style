@@ -12,7 +12,7 @@ Adds to S: `Задание` is usually one infinitive sentence — «Спрое�
    user does: «Преподаватель публикует лекции и формирует тесты.»
 3. Classes: from five up — «На основании вышеописанного были выделены классы,
    представленные в таблице {tab:classes}.» + `table("classes", …)`, columns `№ | Класс |
-   Назначение` (B4); three or four are named in the paragraph itself.
+   Назначение` (L4); three or four are named in the paragraph itself.
 4. Descriptive prose: which class groups model which participants; abstract classes and
    their common attributes; «<A>, <B> наследуют эти свойства через отношение
    обобщения»; «Операции … напрямую отражают функциональные требования и прецеденты
