@@ -53,10 +53,15 @@ const KP = {
     ],
     work: "КУРСОВОЙ ПРОЕКТ",
     italic: true,
+    side: 3,                                                   // text of the title page from the frame, mm: its lines are long
+    below: 5,                                                  // the city line above the frame, mm
     lineHeight: { body: 480, big: 560 },                       // exact, twips
-    workTop: 4300,                                             // top of «КУРСОВОЙ ПРОЕКТ» from the top of the text area
-    signTop: 8400,                                             // top of the signatures block
-    signLeft: 5103,                                            // its left indent, 9 cm
+    workTop: 5200,                                             // top of «КУРСОВОЙ ПРОЕКТ» from the top of the text area
+    signTop: 9170,                                             // top of the signatures block
+    // the signatures are two columns: «Выполнил:» / «Принял:» and what stands against them
+    signLabel: 4990, signValue: 6690,                          // from the left edge of the text, twips
+    // the teacher's post as it is printed before the name
+    posts: { "зав. кафедры ИСПИ": "зав. каф.", "доцент каф. ИСПИ": "доц.", "ст. преп. каф. ИСПИ": "ст. преп.", "ассистент каф. ИСПИ": "асс." },
     minGap: 480,
   },
 };

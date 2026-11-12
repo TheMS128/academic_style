@@ -1,5 +1,5 @@
 ---
-name: course-project
+name: course-project-report
 description: >-
   Write and assemble the explanatory note of a course project ("курсовой проект", "КП",
   "пояснительная записка", "ПЗ", "записка к курсовому") in IT, programming, databases

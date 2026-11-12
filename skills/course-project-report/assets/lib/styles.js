@@ -28,6 +28,7 @@ const S = {
 };
 
 const textWidth = (p) => p.page.width - mm(p.text.left) - mm(p.text.right);
+const titleWidth = (p) => p.page.width - mm(p.frame.left + p.title.side) - mm(p.frame.right + p.title.side);
 
 function buildStyles(p) {
   const { CENTER, LEFT, RIGHT, JUSTIFIED } = AlignmentType;
@@ -66,7 +67,7 @@ function buildStyles(p) {
       // exact line heights: title.js computes the page from them
       style(S.title, "КП — титульный лист", { run: titleRun, paragraph: { alignment: CENTER, indent: noIndent, spacing: exact(p.title.lineHeight.body) } }),
       style(S.titleBig, "КП — титульный лист, вид работы", { basedOn: S.title, run: { size: p.size.titleBig, bold: true }, paragraph: { spacing: exact(p.title.lineHeight.big) } }),
-      style(S.titleSign, "КП — титульный лист, подписи", { basedOn: S.title, paragraph: { alignment: LEFT, indent: { left: p.title.signLeft } } }),
+      style(S.titleSign, "КП — титульный лист, подписи", { basedOn: S.title, paragraph: { alignment: LEFT, indent: { left: p.title.signLabel }, tabStops: [{ type: TabStopType.LEFT, position: p.title.signValue }] } }),
 
       style(S.toc1, "toc 1", { basedOn: S.body, next: S.body, paragraph: { alignment: LEFT, indent: noIndent, tabStops: tocTab } }),
       style(S.toc2, "toc 2", { basedOn: S.body, next: S.body, paragraph: { alignment: LEFT, indent: { firstLine: 0, left: 284 }, tabStops: tocTab } }),
@@ -89,4 +90,4 @@ function buildNumbering(lists, p) {
   return { config: lists.map(({ reference, kind }) => ({ reference, levels: kinds[kind] })) };
 }
 
-module.exports = { S, buildStyles, buildNumbering, textWidth };
+module.exports = { S, buildStyles, buildNumbering, textWidth, titleWidth };

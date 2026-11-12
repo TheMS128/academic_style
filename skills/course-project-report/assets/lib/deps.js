@@ -9,11 +9,11 @@ const LAB = path.join(SKILLS, "lab-report", "assets");
 const CORE = path.join(SKILLS, "core", "assets");
 
 if (!fs.existsSync(path.join(LAB, "lib", "meta.js")))
-  throw new Error(`рядом со скиллом course-project нет скилла lab-report (${LAB}) — сборщик работает на его библиотеках`);
+  throw new Error(`рядом со скиллом course-project-report нет скилла lab-report (${LAB}) — сборщик работает на его библиотеках`);
 if (!fs.existsSync(path.join(LAB, "node_modules", "docx")))
   throw new Error(`зависимости не установлены — выполните один раз: npm i (в папке ${LAB})`);
 if (!fs.existsSync(path.join(CORE, "lint", "index.js")))
-  throw new Error(`рядом со скиллом course-project нет скилла core (${CORE}) — текст проверяется его линтом`);
+  throw new Error(`рядом со скиллом course-project-report нет скилла core (${CORE}) — текст проверяется его линтом`);
 
 module.exports = {
   LAB,

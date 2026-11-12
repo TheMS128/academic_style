@@ -1,4 +1,4 @@
-// course-project builder — public API.
+// course-project-report builder — public API.
 //
 //   node <assets>/bin/build.js kp/<project>     — the usual way: kp/<project>/build.js
 //   exports a function of the block calls and holds no path to the skill
@@ -74,6 +74,9 @@ async function buildProject({ dir, body, description = "", keywords = "", repoRo
     margin: { top: mm(tx.top), bottom: mm(bottom), left: mm(tx.left), right: mm(tx.right), header: 284, footer: 284 },
   });
   const under = (stamp) => fr.bottom + stamp + tx.aboveStamp;     // bottom margin of a sheet with a title block
+  const side = profile.title.side;
+  const titleSheet = { ...page(fr.bottom + profile.title.below), };
+  titleSheet.margin = { ...titleSheet.margin, left: mm(fr.left + side), right: mm(fr.right + side) };
   const hdr = (kind) => new Header({ children: [new Paragraph(`@@KP-HDR:${kind}@@`)] });
   if (!["frame", "big", "small"].includes(st.abstract)) throw new Error(`profile.stamp.abstract: «${st.abstract}» — нужно "frame", "big" или "small"`);
   if (!["big", "small"].includes(st.contents)) throw new Error(`profile.stamp.contents: «${st.contents}» — нужно "big" или "small"`);
@@ -85,7 +88,7 @@ async function buildProject({ dir, body, description = "", keywords = "", repoRo
     styles: buildStyles(profile),
     numbering: buildNumbering(composed.lists, profile),
     sections: [
-      { properties: { page: page(tx.bottom) }, headers: { default: hdr("frame") }, children: titlePage(t, profile) },
+      { properties: { page: titleSheet }, headers: { default: hdr("frame") }, children: titlePage(t, profile) },
       { properties: { page: page(abstractBottom) }, headers: { default: hdr(st.abstract) }, children: parts.abstract },
       {
         properties: { page: page(under(bigContents ? st.big : st.small)), ...(bigContents ? { titlePage: true } : {}) },
