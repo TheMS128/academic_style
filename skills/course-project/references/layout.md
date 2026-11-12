@@ -1,0 +1,68 @@
+# Layout and the builder — maintenance only
+
+Not read while a note is written. Every number lives in `assets/lib/profile.js`; this file
+says where the numbers come from and how the document is put together.
+
+## Where the layout comes from
+
+Three explanatory notes made on the department's template (ВлГУ, кафедра ИСПИ), read as
+samples, not as a standard: where they agree, the profile follows them; where they
+contradict each other or themselves, ГОСТ 2.104 and ГОСТ 2.105 decide.
+
+| Taken from the samples | Decided against them |
+| --- | --- |
+| frame on every sheet, the title page included | frame 185 × 287 mm, 5 mm from the right edge (the samples' is 181 mm wide) |
+| form 2 on the abstract and on the first sheet of the contents, form 2а after | one style for all first-level headings (the samples set «ЗАКЛЮЧЕНИЕ» larger) |
+| the title page in an italic sans-serif, no line for the discipline | no full stop after a heading number («4.4.1.» in one sample) |
+| body: Times New Roman 14, 1.5 lines, justified, first line 1.27 cm | text 10 mm below the frame and above the title block (the samples start 1.4 mm under the frame) |
+| chapters in capitals, centred, each on a new sheet | code with single line spacing (1.5 in the samples) |
+| lists with a dash, «1)», «а)»; the marker at the paragraph indent | the sheet number and the number of sheets are fields (typed by hand in the samples) |
+| «Рисунок N – Название» under the figure; a listing captioned as a figure | |
+| «Таблица N – Название» above the table, at the right | |
+| contents of two levels that lists «Аннотация» and itself | |
+| sources numbered «1)» | |
+
+`table.captionAlign`, `stamp.contents`, `line.code` and `lists.source` switch the choices
+most likely to differ from one teacher to another.
+
+## Sections
+
+| Section | Sheets | Header | Bottom margin |
+| --- | --- | --- | --- |
+| 1 | title page | frame | 15 mm |
+| 2 | abstract | frame + form 2 | 55 mm |
+| 3 | contents | first sheet: frame + form 2; next: frame + form 2а | 55 mm |
+| 4 | everything else | frame + form 2а | 30 mm |
+
+Sheets are numbered through the whole document from the title page; the numbers are PAGE
+fields in the title block.
+
+## The frame and the title block (`frame.js`)
+
+docx-js writes a header with a marker paragraph for every section; `pack()` replaces the
+whole header part with the XML of `headerXml()`. Lines are DrawingML shapes
+(`wps:wsp`, `prstGeom="line"`) with a VML fallback, anchored to the page and placed
+behind the text. Inscriptions are paragraphs in text frames (`w:framePr`) anchored to the
+page: a frame is plain WordprocessingML, so a PAGE or NUMPAGES field works in it, and it
+takes no room in the header. An inscription is centred in its cell by moving the frame
+down, since a text frame has no vertical alignment. `geometry()` holds the cells of both
+forms in millimetres from the page corner.
+
+## Contents
+
+`compose()` collects the headings with their bookmarks; `tocXml()` writes a TOC field
+whose entries are already in place, each with an empty PAGEREF field. `updateFields` in
+the settings makes Word offer to update the fields when the file is opened; Word for the
+web does not update them by itself.
+
+## What is shared
+
+`deps.js` takes docx-js and JSZip, the title-field helpers, the document properties and
+the package clean-up from `lab-report/assets`, and the lint from `core/assets`. The
+document properties are the lab report's, unchanged.
+
+## What cannot be checked here
+
+No Word on the build machine: the frame, the title block and the page flow are verified
+only by opening the file. `stamp` geometry can be drawn from the built header's own
+coordinates, which checks the numbers but not how Word renders them.

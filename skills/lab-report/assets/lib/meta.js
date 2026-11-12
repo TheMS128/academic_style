@@ -200,7 +200,7 @@ function coreXml(title, props, { description = "", keywords = "", language = "ru
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
     '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
     `<dc:title>${xml(title["Тема"])}</dc:title>` +
-    `<dc:subject>${xml(isCourseProject(title["Тип работы"]) ? `Курсовой проект, этап ${title["Номер работы"]}` : workHeading(title))}</dc:subject>` +
+    `<dc:subject>${xml(isCourseProject(title["Тип работы"]) && title["Номер работы"] ? `Курсовой проект, этап ${title["Номер работы"]}` : workHeading(title))}</dc:subject>` +
     `<dc:creator>${xml(initialsFirst(title["Выполнил"]))}</dc:creator>` +
     `<cp:keywords>${xml(keywords)}</cp:keywords>` +
     `<dc:description>${xml(description)}</dc:description>` +
