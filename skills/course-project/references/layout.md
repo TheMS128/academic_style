@@ -12,17 +12,17 @@ contradict each other or themselves, ГОСТ 2.104 and ГОСТ 2.105 decide.
 | Taken from the samples | Decided against them |
 | --- | --- |
 | frame on every sheet, the title page included | frame 185 × 287 mm, 5 mm from the right edge (the samples' is 181 mm wide) |
-| form 2 on the abstract and on the first sheet of the contents, form 2а after | one style for all first-level headings (the samples set «ЗАКЛЮЧЕНИЕ» larger) |
-| the title page in an italic sans-serif, no line for the discipline | no full stop after a heading number («4.4.1.» in one sample) |
-| body: Times New Roman 14, 1.5 lines, justified, first line 1.27 cm | text 10 mm below the frame and above the title block (the samples start 1.4 mm under the frame) |
-| chapters in capitals, centred, each on a new sheet | code with single line spacing (1.5 in the samples) |
-| lists with a dash, «1)», «а)»; the marker at the paragraph indent | the sheet number and the number of sheets are fields (typed by hand in the samples) |
-| «Рисунок N – Название» under the figure; a listing captioned as a figure | |
+| form 2 on the first sheet of the contents, form 2а after | form 2 on one sheet only: the samples carry it on the abstract as well, ГОСТ 2.104 gives it to the first sheet after the title page (E10) |
+| the title page in an italic sans-serif, no line for the discipline | one style for all first-level headings (the samples set «ЗАКЛЮЧЕНИЕ» larger) |
+| body: Times New Roman 14, 1.5 lines, justified, first line 1.27 cm | no full stop after a heading number («4.4.1.» in one sample) |
+| chapters in capitals, centred, each on a new sheet | text 10 mm below the frame and above the title block (the samples start 1.4 mm under the frame) |
+| lists with a dash, «1)», «а)»; the marker at the paragraph indent | code with single line spacing (1.5 in the samples) |
+| «Рисунок N – Название» under the figure; a listing captioned as a figure | the sheet number and the number of sheets are fields (typed by hand in the samples) |
 | «Таблица N – Название» above the table, at the right | |
 | contents of two levels that lists «Аннотация» and itself | |
 | sources numbered «1)» | |
 
-`table.captionAlign`, `stamp.contents`, `line.code` and `lists.source` switch the choices
+`table.captionAlign`, `stamp.abstract` and `stamp.contents` (E10), `line.code` and `lists.source` switch the choices
 most likely to differ from one teacher to another.
 
 ## Sections
@@ -30,8 +30,8 @@ most likely to differ from one teacher to another.
 | Section | Sheets | Header | Bottom margin |
 | --- | --- | --- | --- |
 | 1 | title page | frame | 15 mm |
-| 2 | abstract | frame + form 2 | 55 mm |
-| 3 | contents | first sheet: frame + form 2; next: frame + form 2а | 55 mm |
+| 2 | abstract | frame (`stamp.abstract`: form 2 or 2а) | 15 mm (55 / 30 mm) |
+| 3 | contents | first sheet: frame + form 2 (`stamp.contents`: form 2а); next: frame + form 2а | 55 mm (30 mm) |
 | 4 | everything else | frame + form 2а | 30 mm |
 
 Sheets are numbered through the whole document from the title page; the numbers are PAGE

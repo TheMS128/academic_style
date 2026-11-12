@@ -12,7 +12,11 @@ const KP = {
   // the title block («основная надпись»): form 2 on the first sheets, form 2а after them
   stamp: {
     big: 40, small: 15,                                        // heights, mm
-    contents: "big",                                           // «Содержание» opens with form 2 as well ("small" — form 2а)
+    // Which sheet is the «заглавный лист» that carries form 2. ГОСТ 2.104 gives form 2 to
+    // one sheet, the first after the title page, and ГОСТ 2.105 puts the contents on it;
+    // the abstract is not a part ЕСКД knows, so departments differ.
+    abstract: "frame",                                         // "frame" — the frame only; "big" — form 2; "small" — form 2а
+    contents: "big",                                           // first sheet of the contents: "big" — form 2; "small" — form 2а
     letter: "У",                                               // «Лит.»
     kind: "Пояснительная записка",                             // second line of the name cell
     line: 19050, thin: 3175,                                   // EMU: 1.5 pt and 0.25 pt

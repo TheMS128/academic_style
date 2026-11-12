@@ -75,7 +75,10 @@ async function buildProject({ dir, body, description = "", keywords = "", repoRo
   });
   const under = (stamp) => fr.bottom + stamp + tx.aboveStamp;     // bottom margin of a sheet with a title block
   const hdr = (kind) => new Header({ children: [new Paragraph(`@@KP-HDR:${kind}@@`)] });
+  if (!["frame", "big", "small"].includes(st.abstract)) throw new Error(`profile.stamp.abstract: «${st.abstract}» — нужно "frame", "big" или "small"`);
+  if (!["big", "small"].includes(st.contents)) throw new Error(`profile.stamp.contents: «${st.contents}» — нужно "big" или "small"`);
   const bigContents = st.contents === "big";
+  const abstractBottom = st.abstract === "frame" ? tx.bottom : under(st[st.abstract]);
 
   const doc = new Document({
     features: { updateFields: true },
@@ -83,9 +86,9 @@ async function buildProject({ dir, body, description = "", keywords = "", repoRo
     numbering: buildNumbering(composed.lists, profile),
     sections: [
       { properties: { page: page(tx.bottom) }, headers: { default: hdr("frame") }, children: titlePage(t, profile) },
-      { properties: { page: page(under(st.big)) }, headers: { default: hdr("big") }, children: parts.abstract },
+      { properties: { page: page(abstractBottom) }, headers: { default: hdr(st.abstract) }, children: parts.abstract },
       {
-        properties: { page: page(under(bigContents ? st.big : st.small)), titlePage: bigContents },
+        properties: { page: page(under(bigContents ? st.big : st.small)), ...(bigContents ? { titlePage: true } : {}) },
         headers: bigContents ? { first: hdr("big"), default: hdr("small") } : { default: hdr("small") },
         children: parts.contents,
       },

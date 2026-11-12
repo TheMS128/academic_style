@@ -102,12 +102,28 @@ field followed by the last word form; after that it is the number with the form 
 agrees with it. A change that moves the text to another number of sheets is followed by a
 new look in Word and a new `pages`.
 
-**E10. The title block.** Sheet 2 (the abstract) and the first sheet of the contents
-carry form 2 of ГОСТ 2.104: the document code, the topic with «Пояснительная записка»,
-the letter «У», the sheet and the number of sheets, the group, the student in «Разраб.»
-and the teacher in «Пров.». Every later sheet carries form 2а with the code and the sheet
-number. The title page has the frame only. Nothing of this is typed in `build.js`: it is
-made from the fields of E1.
+**E10. The title block.** Form 2 of ГОСТ 2.104 holds the document code, the topic with
+«Пояснительная записка», the letter «У», the sheet and the number of sheets, the group,
+the student in «Разраб.» and the teacher in «Пров.»; form 2а holds the code and the sheet
+number. Nothing of this is typed in `build.js`: it is made from the fields of E1.
+
+ГОСТ 2.104 gives form 2 to one sheet — the first after the title page — and form 2а to
+every sheet after it; ГОСТ 2.105 puts the contents on that first sheet. The abstract is
+not a part ЕСКД knows, so by default it is kept outside: the title page and the abstract
+carry the frame only, the first sheet of the contents carries form 2, every later sheet —
+form 2а. A department that reads it differently is served by two values of the profile,
+returned from `build.js` as `profile: { ...KP, stamp: { ...KP.stamp, abstract: "big" } }`:
+
+| The department asks for | `stamp.abstract` | `stamp.contents` |
+| --- | --- | --- |
+| form 2 on the contents, nothing on the abstract — the default | `"frame"` | `"big"` |
+| form 2 on the abstract, form 2а from the contents on | `"big"` | `"small"` |
+| form 2 on both | `"big"` | `"big"` |
+| form 2а on the abstract, form 2 on the contents | `"small"` | `"big"` |
+
+The last two contradict ГОСТ 2.104 (form 2 twice; form 2а before form 2) and are there
+because teachers ask for them. Which one applies is asked once at intake when the
+guidelines of the department do not say, and the answer goes to `notes.md`.
 
 **E11. What the build reports.** «ОШИБКА СБОРКИ» — the document was not made: a missing
 field, a missing key, a picture that is not a PNG. «ОШИБКА [id]» and «замечание [id]» —

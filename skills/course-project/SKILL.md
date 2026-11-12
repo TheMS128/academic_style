@@ -68,7 +68,9 @@ rules into a draft; then the **document**, where the finished draft is carried i
    test results, the author's notes (`kp/<project>/notes.md`).
 2. **Intake** — before the first build (no `kp/<project>/meta.json` yet): check the fields
    of E1 in `RULES.MD` and `CONTEXT.MD` and ask for every missing one in **one** message,
-   together with the outline of chapters (K5) when the assignment does not fix it.
+   together with the outline of chapters (K5) when the assignment does not fix it and
+   with the sheet that carries the large title block (E10) when the department's
+   guidelines do not say.
 3. **Text.** Read `<core>/SKILL.md` and follow its Mode A with:
    - the profile `<skill>/profile.json`;
    - the outline: the parts of K1, the chapters and subchapters agreed in step 2;
