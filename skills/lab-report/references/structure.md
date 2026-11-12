@@ -11,7 +11,12 @@
 7. `Контрольные вопросы` (S13) — optional
 
 No other chapter. The three optional ones are written only when the course asks for them
-(S7a, S13); the four others are always there. Items 2–4 may stand in any order between
+(S7a, S13); the four others are always there — with one exception: a practical work
+(`Тип работы: Практическая`) has no `Вывод` unless the user chose to write one. Without it
+the report ends with `Выполнение работы` or, when the course asks for them, with
+`Контрольные вопросы`, and the assignment chapter carries no item about a conclusion; with
+it, that item stays and the `Вывод` follows S10–S12 like any other. The two go together:
+a conclusion item in `Задания` and no `Вывод`, or a `Вывод` with no such item, is an error. Items 2–4 may stand in any order between
 themselves — the template of some courses puts the theory before the assignment. Headings:
 no final period or colon, not in capitals, a capital on the first word only.
 
@@ -96,7 +101,8 @@ and read like any other block.
 **S9. No task labels.** A block never opens with «Задание N.» / «Упражнение N» and never
 restates the assignment in the imperative — the assignment chapter already carries it.
 
-**S10. Вывод** — one paragraph built from the Цель, in three parts:
+**S10. Вывод** — in a practical work only when the user chose to write one (S1). It is one
+paragraph built from the Цель, in three parts:
 
 1. The stamp «В ходе выполнения <тип> работы», `<тип>` from the `Тип работы` field in
    the genitive: Лабораторная → «лабораторной», Практическая → «практической». A stage

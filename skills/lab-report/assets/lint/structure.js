@@ -49,8 +49,17 @@ module.exports = function structure(d, r, ctx = {}) {
     seen.add(k);
     last = Math.max(last, CHAPTERS[k].ord);
   }
+  // S1: a practical work has a «Вывод» only when the user chose one — and then the
+  // assignment keeps its item about it; the item and the chapter go together
+  const practical = d.workType === "Практическая";
+  const conclusion = CHAPTERS.findIndex((c) => c.name === "Вывод");
+  if (practical) {
+    const asked = body.some((p) => /^Задани/.test(p.chapter) && !isHeading(p) && /(^|[^а-яё])вывод/i.test(p.text));
+    if (seen.has(conclusion) && !asked) r.err("S1", "в практической работе «Вывод» пишется только по решению автора — тогда пункт о выводе остаётся в задании; пункта нет, значит и главы нет");
+    if (!seen.has(conclusion) && asked) r.err("S1", "в задании практической работы есть пункт о выводе, а главы «Вывод» нет — пункт убирается, если вывод не пишется");
+  }
   CHAPTERS.forEach((c, k) => {
-    if (seen.has(k) || c.optional) return;
+    if (seen.has(k) || c.optional || (practical && k === conclusion)) return;
     if (c.required) r.err("S1", `нет главы «${c.name}»`);
     else r.warn("S3", `нет главы «${c.name}» — она пишется, когда методичка формулирует задание`);
   });

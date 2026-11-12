@@ -1,0 +1,10 @@
+{
+  "name": "methodichka-scaffold",
+  "private": true,
+  "description": "docx builder for the methodichka skill; run `npm i` here once",
+  "main": "lib/index.js",
+  "dependencies": {
+    "docx": "9.7.1",
+    "jszip": "3.10.2"
+  }
+}
