@@ -102,7 +102,7 @@ rendering).
 
 ## Document properties
 
-`pack()` replaces `docProps/core.xml` and `docProps/app.xml`:
+`pack()` replaces `docProps/core.xml`, `docProps/app.xml` and `docProps/custom.xml`:
 
 - title = Тема; subject = «<Тип работы> работа №<N>» (a course project: «Курсовой проект,
   этап <N>»); creator and lastModifiedBy =
@@ -110,8 +110,19 @@ rendering).
 - created = first build minus 1–14 days; revision 20–50 at the first build, +1–3 per
   rebuild; modified = build time — kept in `meta.json` → `docProps`; delete that key to
   regenerate;
+- category = «<Тип работы> работа» (a course project: «Курсовой проект»); language =
+  `profile.language.body`;
 - app.xml in the shape Word for the web writes: Normal.dotm, «Microsoft Word for the
-  web», 16.0000.
+  web», 16.0000 — plus what describes this document: Manager = Принял, Company =
+  `profile.organization`, the title of the document, and the counts of its text (words,
+  characters with and without spaces, paragraphs) taken from `document.xml`. Pages and
+  lines are not written: only Word lays the text out;
+- custom.xml: Дисциплина, Тип работы, Номер работы, Группа as custom properties.
+
+`pack()` also cleans the package: the comments, footnotes and endnotes parts that docx-js
+adds to every file are dropped when the document does not use them, and every PNG is
+reduced to the chunks that draw it — text, time and EXIF chunks do not travel into the
+report.
 
 ## Verification
 

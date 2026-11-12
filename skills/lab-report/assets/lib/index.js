@@ -14,7 +14,7 @@ const JSZip = require("jszip");
 const { Document, Packer } = require("docx");
 const { VLSU } = require("./profile");
 const { buildStyles, buildNumbering } = require("./styles");
-const { loadMeta, saveMeta, nextDocProps, coreXml, appXml, findRepoRoot, reportFileName, theoryFlag } = require("./meta");
+const { loadMeta, saveMeta, nextDocProps, coreXml, appXml, customXml, textStats, findRepoRoot, reportFileName, theoryFlag } = require("./meta");
 const { titlePage } = require("./title");
 const { compose } = require("./compose");
 const { lint, formatProblem } = require("../lint");
@@ -44,12 +44,55 @@ function mergeSectionBreaks(xml) {
   return out + xml.slice(last);
 }
 
-// docx-js always stamps created = modified = now and an empty app.xml; replace both
-async function pack(doc, { title, docProps, description, keywords }) {
+// docx-js writes comments, footnotes and endnotes parts into every package, used or not.
+// A part the document never refers to is dropped together with its relationship and its
+// content type; one that is in use stays.
+const UNUSED_PARTS = [
+  { part: "comments", ref: /<w:comment(Reference|RangeStart)\b/ },
+  { part: "footnotes", ref: /<w:footnoteReference\b/ },
+  { part: "endnotes", ref: /<w:endnoteReference\b/ },
+];
+async function dropUnusedParts(zip, documentXml) {
+  const relsFile = "word/_rels/document.xml.rels";
+  let rels = await zip.file(relsFile).async("string");
+  let types = await zip.file("[Content_Types].xml").async("string");
+  for (const { part, ref } of UNUSED_PARTS) {
+    if (ref.test(documentXml) || !zip.file(`word/${part}.xml`)) continue;
+    zip.remove(`word/${part}.xml`);
+    zip.remove(`word/_rels/${part}.xml.rels`);
+    rels = rels.replace(new RegExp(`<Relationship [^>]*Target="${part}\\.xml"[^>]*/>`, "g"), "");
+    types = types.replace(new RegExp(`<Override [^>]*PartName="/word/${part}\\.xml"[^>]*/>`, "g"), "");
+  }
+  zip.file(relsFile, rels);
+  zip.file("[Content_Types].xml", types);
+}
+
+// A PNG may carry text, time and EXIF chunks — the tool that made it, a date, a device.
+// None of it belongs in the report: only the chunks that draw the picture are kept.
+const PNG_DRAWING = new Set(["IHDR", "PLTE", "IDAT", "IEND", "tRNS", "gAMA", "cHRM", "sRGB", "iCCP", "sBIT", "bKGD", "pHYs"]);
+function stripPngMetadata(buf) {
+  if (buf.length < 8 || buf.readUInt32BE(0) !== 0x89504e47) return buf;
+  const out = [buf.subarray(0, 8)];
+  for (let o = 8; o + 12 <= buf.length; ) {
+    const size = 12 + buf.readUInt32BE(o);
+    if (PNG_DRAWING.has(buf.toString("latin1", o + 4, o + 8))) out.push(buf.subarray(o, o + size));
+    o += size;
+  }
+  return Buffer.concat(out);
+}
+
+// docx-js always stamps created = modified = now and an empty app.xml and custom.xml;
+// replace all three
+async function pack(doc, { title, docProps, description, keywords, profile }) {
   const zip = await JSZip.loadAsync(await Packer.toBuffer(doc));
-  zip.file("word/document.xml", mergeSectionBreaks(await zip.file("word/document.xml").async("string")));
-  zip.file("docProps/core.xml", coreXml(title, docProps, { description, keywords }));
-  zip.file("docProps/app.xml", appXml());
+  const documentXml = mergeSectionBreaks(await zip.file("word/document.xml").async("string"));
+  zip.file("word/document.xml", documentXml);
+  await dropUnusedParts(zip, documentXml);
+  for (const name of Object.keys(zip.files).filter((n) => /^word\/media\/.+\.png$/i.test(n)))
+    zip.file(name, stripPngMetadata(await zip.file(name).async("nodebuffer")));
+  zip.file("docProps/core.xml", coreXml(title, docProps, { description, keywords, language: profile.language.body }));
+  zip.file("docProps/app.xml", appXml({ title, stats: textStats(documentXml), company: profile.organization }));
+  if (zip.file("docProps/custom.xml")) zip.file("docProps/custom.xml", customXml(title));
   return zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
 }
 
@@ -74,7 +117,7 @@ async function buildReport({ reportDir, body, description = "", keywords = "", r
   });
 
   const docProps = nextDocProps(meta.data.docProps);
-  const buf = await pack(doc, { title: t, docProps, description, keywords });
+  const buf = await pack(doc, { title: t, docProps, description, keywords, profile });
   fs.writeFileSync(out, buf);
   meta.data.docProps = docProps;
   saveMeta(meta);
