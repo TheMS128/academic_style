@@ -27,7 +27,7 @@ const KP = {
   line: { body: 360, code: 240 },                              // 1.5 and 1.0
   indent: { firstLine: 720, nested: 1440 },                    // twips
   gap: { chapter: 240, sectionBefore: 240, sectionAfter: 360, point: 240, figure: 360 },
-  table: { border: 6, cellMargin: { top: 40, bottom: 40, left: 100, right: 100 }, captionAlign: "right" },
+  table: { border: 6, cellMargin: { top: 40, bottom: 40, left: 100, right: 100 }, captionAlign: "left" },
   figure: { maxWidthCm: 16, maxHeightCm: 20 },
   language: { body: "ru-RU", code: "en-US" },
   organization: "Владимирский государственный университет (ВлГУ)",
@@ -36,7 +36,7 @@ const KP = {
     table: (n, name) => `Таблица ${n} – ${name}`,
   },
   // list markers: a dash, «1)» and «а)» for the nested level
-  lists: { dash: "–", number: "%1)", nested: "%2)", source: "%1)" },
+  lists: { dash: "–", number: "%1)", nested: "%2)", source: "%1." },
   headings: {
     abstract: "АННОТАЦИЯ", abstractEn: "ABSTRACT", contents: "СОДЕРЖАНИЕ", intro: "ВВЕДЕНИЕ",
     conclusion: "ЗАКЛЮЧЕНИЕ", sources: "СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ", appendix: "ПРИЛОЖЕНИЕ",

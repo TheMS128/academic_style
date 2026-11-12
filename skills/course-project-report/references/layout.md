@@ -18,9 +18,9 @@ contradict each other or themselves, ГОСТ 2.104 and ГОСТ 2.105 decide.
 | chapters in capitals, centred, each on a new sheet | text 10 mm below the frame and above the title block (the samples start 1.4 mm under the frame) |
 | lists with a dash, «1)», «а)»; the marker at the paragraph indent | code with single line spacing (1.5 in the samples) |
 | «Рисунок N – Название» under the figure; a listing captioned as a figure | the sheet number and the number of sheets are fields (typed by hand in the samples) |
-| «Таблица N – Название» above the table, at the right | |
-| contents of two levels that lists «Аннотация» and itself | |
-| sources numbered «1)» | |
+| contents of two levels that lists «Аннотация» and itself | the name of a table at the left (at the right in the one sample that has a table; ГОСТ 2.105 and ГОСТ 7.32 put it at the left) |
+| | sources by ГОСТ Р 7.0.100-2018, numbered «1.» (the samples use a shortened entry and «1)») |
+| | «ABSTRACT» in bold, as «АННОТАЦИЯ» is |
 
 `table.captionAlign`, `stamp.abstract` and `stamp.contents` (E10), `line.code` and `lists.source` switch the choices
 most likely to differ from one teacher to another.

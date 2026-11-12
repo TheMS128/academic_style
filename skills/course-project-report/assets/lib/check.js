@@ -80,7 +80,13 @@ function check(body, { counts }) {
   for (const b of body.filter((x) => x.kind === "sources"))
     for (const [key, entry] of b.items) {
       if (!all.includes(`{src:${key}}`)) warn("K6", `на источник «${key}» нет ссылки в тексте`);
-      if (/https?:\/\//.test(entry) && !/\(дата обращения: \d{2}\.\d{2}\.\d{4}\)/.test(entry)) err("K6", `источник «${key}»: у электронного ресурса нет «(дата обращения: ДД.ММ.ГГГГ)»`);
+      const e = entry.trim();
+      if (!/\.$/.test(e)) err("K6", `источник «${key}»: запись кончается точкой`);
+      if (/\S:\s*\[?сайт\]?/.test(e)) warn("K6", `источник «${key}»: перед двоеточием в «Название сайта : [сайт]» нужен пробел`);
+      if (!/https?:\/\//.test(e)) continue;
+      if (!/\(дата обращения: \d{2}\.\d{2}\.\d{4}\)/.test(e)) err("K6", `источник «${key}»: у электронного ресурса нет «(дата обращения: ДД.ММ.ГГГГ)»`);
+      if (!/– Текст : электронный/.test(e)) err("K6", `источник «${key}»: у электронного ресурса нет сведений «– Текст : электронный» после названия`);
+      if (!/– URL: https?:\/\//.test(e)) err("K6", `источник «${key}»: адрес пишется как «– URL: https://…»`);
     }
 
   // E3 — every figure, listing and table is referred to in the text, before it appears

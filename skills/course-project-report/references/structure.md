@@ -61,10 +61,19 @@ future work the project does not need.
 
 **K10. Список использованных источников.** Only what the text refers to; every entry is
 referred to at least once, by `[N]` at the sentence that uses it. Entries go in the order
-of the first reference. An electronic resource is written as «Название // сайт: сайт. –
-URL: адрес (дата обращения: ДД.ММ.ГГГГ)»; a book — as «Фамилия, И. О. Название / И. О.
-Фамилия. – Город : Издательство, год. – N с.». The address and the date are the author's:
-an entry is never completed from memory.
+of the first reference and follow ГОСТ Р 7.0.100-2018:
+
+- a page of a site — «Название страницы. – Текст : электронный // Название сайта :
+  [сайт]. – URL: https://… (дата обращения: ДД.ММ.ГГГГ).»; the author, when the page
+  names one, opens the entry («Фамилия, И. О. Название …»), the year follows the site
+  when it is known («: [сайт]. – 2024. – URL: …»);
+- a book — «Фамилия, И. О. Название / И. О. Фамилия. – Город : Издательство, год. – N с.
+  – Текст : непосредственный.».
+
+The site is called by its name, not by its domain («Хабр», not «habr.com»). A colon and
+a semicolon that separate parts of the entry have a space on both sides; every entry ends
+with a full stop. The address and the date are the author's: an entry is never completed
+from memory, and a name of a site the author did not give is asked for.
 
 **K11. Приложения.** What supports the text and would break its flow: long listings, full
 scripts, generated reports, large tables. Each appendix is lettered by the builder, has a

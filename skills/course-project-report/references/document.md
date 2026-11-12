@@ -41,7 +41,7 @@ module.exports = ({ abstract, intro, chapter, section, point, p, list, steps,
     figure("uc", "uc.png", "Диаграмма прецедентов"),
     conclusion(),
     p("…"),
-    sources([["uml", "Диаграммы прецедентов // …: сайт. – URL: … (дата обращения: 21.12.2025)"]]),
+    sources([["uml", "Диаграммы прецедентов. – Текст : электронный // … : [сайт]. – URL: https://… (дата обращения: 21.12.2025)."]]),
     appendix("sql", "Создание базы данных"),
     listing("ddl", "CREATE TABLE …", "Листинг создания таблиц"),
   ],
@@ -78,7 +78,8 @@ scaled down; `{ width: 12 }` sets the width in centimetres. Every figure is refe
 in the text before it appears: «(рисунок {fig:key})», «представлена на рисунке
 {fig:key}».
 
-**E6. Tables.** The name stands above the table: «Таблица N – Название». `columns` give
+**E6. Tables.** The name stands above the table, at the left, without an indent:
+«Таблица N – Название» (ГОСТ 2.105, ГОСТ 7.32). `columns` give
 the heads and the relative widths, `rows` — the cells. Every table is referred to by
 `{tab:key}` before it appears.
 

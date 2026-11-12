@@ -128,7 +128,7 @@ function compose(body, { figdir, profile: p, pages }) {
         heading(S.chapter, p.headings.abstract, 1);
         b.ru.forEach((t) => para(S.body, t));
         if (b.en && b.en.length) {
-          out.push(new Paragraph({ style: S.centered, children: [new TextRun(p.headings.abstractEn)] }));
+          out.push(new Paragraph({ style: S.centered, children: [new TextRun({ text: p.headings.abstractEn, bold: true })] }));
           b.en.forEach((t) => para(S.body, t, null));           // English: outside the Russian lint
         }
         out = parts.contents;
