@@ -89,11 +89,6 @@ what the code is from the text directly before it.
   «В `styles.css` собраны правила оформления.» · «Файл `App.tsx` содержит корневой
   компонент.» · «За маршруты отвечает `routes.js`.» · «Код функции размещён в модуле
   `utils`.»
-- *Files of one shape.* When several files differ only in the entity they hold (the models
-  and controllers of twin services), one is shown in full and the others are described by
-  their difference, with a listing of the differing part only — unless the assignment or
-  `RULES.MD` asks for all the code, and then every file gets its listing and its own
-  sentence.
 
 Paste a fragment as it stands in the file: the common indent is stripped by the builder.
 
