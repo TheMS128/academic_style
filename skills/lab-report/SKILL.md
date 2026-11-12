@@ -1,16 +1,17 @@
 ---
 name: lab-report
 description: >-
-  Generate academic reports for lab and practical work in IT, programming,
-  systems analysis and web / graphic design, assembled as a Word (.docx)
-  document with a title page. Use when the user asks to write or format a
-  report ("отчёт по лабораторной", "отчёт по практике", "оформить отчёт",
-  "оформить в Word", "титульный лист", "вывод к работе") or any of its parts —
+  Generate academic reports for lab work (and stages of a course project) in IT,
+  programming, systems analysis and web / graphic design, assembled as a Word
+  (.docx) document with a title page. Use when the user asks to write or format a
+  lab report ("отчёт по лабораторной", "ЛР", "оформить отчёт", "оформить в Word",
+  "титульный лист", "вывод к работе") or any of its parts —
   Цель работы / Задание / Выполнение работы / Вывод, figure captions, code
   listings. Covers coding exercises (HTML/CSS/JS, SQL, programs, mobile apps),
   modelling (UML, ERD, architecture), design and prototyping (functional spec,
   IA, navigation, wireframes) and statistical labs. Terse formal-academic
-  Russian, fixed section structure.
+  Russian, fixed section structure. For a practical work ("практическая работа",
+  "ПР") use the practice-report skill, which runs on this one.
 ---
 
 # Lab report
@@ -29,6 +30,10 @@ into these files.
 
 Setup, once per installed version: when `<assets>/node_modules` is missing, run `npm i`
 in `<assets>`. The core needs no setup.
+
+A **practical work** is the `practice-report` skill (`<skill>/../practice-report`): the
+same workflow and files as here, with `Тип работы: Практическая` and no `Вывод` (S1).
+When the work at hand is a practical one, read that skill's SKILL.md first.
 
 ## Rule files
 

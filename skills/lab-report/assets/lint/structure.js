@@ -49,8 +49,12 @@ module.exports = function structure(d, r, ctx = {}) {
     seen.add(k);
     last = Math.max(last, CHAPTERS[k].ord);
   }
+  // S1: a practical work has no «Вывод»
+  const practical = d.workType === "Практическая";
+  const conclusion = CHAPTERS.findIndex((c) => c.name === "Вывод");
+  if (practical && seen.has(conclusion)) r.err("S1", "в практической работе главы «Вывод» нет");
   CHAPTERS.forEach((c, k) => {
-    if (seen.has(k) || c.optional) return;
+    if (seen.has(k) || c.optional || (practical && k === conclusion)) return;
     if (c.required) r.err("S1", `нет главы «${c.name}»`);
     else r.warn("S3", `нет главы «${c.name}» — она пишется, когда методичка формулирует задание`);
   });

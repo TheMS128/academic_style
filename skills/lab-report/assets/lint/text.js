@@ -7,7 +7,10 @@ const path = require("path");
 const { S, isCode, isCaptionText } = require("./util");
 
 const CORE = path.join(__dirname, "..", "..", "..", "core", "assets", "lint");
+const fs = require("fs");
 const PROFILE = path.join(__dirname, "..", "..", "profile.json");
+// a practical work is the practice-report genre: its profile is built on this one
+const PRACTICE = path.join(__dirname, "..", "..", "..", "practice-report", "profile.json");
 
 function loadCore() {
   try {
@@ -54,7 +57,7 @@ function toEntries(d) {
 
 module.exports = function text(d, r) {
   const core = loadCore();
-  const profile = core.loadProfile(PROFILE);
+  const profile = core.loadProfile(d.workType === "Практическая" && fs.existsSync(PRACTICE) ? PRACTICE : PROFILE);
   for (const x of core.check(toEntries(d), profile)) (x.level === "error" ? r.err : r.warn)(x.id, x.msg);
 };
 
