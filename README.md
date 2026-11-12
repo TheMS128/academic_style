@@ -21,8 +21,9 @@ claude plugin install academic-style@academic-style
 ```
 
 Скиллы плагина вызываются с его именем: `/academic-style:core`,
-`/academic-style:lab-report`. Скиллу `lab-report` для сборки `.docx` нужен Node.js и
-разовая установка зависимостей — `npm i` в его папке `assets`.
+`/academic-style:lab-report`, `/academic-style:practice-report`,
+`/academic-style:methodichka`. Скиллам `lab-report` и `methodichka` для сборки `.docx`
+нужен Node.js и разовая установка зависимостей — `npm i` в папке `assets` каждого.
 
 ## Зачем разделение
 
@@ -41,8 +42,8 @@ claude plugin install academic-style@academic-style
 | --- | --- | --- | --- |
 | `core` | Ядро: пишет и правит текст по общим правилам; вызывается и сам по себе | — | есть |
 | `lab-report` | Отчёт по лабораторной работе: структура глав, титульный лист, сборка `.docx` | `core` | есть, текст пишет через ядро |
-| `practice-report` | Отчёт по практической работе: то же, что `lab-report`, с двумя отличиями | `lab-report`, `core` | запланирован |
-| `methodichka` | Методические указания к лабораторным работам из Markdown в `.docx` | `core` | существует отдельно, в плагин ещё не перенесён |
+| `practice-report` | Отчёт по практической работе: то же, что `lab-report`, с двумя отличиями | `lab-report`, `core` | есть |
+| `methodichka` | Методические указания к лабораторным работам из Markdown в `.docx` | `core` (для текста) | есть |
 
 Отличия практической работы от лабораторной:
 
@@ -105,6 +106,8 @@ claude plugin install academic-style@academic-style
 | `skills/core/profiles/general.json` | профиль по умолчанию: общий академический текст |
 | `skills/core/assets/` | линт текста, без зависимостей |
 | `skills/lab-report/` | отчёт по лабораторной работе: правила структуры, профиль жанра, сборщик `.docx`, линт документа |
+| `skills/practice-report/` | отчёт по практической работе: два отличия от лабораторной и профиль поверх её профиля |
+| `skills/methodichka/` | методические указания: сборщик `.docx` из Markdown и профиль жанра |
 
 Проверка текста и тесты линта ядра:
 

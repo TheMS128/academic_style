@@ -1,6 +1,6 @@
 ---
 name: methodichka
-description: Render a course's «Методические указания к выполнению лабораторных работ» from a Markdown source into a Word (.docx) in ВлГУ style — a simple cover (university / discipline title / subtitle / city year, no student fields), then the labs. Use when the user wants to assemble or re-render lab methodical guidelines (a multi-lab guide, not a single student report) as .docx. For a single student's report use the lab-report skill instead.
+description: Render a course's «Методические указания к выполнению лабораторных работ» from a Markdown source into a Word (.docx) in ВлГУ style — a simple cover (university / discipline title / subtitle / city year, no student fields), then the labs. Use when the user wants to assemble or re-render lab methodical guidelines (a multi-lab guide, not a single student report) as .docx. Also the place to write or edit the text of such guidelines. For a single student's report use the lab-report skill instead.
 ---
 
 # Methodichka
@@ -10,9 +10,28 @@ description: Render a course's «Методические указания к в
 студента (с полями ФИО/группа/преподаватель), а этот — учебное издание с простой
 обложкой без данных студента.
 
-`<assets>` = `~/.claude/skills/methodichka/assets`. Разовая установка: `npm i` там.
-Полиграфические стили (Times New Roman 14, интервалы, заголовки, таблицы)
-переиспользованы из `lab-report` (`lib/styles.js`).
+`<skill>` — папка, в которой лежит этот SKILL.md, где бы он ни был установлен;
+`<assets>` = `<skill>/assets`; `<core>` = `<skill>/../core`; `<lab>` = `<skill>/../lab-report`.
+Разовая установка для каждой установленной версии: `npm i` в `<assets>`.
+Полиграфические стили (Times New Roman 14, интервалы, заголовки, таблицы) повторяют
+стили `lab-report` в собственном `lib/styles.js`.
+
+## Текст методички
+
+Этот скилл собирает документ; как написан текст, определяет ядро. Когда текст методички
+нужно написать или поправить, читается `<core>/SKILL.md` и выполняется его режим A
+(письмо из фактов) или B (правка готового текста) с профилем `<skill>/profile.json`.
+Профиль называет читателя — студента, разрешает определения и оставляет вопросы для
+самопроверки списком. Источник текста — Markdown-файл методички, он же правится.
+
+Проверка текста перед сборкой:
+
+```
+node <core>/assets/bin/lint.js <input.md> --profile <skill>/profile.json
+```
+
+Линт читает обычный Markdown; строки `Таблица: Название` и маркер `%%split` он
+принимает за текст и на них не ругается. Собственных правил о тексте у этого скилла нет.
 
 ## Как рендерить
 
@@ -36,7 +55,7 @@ node <assets>/bin/render.js <input.md> <output.docx> --title "Название �
   неё, считается заглушкой обложки и в документ не попадает.
 
 Предпросмотр (счётчик страниц по секциям + PNG) — скриптом из lab-report:
-`node ~/.claude/skills/lab-report/assets/bin/preview.js <docx> [out.png]`. Раздел 1
+`node <lab>/assets/bin/preview.js <docx> [out.png]`. Раздел 1
 (обложка) должен занимать ровно одну страницу. docx-preview не разбивает текст на
 страницы как Word, поэтому финальную разбивку смотреть в Word/Word Online.
 
@@ -67,5 +86,5 @@ node <assets>/bin/render.js <input.md> <output.docx> --title "Название �
 Всё оформление — в `lib/`. Обложка — `lib/cover.js`; сопоставление Markdown → стили —
 `lib/md.js`; полиграфические параметры и данные обложки — `lib/profile.js`; сами стили
 абзацев/таблиц — `lib/styles.js`. Другой вуз/шаблон — другой профиль, остальной код не
-меняется. Файлы скилла лежат вне репозитория; менять их — только по явной просьбе
+меняется. Файлы скилла лежат вне проекта; менять их — только по явной просьбе
 пользователя.
