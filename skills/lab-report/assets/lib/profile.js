@@ -13,6 +13,7 @@ const VLSU = {
             fitHeightPx: 567,                                                   // fit: "height" — 15 cm
             maxHeightPx: 900 },                                                 // taller than this does not fit a page with its caption
   language: { body: "ru-RU", code: "en-US" },
+  organization: "Владимирский государственный университет (ВлГУ)",                 // document property «Организация»
   captions: {
     figure: (n, name) => `Рисунок ${n} – ${name}`,
     table: (n, name) => `Таблица ${n}. ${name}`,

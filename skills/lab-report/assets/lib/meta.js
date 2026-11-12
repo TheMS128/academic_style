@@ -193,7 +193,10 @@ function nextDocProps(prev, now = new Date()) {
 
 const xml = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-function coreXml(title, props, { description = "", keywords = "" } = {}) {
+// «Лабораторная работа», «Практическая работа», «Курсовой проект»
+const workCategory = (type) => (isCourseProject(type) ? "Курсовой проект" : `${type} работа`);
+
+function coreXml(title, props, { description = "", keywords = "", language = "ru-RU" } = {}) {
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
     '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
     `<dc:title>${xml(title["Тема"])}</dc:title>` +
@@ -205,19 +208,62 @@ function coreXml(title, props, { description = "", keywords = "" } = {}) {
     `<cp:revision>${props.revision}</cp:revision>` +
     `<dcterms:created xsi:type="dcterms:W3CDTF">${props.created}</dcterms:created>` +
     `<dcterms:modified xsi:type="dcterms:W3CDTF">${props.modified}</dcterms:modified>` +
+    `<cp:category>${xml(workCategory(title["Тип работы"]))}</cp:category>` +
+    `<dc:language>${xml(language)}</dc:language>` +
     "</cp:coreProperties>";
 }
 
-function appXml() {
+// Counts of the text as it stands in document.xml: words, characters without and with
+// spaces, non-empty paragraphs. Pages and lines are not counted — only Word lays the
+// text out, and it writes them itself on the first save.
+function textStats(documentXml) {
+  const paragraphs = (documentXml.match(/<w:p[ >][\s\S]*?<\/w:p>/g) || [])
+    .map((p) => (p.match(/<w:t(?: [^>]*)?>[^<]*<\/w:t>/g) || []).map((t) => t.replace(/<[^>]+>/g, "")).join("")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&"))
+    .filter((t) => t.trim());
+  const all = paragraphs.join(" ");
+  return {
+    words: all.split(/\s+/).filter(Boolean).length,
+    characters: all.replace(/\s/g, "").length,
+    charactersWithSpaces: paragraphs.reduce((n, t) => n + t.length, 0),
+    paragraphs: paragraphs.length,
+  };
+}
+
+// title: the frozen title fields; stats: textStats(); company: the profile's organization
+function appXml({ title = {}, stats, company = "" } = {}) {
+  const manager = initialsFirst(title["Принял"]);
+  const name = title["Тема"];
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
     '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">' +
-    "<Template>Normal.dotm</Template><Application>Microsoft Word for the web</Application><DocSecurity>0</DocSecurity>" +
-    "<ScaleCrop>false</ScaleCrop><SharedDoc>false</SharedDoc><HyperlinksChanged>false</HyperlinksChanged>" +
-    "<AppVersion>16.0000</AppVersion><LinksUpToDate>false</LinksUpToDate></Properties>";
+    "<Template>Normal.dotm</Template>" +
+    (stats ? `<Words>${stats.words}</Words><Characters>${stats.characters}</Characters>` : "") +
+    "<Application>Microsoft Word for the web</Application><DocSecurity>0</DocSecurity>" +
+    (stats ? `<Paragraphs>${stats.paragraphs}</Paragraphs>` : "") +
+    "<ScaleCrop>false</ScaleCrop>" +
+    (name
+      ? '<HeadingPairs><vt:vector size="2" baseType="variant"><vt:variant><vt:lpstr>Название</vt:lpstr></vt:variant><vt:variant><vt:i4>1</vt:i4></vt:variant></vt:vector></HeadingPairs>' +
+        `<TitlesOfParts><vt:vector size="1" baseType="lpstr"><vt:lpstr>${xml(name)}</vt:lpstr></vt:vector></TitlesOfParts>`
+      : "") +
+    (manager ? `<Manager>${xml(manager)}</Manager>` : "") +
+    (company ? `<Company>${xml(company)}</Company>` : "") +
+    "<LinksUpToDate>false</LinksUpToDate>" +
+    (stats ? `<CharactersWithSpaces>${stats.charactersWithSpaces}</CharactersWithSpaces>` : "") +
+    "<SharedDoc>false</SharedDoc><HyperlinksChanged>false</HyperlinksChanged>" +
+    "<AppVersion>16.0000</AppVersion></Properties>";
+}
+
+// docProps/custom.xml: the title fields that have no place among the standard properties
+function customXml(title) {
+  const props = ["Дисциплина", "Тип работы", "Номер работы", "Группа"].filter((k) => title[k]);
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+    '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">' +
+    props.map((k, i) => `<property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="${i + 2}" name="${xml(k).replace(/"/g, "&quot;")}"><vt:lpwstr>${xml(title[k])}</vt:lpwstr></property>`).join("") +
+    "</Properties>";
 }
 
 module.exports = {
   FIELDS, initialsFirst, surname, disciplineAbbr, reportFileName, readKey, isPlaceholder, invalidFields,
-  workTypeGenitive, conclusionStamp, workHeading, isCourseProject, theoryFlag, findRepoRoot, readSources, loadMeta, saveMeta, nextDocProps, coreXml, appXml,
+  workTypeGenitive, conclusionStamp, workHeading, isCourseProject, theoryFlag, findRepoRoot, readSources, loadMeta, saveMeta, nextDocProps, coreXml, appXml, customXml, textStats, workCategory,
   requireProjectFiles,
 };
