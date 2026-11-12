@@ -62,7 +62,7 @@ assignment chapter word for word and is described nowhere else.
 
 **S7. Словарь предметной области** — only when the domain needs one: a `list()` of
 «Термин – значение» pairs directly under the heading, the single place where that
-item shape is allowed (B3).
+item shape is allowed (the profile exempts it from L3).
 
 **S7a. Subchapter or chapter.** S6 and S7 are subchapters of `Выполнение работы` by
 default. When the course template prints them as separate chapters — `RULES.MD` says so,
@@ -74,9 +74,20 @@ report, not both.
 **S13. Контрольные вопросы** — a chapter after `Вывод`, only when the assignment has a
 list of questions and the course asks for the answers in the report. Each question is a
 paragraph of its own, numbered and copied word for word from the methodichka; its answer
-is the paragraph directly under it. An answer is 1–4 sentences, in the voice of the rest
-of the report (V), and stays within the course material — no facts from outside it, no
-code the work does not contain. A listing or a figure only if the question asks for one.
+is the paragraph directly under it. An answer is 1–5 sentences, in the voice of the rest
+of the report (V), and gives the reasoning the question asks for — why, not only what. It
+stays within the course material: no facts from outside it. Where the work has the
+construct in question, the answer points at it; where it has none, the general form of the
+construct is enough («value?.let { … }») and no example is made up for it. A listing or a figure only if the question asks for one.
+
+**S14. Every requirement gets its answer.** Each thing the assignment demands — an item
+of `Задания`, a condition inside an item («все поля объекта должны быть корректно
+заполнены», «события должны быть реальными»), the statement of the variant — is answered
+somewhere in `Выполнение работы` by a sentence a reader can find: what was done about it
+and where it shows. Before the text is handed over, go through the assignment clause by
+clause and point at that sentence for each; a clause with none is a hole in the report,
+whatever the lint says. The answer is a fact of the work, not the requirement repeated
+(S9).
 
 **S8. Optional exercises** (I7) get no heading, subchapter or block of their own. They
 continue the run of blocks after the mandatory ones, keep the methodichka's numbering,
@@ -98,6 +109,12 @@ restates the assignment in the imperative — the assignment chapter already car
 3. The Цель itself, word for word — only its infinitive becomes the perfective passive
    of the connective («освоить» → «освоены»); every other word, subordinate clauses
    included, is carried over; several infinitives are all kept, in their order.
+
+A reflexive infinitive has no passive, and one is not forced out of it («было проведено
+знакомство», «было произведено научение» are wrong). It takes the connective that says the
+same thing, and its object follows in the case that connective asks for: «Познакомиться
+с приёмами …» / «Ознакомиться с …» → «были изучены приёмы …»; «Научиться использовать
+…» → «были получены навыки использования …». Every other word of the Цель stays.
 
 «Составить схемы страниц сайта строительной компании, определяющие взаимное расположение
 элементов …» → «В ходе выполнения лабораторной работы были составлены схемы страниц сайта

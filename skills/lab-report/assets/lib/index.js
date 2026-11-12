@@ -1,9 +1,9 @@
 // lab-report builder — public API.
 //
-//   const { run, chapter, subchapter, p, list, figure, table, listing } =
-//     require(require("path").join(require("os").homedir(), "<skill-from-home>/assets/lib"));
-//   (<skill-from-home>: the skill directory relative to the home dir — blocks.md → B1)
-//   run({ reportDir: __dirname, body: [...], description: "…", keywords: "…" });
+//   node <assets>/bin/build.js reports/<lab>     — the usual way: reports/<lab>/build.js
+//   exports a function of the block calls and holds no path to the skill (blocks.md → B1)
+//
+//   run({ reportDir, body: [...], description: "…", keywords: "…" })   — what bin/build.js calls
 //
 // reportDir holds build.js, figures/ and meta.json (written on the first build).
 // The output defaults to "<repo>/<Аббревиатура дисциплины>_<N>_<Фамилия>.docx", e.g. "ОАиП_1_Парфеньев.docx".

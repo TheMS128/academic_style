@@ -46,7 +46,7 @@ already closed → no exercise is added to «усилить» the report. Placem
 «Не знаю» or a skipped question means writing without that fact.
 
 **I9. Judgement calls** — asked, never decided alone: `Задание` vs `Задания` when it is
-genuinely unclear (S3); a requirement vs an example of the methodichka (F4).
+genuinely unclear (S3); a requirement vs an example of the methodichka (D2).
 
 **Asked later, once per report, when it comes up:** a figure that does not fit a page
 (G7); a missing toolchain for run figures (G1).
@@ -54,4 +54,4 @@ genuinely unclear (S3); a requirement vs an example of the methodichka (F4).
 | Answer | Goes to |
 | --- | --- |
 | title fields, Должность, theory flag | `RULES.MD` / `CONTEXT.MD` (after the first build: `meta.json`) |
-| variant, «Ознакомиться», optional exercises, facts, tall-figure choice | `reports/<lab>/notes.md` (format F6) |
+| variant, «Ознакомиться», optional exercises, facts, tall-figure choice | `reports/<lab>/notes.md` (format D4) |

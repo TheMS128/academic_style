@@ -15,10 +15,4 @@ const tally = (keys) => keys.filter(Boolean).reduce((m, k) => m.set(k, (m.get(k)
 const REF_FIG = /рис(?:ун\p{L}*|\.)\s*(\d+)/giu;
 const REF_TAB = /табл(?:иц\p{L}*|\.)\s*(\d+)/giu;
 
-// text paragraphs: no code, no table cells, no headings, no captions, not empty
-const prose = (body) => body.filter((p) => !isCode(p) && !p.inTable && !isHeading(p) && p.text.trim() && !isCaptionText(p.text));
-// the student's own prose: Цель, Задание and the Вывод built from the Цель carry the
-// methodichka's words and are not checked for style (voice.md → V8)
-const own = (body) => prose(body).filter((p) => !/^(Цель работы|Задани|Вывод)/.test(p.chapter));
-
-module.exports = { S, isCode, isHeading, isCaptionText, where, sentences, tally, prose, own, REF_FIG, REF_TAB };
+module.exports = { S, isCode, isHeading, isCaptionText, where, sentences, tally, REF_FIG, REF_TAB };

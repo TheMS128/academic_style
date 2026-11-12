@@ -1,6 +1,6 @@
 // Checks a built report. Every problem carries the id of the rule it enforces
-// (S — structure.md, B — blocks.md, V / T — voice.md, F — facts.md), so a fix starts
-// from that one rule. Errors first.
+// (S — structure.md, B — blocks.md; V / L / F / T — the core, skills/core/references), so a
+// fix starts from that one rule. Errors first.
 //
 //   lint(file, { theory: "required" | "not" })
 
@@ -8,7 +8,7 @@ const fs = require("fs");
 const JSZip = require("jszip");
 const { parseDocument } = require("./parse");
 
-const CHECKS = [require("./format"), require("./structure"), require("./voice")]; // format first: it numbers figures
+const CHECKS = [require("./format"), require("./structure"), require("./text")]; // format first: it numbers figures
 
 async function lint(file, ctx = {}) {
   const zip = await JSZip.loadAsync(fs.readFileSync(file));

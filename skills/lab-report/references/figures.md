@@ -5,7 +5,7 @@ from actually running, rendering or computing them — never hand-written. Diagr
 wireframes are schematics and are named as such («Диаграмма …», «Прототип макета …»).
 Decoration around a real render is allowed when wanted. The only text inside a picture
 is its own labels — an explanation belongs in the paragraph above it (V5). How it was
-captured stays out of the text (F5). A missing toolchain is reported once, with the
+captured stays out of the text (F4 of the core). A missing toolchain is reported once, with the
 choice: install it, or no run figures. Sources (`.html`) and PNGs live together in
 `reports/<lab>/figures/`.
 
