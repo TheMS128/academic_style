@@ -6,7 +6,8 @@ description: >-
   assembled as a Word (.docx) document with a title page. Use when the work the user
   names is a practical one, or `Тип работы` in the project's CONTEXT.MD is
   «Практическая». It is the lab-report skill with two differences: the title page says
-  «Практическая работа» and the report has no «Вывод». For a lab work use lab-report.
+  «Практическая работа» and the report has no «Вывод» unless the user asks for
+  one. For a lab work use lab-report.
 ---
 
 # Practice report
@@ -36,13 +37,23 @@ this one.
 the user calls practical is a question to the user (I1 of the lab report), not something
 to change silently.
 
-**P2. No «Вывод».** The report ends with `Выполнение работы` or, when the course asks for
-them, with `Контрольные вопросы`. The rules of the lab report about the Вывод (S10–S12) do
-not apply, and nothing takes its place: no closing paragraph that sums the work up at the
-end of `Выполнение работы` (T2 of the core). An item «Сделать вывод» in the assignment is
-kept in `Задания` word for word, as the methodichka has it, and is not answered by a
-chapter; when the methodichka of a practical work plainly demands a written conclusion,
-that is a question to the user.
+**P2. No «Вывод» by default.** The report ends with `Выполнение работы` or, when the
+course asks for them, with `Контрольные вопросы`. Nothing takes the place of the Вывод: no
+closing paragraph that sums the work up at the end of `Выполнение работы` (T2 of the
+core).
 
-The lint knows both: with `Тип работы: Практическая` it does not ask for `Вывод` and
-reports one that is there.
+When the methodichka's assignment has an item about a conclusion («Сделать вывод»), the
+user is asked once, together with the other intake questions, whether this practical work
+gets a `Вывод`. The answer goes to `notes.md` and decides both things at once:
+
+- **no** (also the default when the user gives no answer) — there is no `Вывод`, and the
+  item about it is left out of `Задания`. This is the one place where an item of the
+  methodichka's assignment is dropped; the other items stay word for word (S3);
+- **yes** — the item stays in `Задания` as the methodichka has it, and the `Вывод` is
+  written by S10–S12 of the lab report, with the stamp «В ходе выполнения практической
+  работы».
+
+An assignment with no such item gets no question and no `Вывод`.
+
+The lint knows both rules: with `Тип работы: Практическая` it does not ask for a `Вывод`,
+and it reports a `Вывод` without the item in `Задания` or the item without a `Вывод`.
