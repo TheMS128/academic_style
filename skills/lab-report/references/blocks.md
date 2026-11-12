@@ -63,13 +63,39 @@ A sentence that reads badly is fixed in `text.md` and carried over again.
 **B4, B5** are retired: when a table is justified and the tests it must pass are the
 core's L4 and L5.
 
-**B6. Listings.** The label is «Листинг:», always and only that. The file or component is
-named in the paragraph before the listing, inside a sentence that does other work
-(«Обработчик жестов в `EventCard` перезапускается с каждой новой карточкой …») — never in
-a sentence written only to point at the file («Код находится в файле …»). What that
-paragraph says about the code is the core's L7. Several files → one listing per file,
-each after its own paragraph. Paste a fragment as it stands in the file: the common
-indent is stripped by the builder.
+**B6. Listings.** The label is «Листинг:», always and only that, so the reader learns
+what the code is from the text directly before it.
+
+- *What stands before a listing.* One sentence as a rule; a paragraph when the idea of the
+  fragment is big enough to need one (L7 says what it tells). Several files → one listing
+  per file, each after its own sentence or paragraph.
+- *How the file is named.* By its role and where it belongs: «контроллер сервиса заказов»,
+  «модель `Order`», «`OrderController` в `order-service`». A path is given only when two
+  files of the report share a name.
+- *The sentence carries a fact.* Best of all the file is named inside a sentence that does
+  other work: «Обработчик жестов в `EventCard` перезапускается с каждой новой карточкой».
+  A short one before a simple listing is fine when it says something about the code:
+  «Заказ хранит идентификатор клиента и сумму».
+- *When all that is left is to point at the file,* the pointer is taken from the stock
+  below and never becomes a refrain: no wording twice in a row, none more than twice per
+  report, no fixed order in which they come round — a cycle is seen as quickly as a
+  repeat. Its place varies too: the file at the start of the sentence, at its end, inside
+  it. Three listings in a row introduced by pointers alone means the text between them is
+  missing (L7).
+
+  «Разметка страницы задана в `index.html`.» · «Класс описан в файле `Order.java`.» ·
+  «Реализация вынесена в `OrderService`.» · «Запрос сохранён в `report.sql`.» ·
+  «Обработчик объявлен в `OrderController`.» · «Модель хранится в `Customer.kt`.» ·
+  «В `styles.css` собраны правила оформления.» · «Файл `App.tsx` содержит корневой
+  компонент.» · «За маршруты отвечает `routes.js`.» · «Код функции размещён в модуле
+  `utils`.»
+- *Files of one shape.* When several files differ only in the entity they hold (the models
+  and controllers of twin services), one is shown in full and the others are described by
+  their difference, with a listing of the differing part only — unless the assignment or
+  `RULES.MD` asks for all the code, and then every file gets its listing and its own
+  sentence.
+
+Paste a fragment as it stands in the file: the common indent is stripped by the builder.
 
 **B7. Listing code.** Code the skill writes is English-only — identifiers, string
 literals, printed text (`Сотрудник` → `Employee`) — and has no comments. The student's
