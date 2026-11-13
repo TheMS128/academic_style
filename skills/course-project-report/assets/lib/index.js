@@ -44,6 +44,9 @@ async function pack(doc, { title, docProps, description, keywords, profile, toc,
   const mark = new RegExp(`<w:p>(?:(?!<w:p>)[\\s\\S])*?${TOC_MARK}[\\s\\S]*?</w:p>`);
   if (!mark.test(documentXml)) throw new Error("в документе не найдено место содержания");
   documentXml = labPackage.mergeSectionBreaks(documentXml.replace(mark, () => tocXml(toc)));
+  // every entry of the contents leads to a heading that is in the document
+  const lost = toc.filter((e) => !documentXml.includes(`<w:bookmarkStart w:name="${e.bookmark}"`));
+  if (lost.length) throw new Error(`содержание ссылается на заголовки, которых нет в документе: ${lost.map((e) => e.text).join("; ")}`);
   zip.file("word/document.xml", documentXml);
 
   let n = 0;

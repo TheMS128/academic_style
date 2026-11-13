@@ -92,7 +92,8 @@ What the paragraph before a listing says is L7 of the core.
 **E8. References.** A number is never typed. `{fig:key}`, `{tab:key}` and `{app:key}` give
 the number or the letter; `[{src:key}]` prints «[3]». A missing key stops the build; a
 figure, a table or a listing that nothing refers to is an error, a source that nothing
-refers to — a «замечание».
+refers to — a «замечание». A reference to a source stands inside its sentence, before the
+full stop: «… представлена на рисунке 3 [5].», not «… на рисунке 3. [5]».
 
 **E9. Counts.** `{pages}`, `{figures}`, `{tables}`, `{sources}` and `{appendices}` give
 the numbers of the note. With word forms the noun agrees with the number:
@@ -129,7 +130,9 @@ guidelines of the department do not say, and the answer goes to `notes.md`.
 **E11. What the build reports.** «ОШИБКА СБОРКИ» — the document was not made: a missing
 field, a missing key, a picture that is not a PNG. «ОШИБКА [id]» and «замечание [id]» —
 the document is made and a rule is broken; K and E are this skill's, V, L, F and T — the
-core's.
+core's. A problem that repeats is printed once, with the number of places and the first
+three: «— 71 мест: абз. 24 …», «— 7 источников: «s1», …». The contents is checked by the
+build itself: every entry must lead to a heading of the document, or the build stops.
 
 **E12. After the build.** The builder cannot open the file in Word. The first time a note
 is built, and after any change of `layout.md` or of the profile, the author is asked to

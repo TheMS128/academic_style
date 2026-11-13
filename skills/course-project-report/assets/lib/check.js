@@ -81,7 +81,7 @@ function check(body, { counts }) {
     for (const [key, entry] of b.items) {
       if (!all.includes(`{src:${key}}`)) warn("K6", `на источник «${key}» нет ссылки в тексте`);
       const e = entry.trim();
-      if (!/\.$/.test(e)) err("K6", `источник «${key}»: запись кончается точкой`);
+      if (!/\.$/.test(e)) err("K6", `источник «${key}»: в конце записи нет точки`);
       if (/\S:\s*\[?сайт\]?/.test(e)) warn("K6", `источник «${key}»: перед двоеточием в «Название сайта : [сайт]» нужен пробел`);
       if (!/https?:\/\//.test(e)) continue;
       if (!/\(дата обращения: \d{2}\.\d{2}\.\d{4}\)/.test(e)) err("K6", `источник «${key}»: у электронного ресурса нет «(дата обращения: ДД.ММ.ГГГГ)»`);
@@ -104,18 +104,52 @@ function check(body, { counts }) {
     if (/^[а-яёa-z]/.test(caption)) err("E4", `название «${caption}» начинается со строчной буквы`);
   }
 
+  // E8 — a reference to a source belongs to its sentence
+  if (/[.!?]\s*\[\{src:/.test(all)) warn("E8", "ссылка на источник стоит после точки: она входит в предложение — «… на рисунке 3 [5].»");
+
   // E5 — numbers written by hand instead of a reference by key
   if (/(?:рисун\S*|таблиц\S*|приложени\S*)\s+\d/i.test(all)) warn("E5", "номер рисунка или таблицы написан в тексте цифрой: ссылка ставится ключом — {fig:…}, {tab:…}");
   if (/\[\d+(?:[,–-]\s*\d+)*\]/.test(all)) warn("E5", "номер источника написан цифрой: ссылка ставится ключом — [{src:…}]");
 
-  return problems;
+  // one mistake repeated in every entry of the list is one problem
+  const bySource = new Map();
+  const rest = [];
+  for (const x of problems) {
+    const m = x.msg.match(/^источник «([^»]+)»: (.+)$/);
+    if (!m) { rest.push(x); continue; }
+    const key = `${x.level}|${m[2]}`;
+    if (!bySource.has(key)) bySource.set(key, { ...x, keys: [], what: m[2] });
+    bySource.get(key).keys.push(m[1]);
+  }
+  for (const g of bySource.values())
+    rest.push({ level: g.level, id: g.id, msg: g.keys.length < 3 ? `источник «${g.keys.join("», «")}»: ${g.what}` : `${g.what} — ${g.keys.length} источников: «${g.keys.slice(0, 3).join("», «")}», …` });
+  return rest;
 }
 
 function lint(body, composed) {
   const profile = core.loadProfile(PROFILE);
   const own = check(body, composed);
-  const text = core.check(composed.entries.filter((e) => e.kind !== "source"), profile);
+  const text = fold(core.check(composed.entries.filter((e) => e.kind !== "source"), profile));
   return [...own, ...text].sort((a, b) => (a.level === b.level ? 0 : a.level === "error" ? -1 : 1));
+}
+
+// A note is long, and one habit of its author gives the same problem dozens of times.
+// Problems that differ only in the paragraph they point at are reported once, with the
+// count and the first places.
+function fold(problems) {
+  const groups = new Map();
+  for (const x of problems) {
+    const cut = x.msg.indexOf(": абз. ");
+    const key = `${x.level}|${x.id}|${cut < 0 ? x.msg : x.msg.slice(0, cut)}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(x);
+  }
+  return [...groups.values()].map((g) => {
+    if (g.length < 4) return g;
+    const cut = g[0].msg.indexOf(": абз. ");
+    const places = g.slice(0, 3).map((x) => x.msg.slice(cut + 2)).join("; ");
+    return [{ ...g[0], msg: `${g[0].msg.slice(0, cut)} — ${g.length} мест: ${places}; …` }];
+  }).flat();
 }
 
 module.exports = { lint, check, PROFILE };
