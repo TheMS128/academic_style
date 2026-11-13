@@ -133,6 +133,8 @@ the document is made and a rule is broken; K and E are this skill's, V, L, F and
 core's. A problem that repeats is printed once, with the number of places and the first
 three: «— 71 мест: абз. 24 …», «— 7 источников: «s1», …». The contents is checked by the
 build itself: every entry must lead to a heading of the document, or the build stops.
+The build works offline: it checks the form of the sources (K10), and whether they exist
+is the separate `bin/sources.js` (K12).
 
 **E12. After the build.** The builder cannot open the file in Word. The first time a note
 is built, and after any change of `layout.md` or of the profile, the author is asked to

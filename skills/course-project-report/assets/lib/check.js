@@ -5,6 +5,7 @@
 const path = require("path");
 const { core } = require("./deps");
 const { plain, itemText, itemNested } = require("./compose");
+const { checkEntry } = require("./sources");
 
 const PROFILE = path.resolve(__dirname, "..", "..", "profile.json");
 
@@ -56,60 +57,62 @@ function check(body, { counts }) {
     if (/\b\d+\s+(лист|рисун|таблиц|источник|приложени)/i.test(ru)) err("K2", "в аннотации число листов, рисунков, таблиц или источников написано цифрой — замените на {pages:…}, {figures:…} и так далее");
   }
 
-  // K3 — the introduction states the aim
-  if (seen.includes("intro") && !/цел[ьию]/i.test(textIn("intro"))) warn("K3", "во введении не названа цель работы");
+  // K4 — the introduction states the aim
+  if (seen.includes("intro") && !/цел[ьию]/i.test(textIn("intro"))) warn("K4", "во введении не названа цель работы");
 
-  // K4 — headings
+  // K5, E3 — headings
   let chapter = null, sections = 0;
-  const closeChapter = () => { if (chapter && sections === 1) warn("K4", `в главе «${chapter.text}» одна подглава: подглав либо нет, либо не меньше двух`); };
+  const closeChapter = () => { if (chapter && sections === 1) warn("K5", `в главе «${chapter.text}» одна подглава: подглав либо нет, либо не меньше двух`); };
   for (const b of body) {
     if (b.kind !== "heading") continue;
-    if (/[.:;,]$/.test(b.text.trim())) err("K4", `заголовок «${b.text}» кончается знаком препинания`);
-    if (/^\d/.test(b.text.trim())) err("K4", `заголовок «${b.text}» начинается с номера: номера ставит сборщик`);
+    if (/[.:;,]$/.test(b.text.trim())) err("E3", `заголовок «${b.text}» кончается знаком препинания`);
+    if (/^\d/.test(b.text.trim())) err("E3", `заголовок «${b.text}» начинается с номера: номера ставит сборщик`);
     if (b.level === 1) { closeChapter(); chapter = b; sections = 0; } else if (b.level === 2) sections++;
-    if (b.level > 1 && !chapter) err("K4", `подглава «${b.text}» стоит вне главы`);
+    if (b.level > 1 && !chapter) err("K5", `подглава «${b.text}» стоит вне главы`);
   }
   closeChapter();
 
-  // K5 — the conclusion is text only
+  // K9 — the conclusion is text only
   if (body.some((b) => partOf.get(b) === "conclusion" && ["figure", "table", "listing"].includes(b.kind)))
-    warn("K5", "в заключении есть рисунок, таблица или листинг: заключение подводит итог словами");
+    warn("K9", "в заключении есть рисунок, таблица или листинг: заключение подводит итог словами");
 
-  // K6 — sources
+  // K10 — sources: every entry is referred to and follows ГОСТ Р 7.0.100
   const all = body.flatMap(blockText).join("\n");
+  const urls = new Map();
   for (const b of body.filter((x) => x.kind === "sources"))
     for (const [key, entry] of b.items) {
-      if (!all.includes(`{src:${key}}`)) warn("K6", `на источник «${key}» нет ссылки в тексте`);
-      const e = entry.trim();
-      if (!/\.$/.test(e)) err("K6", `источник «${key}»: в конце записи нет точки`);
-      if (/\S:\s*\[?сайт\]?/.test(e)) warn("K6", `источник «${key}»: перед двоеточием в «Название сайта : [сайт]» нужен пробел`);
-      if (!/https?:\/\//.test(e)) continue;
-      if (!/\(дата обращения: \d{2}\.\d{2}\.\d{4}\)/.test(e)) err("K6", `источник «${key}»: у электронного ресурса нет «(дата обращения: ДД.ММ.ГГГГ)»`);
-      if (!/– Текст : электронный/.test(e)) err("K6", `источник «${key}»: у электронного ресурса нет сведений «– Текст : электронный» после названия`);
-      if (!/– URL: https?:\/\//.test(e)) err("K6", `источник «${key}»: адрес пишется как «– URL: https://…»`);
+      if (!all.includes(`{src:${key}}`)) warn("K10", `на источник «${key}» нет ссылки в тексте`);
+      const r = checkEntry(entry);
+      for (const m of r.errors) err("K10", `источник «${key}»: ${m}`);
+      for (const m of r.warns) warn("K10", `источник «${key}»: ${m}`);
+      if (r.url) {
+        const same = urls.get(r.url.replace(/\/$/, ""));
+        if (same) err("K10", `источники «${same}» и «${key}» — одна и та же страница`);
+        else urls.set(r.url.replace(/\/$/, ""), key);
+      }
     }
 
-  // E3 — every figure, listing and table is referred to in the text, before it appears
+  // E8 — every figure, listing and table is referred to in the text, before it appears
   const before = new Set();
   for (const b of body) {
     for (const t of blockText(b)) for (const m of t.matchAll(/\{(fig|tab):([^}\s]+)\}/g)) before.add(`${m[1]}:${m[2]}`);
     if (!["figure", "listing", "table"].includes(b.kind)) continue;
     const ref = `${b.kind === "table" ? "tab" : "fig"}:${b.key}`;
     const what = b.kind === "table" ? "таблицу" : b.kind === "listing" ? "листинг" : "рисунок";
-    if (!all.includes(`{${ref}}`)) err("E3", `на ${what} «${b.key}» нет ссылки в тексте`);
-    else if (!before.has(ref)) warn("E3", `первая ссылка на ${what} «${b.key}» стоит после него`);
-    // E4 — captions
+    if (!all.includes(`{${ref}}`)) err("E8", `на ${what} «${b.key}» нет ссылки в тексте`);
+    else if (!before.has(ref)) warn("E8", `первая ссылка на ${what} «${b.key}» стоит после него`);
+    // E5 — captions
     const caption = plain(b.caption).trim();
-    if (/[.:;,]$/.test(caption)) err("E4", `название «${caption}» кончается знаком препинания`);
-    if (/^[а-яёa-z]/.test(caption)) err("E4", `название «${caption}» начинается со строчной буквы`);
+    if (/[.:;,]$/.test(caption)) err("E5", `название «${caption}» кончается знаком препинания`);
+    if (/^[а-яёa-z]/.test(caption)) err("E5", `название «${caption}» начинается со строчной буквы`);
   }
 
   // E8 — a reference to a source belongs to its sentence
   if (/[.!?]\s*\[\{src:/.test(all)) warn("E8", "ссылка на источник стоит после точки: она входит в предложение — «… на рисунке 3 [5].»");
 
-  // E5 — numbers written by hand instead of a reference by key
-  if (/(?:рисун\S*|таблиц\S*|приложени\S*)\s+\d/i.test(all)) warn("E5", "номер рисунка или таблицы написан в тексте цифрой: ссылка ставится ключом — {fig:…}, {tab:…}");
-  if (/\[\d+(?:[,–-]\s*\d+)*\]/.test(all)) warn("E5", "номер источника написан цифрой: ссылка ставится ключом — [{src:…}]");
+  // E8 — numbers written by hand instead of a reference by key
+  if (/(?:рисун\S*|таблиц\S*|приложени\S*)\s+\d/i.test(all)) warn("E8", "номер рисунка или таблицы написан в тексте цифрой: ссылка ставится ключом — {fig:…}, {tab:…}");
+  if (/\[\d+(?:[,–-]\s*\d+)*\]/.test(all)) warn("E8", "номер источника написан цифрой: ссылка ставится ключом — [{src:…}]");
 
   // one mistake repeated in every entry of the list is one problem
   const bySource = new Map();

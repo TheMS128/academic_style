@@ -60,22 +60,59 @@ It introduces nothing new, names no chapter («в первой главе …»)
 future work the project does not need.
 
 **K10. Список использованных источников.** Only what the text refers to; every entry is
-referred to at least once, by `[N]` at the sentence that uses it. Entries go in the order
+referred to at least once, by `[N]` inside the sentence that uses it. Entries go in the order
 of the first reference and follow ГОСТ Р 7.0.100-2018:
 
 - a page of a site — «Название страницы. – Текст : электронный // Название сайта :
   [сайт]. – URL: https://… (дата обращения: ДД.ММ.ГГГГ).»; the author, when the page
   names one, opens the entry («Фамилия, И. О. Название …»), the year follows the site
   when it is known («: [сайт]. – 2024. – URL: …»);
+- a site as a whole — «Название : [сайт]. – Город, год– . – URL: https://… (дата
+  обращения: ДД.ММ.ГГГГ). – Текст : электронный.»;
 - a book — «Фамилия, И. О. Название / И. О. Фамилия. – Город : Издательство, год. – N с.
-  – Текст : непосредственный.».
+  – Текст : непосредственный.»;
+- an article — «Фамилия, И. О. Название / И. О. Фамилия. – Текст : непосредственный //
+  Журнал. – год. – № N. – С. 10–15.».
 
 The site is called by its name, not by its domain («Хабр», not «habr.com»). A colon and
 a semicolon that separate parts of the entry have a space on both sides; every entry ends
-with a full stop. The address and the date are the author's: an entry is never completed
-from memory, and a name of a site the author did not give is asked for.
+with a full stop. The build checks the form of every entry and names what the standard
+asks for; the same page listed twice is an error. The address and the date are the
+author's: an entry is never completed from memory. The title of a page and the name of
+its site may be read from the page itself (K12) — that is a fact of the source, not a
+guess.
 
 **K11. Приложения.** What supports the text and would break its flow: long listings, full
 scripts, generated reports, large tables. Each appendix is lettered by the builder, has a
 title and is referred to in the text («приведено в приложении А»). Figures and tables in
 an appendix continue the numbering of the note.
+
+**K12. The sources exist and belong to the note.** Before the note is handed over, and
+after any change of the list, run `node <assets>/bin/sources.js kp/<project>` and answer
+three questions about every entry. The script answers the first two where it can and
+prints what the third is judged by; the judgement is made by reading, not by the script.
+
+1. **Does it exist?** A page that answers 404 or 410 is an error. A page the script could
+   not reach (403, a time-out, a file) is opened in the browser; a printed source is
+   looked up in a library catalogue or a publisher's site when a search tool is at hand.
+   What still cannot be confirmed is listed for the author as unconfirmed — never
+   reported as existing.
+2. **Is it what the entry says?** The title in the entry is the heading of the page, the
+   site is called by the name the page gives it. A title that differs from the page is
+   corrected from the page; an address that now leads to the front page of the site means
+   the page is gone.
+3. **Does it belong?** A source belongs when its subject is the subject area of the
+   project, a method or a notation the note uses, or a tool the project is built with —
+   and when the sentence that refers to it speaks about that very thing. Two failures:
+   - the source has nothing to do with the subject, the methods or the tools, and no
+     sentence of the note says why it is there (a game guide in a note about a web
+     application) — an error;
+   - the source is on the topic, but the sentence that refers to it is about something
+     else (the documentation of an identity service cited for a statement about file
+     storage) — a «замечание»: the reference moves to the sentence it supports, or the
+     author says what was taken from the source.
+
+The result goes to the user as one table — the number, the title, exists or not, belongs
+or not and why, what to do. Nothing is repaired silently: an entry is not deleted, not
+replaced with a better source and not justified by a sentence written for the purpose.
+A source the author did not use is the author's to remove.

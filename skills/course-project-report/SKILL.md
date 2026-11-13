@@ -38,7 +38,7 @@ of every problem — open that rule, not the whole file.
 
 | Id | File | Owns |
 | --- | --- | --- |
-| K | `references/structure.md` | the parts of the note, their order and what each one holds |
+| K | `references/structure.md` | the parts of the note, their order and what each one holds; the form of a source (K10), whether it exists and belongs (K12) |
 | E | `references/document.md` | carrying the draft into `build.js`; headings, lists, figures, tables, listings, sources, the fields of the title block |
 | — | `references/layout.md` | the frame, the title block and the styles — maintenance only |
 | — | `profile.json` | the genre profile handed to the core |
@@ -52,7 +52,8 @@ of every problem — open that rule, not the whole file.
   next to this one.
 - A fact the note needs and the project does not contain — a measured result, a cost, a
   source — is asked for (F1 of the core), never made up. A source goes into the list only
-  when the author has used it; its address and date are the author's.
+  when the author has used it; its address and date are the author's. A source that does
+  not exist or does not belong to the topic is reported (K12), never quietly swapped.
 - Diagrams are not drawn by this skill. A figure is a PNG the author supplies or another
   tool produces; a missing one is listed among the open places.
 - The skill's own files are edited only when the user asks in this conversation.
@@ -87,11 +88,14 @@ rules into a draft; then the **document**, where the finished draft is carried i
    (K), the document (E) and the text (the core's rules). Fix every «ОШИБКА». Fix a
    «замечание» or leave it with a reason. A problem with an id of the core is fixed in
    `text.md` by the core's rule and carried over again.
-6. **Sheet count.** The contents and the number of sheets are Word fields. Tell the user
+6. **Sources.** `node <assets>/bin/sources.js kp/<project>` — the script requests only the
+   addresses written in the list. Go through K12 for every entry and put the result into
+   the reply as a table; an entry that fails is the user's to decide.
+7. **Sheet count.** The contents and the number of sheets are Word fields. Tell the user
    to open the file in Word, update the fields when asked (or Ctrl+A, F9) and report the
    number of sheets; write it into `meta.json` as `"pages": N` and build again, so the
    abstract names the number in words that agree with it (E9).
-7. **Reply** with the file path, the result of the checks in a line or two, and the open
+8. **Reply** with the file path, the result of the checks in a line or two, and the open
    places still waiting for the user. Say plainly that the frame and the title block can
    be judged only in Word: the builder cannot open the file there.
 
