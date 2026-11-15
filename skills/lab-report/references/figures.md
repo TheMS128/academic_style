@@ -18,7 +18,7 @@ choice: install it, or no run figures. Sources (`.html`) and PNGs live together 
 | a mobile app | `adb exec-out screencap -p > reports/<lab>/figures/figN.png` with the screen open on the emulator, or the user's screenshot (G6) |
 | a query / data script | the real result set — Analysis result template (G5) |
 | a public URL in scope | Edge `--screenshot` of the URL; privacy-preserving choice on consent banners, no forms |
-| a model (UML, ERD, flow) | Diagram template (G5), notation in `families/analysis.md` |
+| a model (UML, ERD, flow), a scheme of a process | the `diagram` skill (`<skill>/../diagram`): it decides what goes on the picture, draws it and checks that nothing overlaps; notation in `families/analysis.md`. Without that skill — the Diagram template (G5) |
 | a specification of an unbuilt site | wireframe — `families/design.md` |
 | an installed GUI app (Excel, StarUML), a page behind a login | the user's screenshot |
 

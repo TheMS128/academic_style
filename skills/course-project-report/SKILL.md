@@ -54,8 +54,10 @@ of every problem — open that rule, not the whole file.
   source — is asked for (F1 of the core), never made up. A source goes into the list only
   when the author has used it; its address and date are the author's. A source that does
   not exist or does not belong to the topic is reported (K12), never quietly swapped.
-- Diagrams are not drawn by this skill. A figure is a PNG the author supplies or another
-  tool produces; a missing one is listed among the open places.
+- Diagrams are not drawn by this skill. A scheme or a diagram the note needs and the
+  author has not supplied is made by the `diagram` skill (`<skill>/../diagram`), which
+  decides what goes on it and checks it; a screenshot is the author's. A missing figure
+  is listed among the open places.
 - The skill's own files are edited only when the user asks in this conversation.
 
 ## Workflow
