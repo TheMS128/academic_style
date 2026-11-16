@@ -22,7 +22,7 @@ claude plugin install academic-style@academic-style
 
 Скиллы плагина вызываются с его именем: `/academic-style:core`,
 `/academic-style:lab-report`, `/academic-style:practice-report`,
-`/academic-style:methodichka`, `/academic-style:course-project-report`. Скиллам `lab-report` и `methodichka` для сборки `.docx`
+`/academic-style:methodichka`, `/academic-style:course-project-report`, `/academic-style:diagram`. Скиллам `lab-report` и `methodichka` для сборки `.docx`
 нужен Node.js и разовая установка зависимостей — `npm i` в папке `assets` каждого.
 
 ## Зачем разделение
@@ -44,6 +44,7 @@ claude plugin install academic-style@academic-style
 | `lab-report` | Отчёт по лабораторной работе: структура глав, титульный лист, сборка `.docx` | `core` | есть, текст пишет через ядро |
 | `practice-report` | Отчёт по практической работе: то же, что `lab-report`, с двумя отличиями | `lab-report`, `core` | есть |
 | `methodichka` | Методические указания к лабораторным работам из Markdown в `.docx` | `core` (для текста) | есть |
+| `diagram` | Схемы и диаграммы для отчётов и записок: отбор элементов, рисование (PlantUML, Graphviz, свой рисовальщик), проверка наложений скриптом | — | есть |
 | `course-project-report` | Пояснительная записка курсового проекта: рамка и основная надпись по ГОСТ 2.104, аннотация, содержание, главы, источники, приложения | `lab-report` (библиотеки сборки), `core` | есть |
 
 Отличия практической работы от лабораторной:
@@ -109,6 +110,7 @@ claude plugin install academic-style@academic-style
 | `skills/lab-report/` | отчёт по лабораторной работе: правила структуры, профиль жанра, сборщик `.docx`, линт документа |
 | `skills/practice-report/` | отчёт по практической работе: два отличия от лабораторной и профиль поверх её профиля |
 | `skills/methodichka/` | методические указания: сборщик `.docx` из Markdown и профиль жанра |
+| `skills/diagram/` | схемы и диаграммы: правила отбора элементов, рисовальщик, проверка наложений, перевод в PNG |
 | `skills/course-project-report/` | пояснительная записка курсового проекта: части записки, сборщик с рамкой и основной надписью, профиль жанра |
 
 Проверка текста и тесты линта ядра:
