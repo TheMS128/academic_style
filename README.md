@@ -22,7 +22,8 @@ claude plugin install academic-style@academic-style
 
 Скиллы плагина вызываются с его именем: `/academic-style:core`,
 `/academic-style:lab-report`, `/academic-style:practice-report`,
-`/academic-style:methodichka`, `/academic-style:course-project-report`, `/academic-style:diagram`. Скиллам `lab-report` и `methodichka` для сборки `.docx`
+`/academic-style:methodichka`, `/academic-style:course-project-report`, `/academic-style:course-project-stage-report`,
+`/academic-style:diagram`. Скиллам `lab-report` и `methodichka` для сборки `.docx`
 нужен Node.js и разовая установка зависимостей — `npm i` в папке `assets` каждого.
 
 ## Зачем разделение
@@ -46,6 +47,7 @@ claude plugin install academic-style@academic-style
 | `methodichka` | Методические указания к лабораторным работам из Markdown в `.docx` | `core` (для текста) | есть |
 | `diagram` | Схемы и диаграммы для отчётов и записок: отбор элементов, рисование (PlantUML, Graphviz, свой рисовальщик), проверка наложений скриптом | — | есть |
 | `course-project-report` | Пояснительная записка курсового проекта: рамка и основная надпись по ГОСТ 2.104, аннотация, содержание, главы, источники, приложения | `lab-report` (библиотеки сборки), `core` | есть |
+| `course-project-stage-report` | Этапы курсового проекта отдельными отчётами и техническое задание по ГОСТ 34.602-2020 | — | перенесён как есть: со своей копией правил текста и сборщика, на ядро не переведён |
 
 Отличия практической работы от лабораторной:
 
@@ -112,6 +114,7 @@ claude plugin install academic-style@academic-style
 | `skills/methodichka/` | методические указания: сборщик `.docx` из Markdown и профиль жанра |
 | `skills/diagram/` | схемы и диаграммы: правила отбора элементов, рисовальщик, проверка наложений, перевод в PNG |
 | `skills/course-project-report/` | пояснительная записка курсового проекта: части записки, сборщик с рамкой и основной надписью, профиль жанра |
+| `skills/course-project-stage-report/` | этапы курсового проекта и ТЗ по ГОСТ 34.602-2020: прежний скилл, перенесён как есть |
 
 Проверка текста и тесты линта ядра:
 
