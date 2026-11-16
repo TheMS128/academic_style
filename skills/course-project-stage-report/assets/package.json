@@ -1,0 +1,11 @@
+{
+  "name": "lab-report-scaffold",
+  "private": true,
+  "description": "docx builder for the lab-report skill; run `npm i` here once",
+  "main": "lib/index.js",
+  "dependencies": {
+    "docx": "9.7.1",
+    "docx-preview": "0.4.0",
+    "jszip": "3.10.2"
+  }
+}
