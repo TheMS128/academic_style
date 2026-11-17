@@ -48,6 +48,7 @@ the whole file.
 | D | `references/sources.md` | where the facts of a lab come from, deviations, the tools of the work, `notes.md` |
 | B | `references/blocks.md` | carrying the draft into `build.js`; listings, figures and captions in the document |
 | G | `references/figures.md` | producing the pictures |
+| K | `references/verify.md` | the optional independent check of the text against the facts |
 | — | `references/families/*.md` | what one kind of lab adds on top of S |
 | — | `references/docx.md` | formatting and the builder's internals — maintenance only |
 | — | `profile.json` | the genre profile handed to the core: reader, sources, verbatim chapters, exemptions |
@@ -103,6 +104,10 @@ written — a text written next to `table()` and `list()` grows tables and lists
    own check (its step 4, its lint on `text.md` with the profile) is part of this step,
    and so is asking the user about the open places it returns — answers go to `notes.md`
    (D4).
+
+   5a. **Verify** (optional) — an independent agent checks every claim of `text.md`
+   against the code, the figures, the notes and the subject. When to run or offer it, who
+   runs it, what it gets and what is done with its findings: `verify.md` (K1–K6).
 6. **Document.** Now read `blocks.md` and write `reports/<lab>/build.js` from `text.md`
    (B1, B3) — content only, the words as they stand in the draft.
 7. **Build**: `node <assets>/bin/build.js reports/<lab>`. Output:
@@ -117,14 +122,16 @@ written — a text written next to `table()` and `list()` grows tables and lists
 8. **Preview**: `node <assets>/bin/preview.js "<docx>" reports/<lab>/preview.png` — expect
    «раздел 1: 1 стр.» and look at the PNG. docx-preview does not break flowing text into
    pages: the page flow is final only in Word Online — tell the user.
-9. **Reply** with the file path and the lint / preview result in a line or two, and the
-   open places still waiting for the user. The document itself contains no preamble.
+9. **Reply** with the file path and the lint / preview result in a line or two, the
+   result of the check when it ran (K6), and the open places still waiting for the user.
+   The document itself contains no preamble.
 
 **Editing an existing report** — the wording changes in `text.md` and is carried into
 `build.js` (B3); a report made before the draft existed has its text only in `build.js`,
 and is edited there. A request to make the text stop reading as generated is the core's
 Mode B with this skill's profile. Цель, Задание and the first sentence of the Вывод are
-not rewritten (S2, S3, S10).
+not rewritten (S2, S3, S10). The check of K can be run on an existing report too: on
+`text.md`, or on the text of the built `.docx` when there is no draft.
 
 A single section, listing or fragment asked for on its own is plain text that starts
 directly with the content — written by the core's rules with this skill's profile. A
