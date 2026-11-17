@@ -65,19 +65,34 @@ rule files: a reviewer that sees how the text was meant reads it as meant.
 Итоговое сообщение: числа и каждая находка одной строкой.
 ```
 
-**K5. What is done with the result.** Nothing is changed on the reviewer's word alone.
-Each finding is shown to the user with its line and its evidence, sorted into three kinds:
+**K5. What is done with the result.** The findings are resolved by this agent, not handed
+to the user to judge: each one carries its evidence, and checking it takes opening one line
+of code or one figure, while asking the user means making them read code they have no
+reason to read yet. Nothing is changed on the reviewer's word alone — every finding is
+checked against its own evidence first:
 
-- **an error** — the claim contradicts the code, a figure or the subject: proposed fix in
-  `text.md`;
-- **a quibble** — formally true, but the wording is right for a report (in the tests: «сразу
-  после проверки ответа» with two assignments in between): proposed to leave as is;
-- **no support** — the sources do not settle it (often a claim about the methodichka's own
-  code, which the reviewer does not have): a question to the user; the answer goes to
-  `notes.md` (D4).
+- **refuted, and the evidence holds** (the line of code, the figure, the documentation
+  says what the reviewer says) — the claim is fixed in `text.md` by the core's rules and
+  carried over (B3);
+- **a quibble** — formally true, but the wording is right for a report (in the tests:
+  «сразу после проверки ответа» with two assignments in between) — left as is;
+- **the evidence does not hold** — the reviewer was wrong — dropped;
+- **no support** — looked up in the code, the notes and the figures first; only what no
+  source can settle and only the user knows (the methodichka's own code, why a decision
+  was made) becomes a question to the user, asked with the other open places (Workflow
+  5); the answer goes to `notes.md` (D4).
 
-The user decides; agreed fixes go into `text.md` by the core's rules and are carried over
-(B3). The check is not repeated after the fixes unless the user asks.
+Two kinds always go to the user, because they are not mistakes of the text:
 
-**K6. Reply.** The reply of Workflow 9 says whether the check ran, how many claims it
-read, and what came of each finding.
+- a finding that contradicts the user's own `notes.md` — the notes are the user's facts;
+- a finding that shows the work itself falls short of the assignment — the text must not
+  be "fixed" into describing what was not done; this is reported, and the report waits
+  for the user's decision.
+
+The check is not repeated after the fixes unless the user asks.
+
+**K6. Record and reply.** What was done with every finding is written next to it in
+`reports/<lab>/verify.md`: fixed (with the new wording), left as a quibble, dropped (and
+why), asked. The file stays with the report so that a run can be looked at later. The reply
+of Workflow 9 gives one line — «проверка: N утверждений, исправлено X, оставлено Y,
+отброшено Z» — plus the questions and the shortfalls of K5, if any.
