@@ -123,7 +123,8 @@ written — a text written next to `table()` and `list()` grows tables and lists
    «раздел 1: 1 стр.» and look at the PNG. docx-preview does not break flowing text into
    pages: the page flow is final only in Word Online — tell the user.
 9. **Reply** with the file path and the lint / preview result in a line or two, the
-   result of the check when it ran (K6), and the open places still waiting for the user. The document itself contains no preamble.
+   result of the check when it ran (K6), and the open places still waiting for the user.
+   The document itself contains no preamble.
 
 **Editing an existing report** — the wording changes in `text.md` and is carried into
 `build.js` (B3); a report made before the draft existed has its text only in `build.js`,
