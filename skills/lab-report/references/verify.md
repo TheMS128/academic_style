@@ -13,8 +13,10 @@ is why the task is kept this narrow.
 
 **K1. When.** The step is offered, not imposed. Run it when the user asks, or offer it in
 one line when the lab has a variant or an individual task, or more than three items in
-the assignment. A lab of one short task goes without it. It costs about as much as
-writing the text once more — say so when offering it.
+the assignment. A lab of one short task goes without it. On a rebuild (SKILL.md, Rebuilding) it
+is offered for every report, whatever its size: an old report was written under older
+rules and nobody checked it against its facts. It costs about as much as writing the text
+once more — say so when offering it.
 
 **K2. Who.** A subagent on the strongest model the session can start — an Opus-class
 model. Never a smaller one: in the tests a smaller model in this role found none of the
@@ -22,14 +24,16 @@ known errors and reported the text as clean.
 
 **K3. What it gets.** Paths only, and only these:
 
-- the draft `reports/<lab>/text.md`;
+- the draft `reports/<lab>/text.md` — or, for a report that has none (one made before
+  the draft existed), its text taken from the built document:
+  `node <assets>/bin/text.js "<docx>" reports/<lab>/text.extracted.md`;
 - the code of the work (the project directory, or the `--project` directory of D1);
 - `notes.md` and `CONTEXT.MD`;
 - the figures in `reports/<lab>/figures/` and what each one shows;
 - the assignment text, to know which chapters are the methodichka's words.
 
-Not the inventory, not earlier versions of the report, not `build.js` and not this skill's
-rule files: a reviewer that sees how the text was meant reads it as meant.
+Not the inventory, not earlier versions of the report (`build.old.js`, `*.old.docx`), not
+`build.js` and not this skill's rule files: a reviewer that sees how the text was meant reads it as meant.
 
 **K4. The task**, handed over as it stands, with the paths filled in:
 
@@ -73,7 +77,8 @@ checked against its own evidence first:
 
 - **refuted, and the evidence holds** (the line of code, the figure, the documentation
   says what the reviewer says) — the claim is fixed in `text.md` by the core's rules and
-  carried over (B3);
+  carried over (B3); a report with no draft is fixed in its `build.js` directly, and
+  rebuilt;
 - **a quibble** — formally true, but the wording is right for a report (in the tests:
   «сразу после проверки ответа» with two assignments in between) — left as is;
 - **the evidence does not hold** — the reviewer was wrong — dropped;
@@ -96,3 +101,7 @@ The check is not repeated after the fixes unless the user asks.
 why), asked. The file stays with the report so that a run can be looked at later. The reply
 of Workflow 9 gives one line — «проверка: N утверждений, исправлено X, оставлено Y,
 отброшено Z» — plus the questions and the shortfalls of K5, if any.
+
+On a rebuild the report was handed in with these errors, so the reply lists every fix
+instead of a count: the chapter, the claim as it was, as it is now, and in a few words
+why (the line of code or the figure). Quibbles and dropped findings stay a count.

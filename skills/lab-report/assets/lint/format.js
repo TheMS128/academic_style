@@ -63,7 +63,7 @@ module.exports = function format(d, r) {
   d.tabRefs = refs(REF_TAB);
   const checkRefs = (what, caps, found) => {
     const nums = caps.map((c) => c.n);
-    for (const x of found) if (!nums.includes(x.n)) r.err("B2", `ссылка на ${what} ${x.n}, которого нет: ${where(x.p)}`);
+    for (const x of found) if (!nums.includes(x.n)) r.err("B2", `ссылка на ${what} ${x.n}, которого нет: абз. ${x.p.i + 1} «${x.last.slice(0, 60)}»`);
     const referenced = new Set(found.map((x) => x.n));
     for (const n of nums) if (!referenced.has(n)) r.err("V6", `на ${what} ${n} нет ссылки в тексте`);
   };
@@ -101,14 +101,15 @@ module.exports = function format(d, r) {
     if (!before || isCode(before) || before.style === S.codeLabel || before.images.length || isCaptionText(before.text)) return;
     const last = sentences(before.text).pop() || "";
     const shape = last.replace(/`/g, "").replace(/[A-Za-z_][\w./\-<>()@:]*/g, "X").replace(/\d+/g, "N").replace(/\s+/g, " ").trim().toLowerCase();
-    intros.push({ p: before, shape, pointer: shape.split(" ").length <= 7 && /x/.test(shape) });
+    intros.push({ p: before, last, shape, pointer: sentences(before.text).length === 1 && shape.split(" ").length <= 7 && /x/.test(shape) });
+    // a pointer «alone» is a paragraph that says nothing but where the code is
   });
   const seen = new Map();
   intros.forEach((x, k) => {
     seen.set(x.shape, (seen.get(x.shape) || 0) + 1);
-    if (k && x.shape === intros[k - 1].shape) r.warn("B6", `два листинга подряд введены одной и той же фразой: ${where(x.p)}`);
+    if (k && x.shape === intros[k - 1].shape) r.warn("B6", `два листинга подряд введены одной и той же фразой: абз. ${x.p.i + 1} «${x.last.slice(0, 60)}»`);
     if (k >= 2 && x.pointer && intros[k - 1].pointer && intros[k - 2].pointer)
-      r.warn("B6", `три листинга подряд введены одним указанием на файл — между ними нет текста о коде: ${where(x.p)}`);
+      r.warn("B6", `три листинга подряд введены одним указанием на файл — между ними нет текста о коде: абз. ${x.p.i + 1} «${x.last.slice(0, 60)}»`);
   });
   for (const [shape, n] of seen) if (n > 2) r.warn("B6", `фраза перед листингом «${shape}» повторяется ${n} раз(а) — не больше двух на отчёт`);
 

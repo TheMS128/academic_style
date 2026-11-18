@@ -26,10 +26,12 @@ if (!fs.existsSync(file)) fail(`нет файла ${file}`);
 if (!fs.existsSync(path.join(__dirname, "..", "node_modules", "docx")))
   fail(`зависимости не установлены — выполните один раз: npm i (в папке ${path.join(__dirname, "..")})`);
 
-const { run, buildReport, ...api } = require("../lib");
+const { run, buildReport, ...blocks } = require("../lib");
+// docx is part of the API for the escape hatch (blocks.md → B10)
+const api = { ...blocks, docx: require("docx") };
 const content = require(file);
 if (typeof content !== "function")
-  fail(`${file} написан в старом формате (сам подключает сборщик) — запустите его напрямую: node "${file}"`);
+  fail(`${file} написан в старом формате (сам подключает сборщик). Переведите его: node "${path.join(__dirname, "migrate.js")}" "${reportDir}" — или соберите как есть: node "${file}"`);
 
 const report = content(api);
 if (!report || !Array.isArray(report.body)) fail(`${file}: функция должна вернуть объект с массивом body`);
