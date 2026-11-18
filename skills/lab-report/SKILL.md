@@ -126,7 +126,25 @@ written — a text written next to `table()` and `list()` grows tables and lists
    result of the check when it ran (K6), and the open places still waiting for the user.
    The document itself contains no preamble.
 
-**Editing an existing report** — the wording changes in `text.md` and is carried into
+**Rebuilding a report that already exists.** First tell which of three things the user
+wants; when unsure, it is the second.
+
+1. *As it was* — the same text, the builder it was made with: `node reports/<lab>/build.js`
+   for a `build.js` of the older kind, which loads the old skill from the home directory.
+   Works while that old skill folder is in place.
+2. *On this skill* — the same text, the current builder and lint. A `build.js` of the older
+   kind is migrated first: `node <assets>/bin/migrate.js reports/<lab>` (the original stays
+   as `build.old.js`; `--check` only says whether it can be migrated). Before the build the
+   existing `.docx` is copied to `reports/<lab>/<name>.old.docx`; then
+   `node <assets>/bin/build.js reports/<lab>`. `meta.json` keeps the title fields, the
+   text is not touched. The lint may now report what the old rules allowed: such a
+   «замечание» is reported to the user with the build, not fixed silently — the text of a
+   handed-in report changes only when the user asks.
+3. *With a new text* — the text is written again from the facts: Workflow from step 5, with
+   the existing `meta.json` and `notes.md`, and after case 2 has been done, so that the old
+   `build.js` and `.docx` are kept.
+
+ — the wording changes in `text.md` and is carried into
 `build.js` (B3); a report made before the draft existed has its text only in `build.js`,
 and is edited there. A request to make the text stop reading as generated is the core's
 Mode B with this skill's profile. Цель, Задание and the first sentence of the Вывод are

@@ -27,7 +27,9 @@ module.exports = ({ chapter, subchapter, p, list, figure, table, listing }) => (
 It is built with `node <assets>/bin/build.js reports/<lab>`. The same `build.js` works on
 any machine and with any way the skill is installed. A `build.js` of the older kind — one
 that `require`s the builder itself — still runs directly (`node reports/<lab>/build.js`)
-and is rewritten to this form when the report is next edited.
+while the old skill folder is in place; it is turned into this form by
+`node <assets>/bin/migrate.js reports/<lab>` (SKILL.md, Rebuilding). The calls also
+include `docx`, the docx-js module, for the escape hatch of B10.
 
 | Call | Produces |
 | --- | --- |
@@ -106,7 +108,7 @@ page of its caption.
 period, no number (the builder adds «Рисунок N – » / «Таблица N. »).
 
 **B10. Escape hatch.** A `body` entry may be a ready docx-js `Paragraph` or `Table`
-(`require` docx from `<assets>/node_modules`) for what the calls cannot express — with a
+(`docx` comes with the calls of B1) for what the calls cannot express — with a
 style id from `lib/styles.js`, never direct formatting.
 
 **B11. Formatting** is owned by `<assets>/lib`: styles, the title page, document
