@@ -140,11 +140,17 @@ wants; when unsure, it is the second.
    text is not touched. The lint may now report what the old rules allowed: such a
    «замечание» is reported to the user with the build, not fixed silently — the text of a
    handed-in report changes only when the user asks.
+
+   An old report was written under older rules and was never checked against its facts,
+   so the check of K is offered with every rebuild (K1). When the user takes it, the text
+   is taken from the rebuilt document (K3), the agent resolves the findings itself and
+   fixes the confirmed errors in `build.js` (K5), rebuilds, and gives the user the list
+   of what was fixed (K6). Taking the check is the user's consent to those fixes.
 3. *With a new text* — the text is written again from the facts: Workflow from step 5, with
    the existing `meta.json` and `notes.md`, and after case 2 has been done, so that the old
    `build.js` and `.docx` are kept.
 
- — the wording changes in `text.md` and is carried into
+**Editing an existing report** — the wording changes in `text.md` and is carried into
 `build.js` (B3); a report made before the draft existed has its text only in `build.js`,
 and is edited there. A request to make the text stop reading as generated is the core's
 Mode B with this skill's profile. Цель, Задание and the first sentence of the Вывод are
