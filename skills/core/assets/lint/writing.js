@@ -46,9 +46,10 @@ module.exports = function writing(d, r) {
     // T6: a guess instead of a fact
     const guess = p.text.match(/(?<![а-яё])(вероятно|возможно, (?:из-за|это|причина))(?![а-яё])/i);
     if (guess && !r.limited("T6", guess[1])) r.warn("T6", `догадка о причине — спросите автора или не пишите: ${where(p)}`, p);
-    // T3: «…, то есть …» that says the same thing again; «т. е.» with a number is a fact
-    const again = p.text.match(/,\s+то есть\s+([^.!?]*)/i);
-    if (again && !/\d/.test(again[1])) r.warn("T3", `«то есть» с пересказом — оставьте одну, более точную формулировку: ${where(p)}`, p);
+    // T3: «…, то есть …» that says the same thing again; «т. е.» with a number or a formula
+    // («N = 3, то есть f(x, y) = …») is a fact
+    const again = [...p.text.matchAll(/,\s+то есть\s+([^.!?]*)/gi)].find((m) => !/\d|=/.test(m[1]));
+    if (again) r.warn("T3", `«то есть» с пересказом — оставьте одну, более точную формулировку: ${where(p)}`, p);
     // T9: three sentences in a row with the same opening
     const firsts = ss.map((s) => s.split(/\s+/)[0].toLowerCase().replace(/[^а-яёa-z]/g, "").replace(/^был[аои]?$/, "был…"));
     if (firsts.some((w, i) => i >= 2 && w && w === firsts[i - 1] && w === firsts[i - 2])) r.warn("T9", `три предложения подряд начинаются одинаково: ${where(p)}`, p);
@@ -64,9 +65,11 @@ module.exports = function writing(d, r) {
     if (/(^|[\s(])\d+\.\d+\s?(%|мс|с|сек|мин|ч|МБ|ГБ|КБ|кБ|Мб|Гб|см|мм|px|раз)(?=[^а-яёa-z]|$)/i.test(prose))
       r.warn("T17", `десятичная точка в значении — нужна запятая (0,65): ${where(p)}`, p);
     // T23: a softener before an adjective or adverb («достаточно удобный»), not
-    // «достаточно указать» or «относительно родительского блока» (-ого / -его end in «о» too)
+    // «достаточно указать» or «относительно родительского блока» (-ого / -его end in «о» too).
+    // After the preposition «относительно» a genitive («относительно прямой», «… осей»)
+    // looks like an adjective, so for it the -ой / -ей / -ых / -их endings are not taken.
     const soft = [...p.text.matchAll(/(?:^|[^а-яё])((?:достаточно|довольно|относительно|несколько|вполне)\s+([а-яё]+))(?=[^а-яё]|$)/gi)]
-      .find((m) => (/^несколько/i.test(m[1])
+      .find((m) => (/^относительно/i.test(m[1]) && /(ой|ей|ых|их)$/i.test(m[2]) ? false : /^несколько/i.test(m[1])
         // «несколько новых экранов» is a count; only a comparative makes it a softener
         ? /(ее|ей|же|ше)$/i.test(m[2])
         : /(ый|ий|ой|ая|яя|ое|ее|ые|ие|ым|им)$/i.test(m[2]) || (/о$/i.test(m[2]) && !/(ого|его)$/i.test(m[2]))));
