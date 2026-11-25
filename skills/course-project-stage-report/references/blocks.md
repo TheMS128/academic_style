@@ -2,8 +2,9 @@
 
 **B1. build.js** holds content only. The skill lives outside the project, so the
 require resolves it from the user's home: `<skill-from-home>` is `<skill>` written
-relative to the home directory with forward slashes (a standard install gives
-`.claude/skills/<skill name>`). No drive letter, user name or absolute path goes into
+relative to the home directory with forward slashes (for example
+`.claude/skills/<skill name>`, `.agents/skills/<skill name>` or
+`.hermes/skills/<skill name>`, whichever folder the agent installs skills into). No drive letter, user name or absolute path goes into
 the project — the same `build.js` works on any machine with the same install:
 
 ```js

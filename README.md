@@ -23,8 +23,48 @@ claude plugin install academic-style@academic-style
 Скиллы плагина вызываются с его именем: `/academic-style:core`,
 `/academic-style:lab-report`, `/academic-style:practice-report`,
 `/academic-style:methodichka`, `/academic-style:course-project-report`, `/academic-style:course-project-stage-report`,
-`/academic-style:diagram`. Скиллам `lab-report` и `methodichka` для сборки `.docx`
-нужен Node.js и разовая установка зависимостей — `npm i` в папке `assets` каждого.
+`/academic-style:diagram`. Скиллам `lab-report`, `methodichka` и
+`course-project-stage-report` для сборки `.docx` нужен Node.js и разовая установка
+зависимостей — `npm i` в папке `assets` каждого.
+
+### Другие агенты: Codex, OpenCode, Hermes
+
+Скиллы написаны в открытом формате Agent Skills (папка с `SKILL.md`), который читают и
+другие агенты. Плагин — упаковка только для Claude Code; остальным агентам скиллы
+копируются в их папку скиллов. Копировать нужно все семь папок вместе: скиллы ссылаются
+друг на друга как на соседние папки (`../core`, `../lab-report`).
+
+| Агент | Папка скиллов (для всех проектов) |
+| --- | --- |
+| Codex | `~/.agents/skills` |
+| OpenCode | `~/.config/opencode/skills` |
+| Hermes | `~/.hermes/skills` |
+
+Linux, macOS, WSL — подставьте папку агента вместо `~/.agents/skills`:
+
+```bash
+git clone https://github.com/TheMS128/academic_style.git
+mkdir -p ~/.agents/skills && cp -r academic_style/skills/* ~/.agents/skills/
+for d in lab-report methodichka course-project-stage-report; do (cd ~/.agents/skills/$d/assets && npm i); done
+```
+
+Windows, PowerShell:
+
+```powershell
+git clone https://github.com/TheMS128/academic_style.git
+$dst = "$HOME\.agents\skills"; New-Item -ItemType Directory -Force $dst | Out-Null
+Copy-Item -Recurse -Force academic_style\skills\* $dst
+foreach ($d in "lab-report","methodichka","course-project-stage-report") { Push-Location "$dst\$d\assets"; npm i; Pop-Location }
+```
+
+Отличия от Claude Code:
+
+- скиллы вызываются без префикса плагина: `core`, `lab-report` и т. д. Имя `core`
+  общее — если в папке уже есть чужой скилл с таким именем, агент увидит оба;
+- проверка отчёта по фактам (`lab-report`, `references/verify.md`) запускается в
+  отдельном агенте; если ваш агент не умеет запускать отдельного агента, проверка не
+  предлагается;
+- в этих агентах скиллы пока проверяются: если что-то не работает, напишите в issues.
 
 ## Зачем разделение
 
@@ -98,7 +138,7 @@ claude plugin install academic-style@academic-style
 
 | Путь | Что там |
 | --- | --- |
-| `.claude-plugin/` | манифест плагина и запись для установки из репозитория |
+| `.claude-plugin/` | манифест плагина Claude Code и запись для установки из репозитория; другим агентам не нужен |
 | `skills/core/` | ядро |
 | `skills/core/SKILL.md` | порядок работы ядра, два режима, формат черновика |
 | `skills/core/references/writing.md` | правила V — как написан текст |

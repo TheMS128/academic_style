@@ -18,9 +18,12 @@ is offered for every report, whatever its size: an old report was written under 
 rules and nobody checked it against its facts. It costs about as much as writing the text
 once more — say so when offering it.
 
-**K2. Who.** A subagent on the strongest model the session can start — an Opus-class
-model. Never a smaller one: in the tests a smaller model in this role found none of the
-known errors and reported the text as clean.
+**K2. Who.** A separate agent (a subagent, a child session — whatever the harness has)
+on the strongest model the session can start — in Claude, an Opus-class model. Never a
+smaller one: in the tests a smaller model in this role found none of the known errors
+and reported the text as clean. If the harness cannot start a separate agent, or only a
+smaller model, the check is not offered: run in the author's own context it reads the
+text as meant, which is what K3 guards against.
 
 **K3. What it gets.** Paths only, and only these:
 
