@@ -61,7 +61,7 @@ const KP = {
     // the signatures are two columns: «Выполнил:» / «Принял:» and what stands against them
     signLabel: 4990, signValue: 6690,                          // from the left edge of the text, twips
     // the teacher's post as it is printed before the name
-    posts: { "зав. кафедры ИСПИ": "зав. каф.", "доцент каф. ИСПИ": "доц.", "ст. преп. каф. ИСПИ": "ст. преп.", "ассистент каф. ИСПИ": "асс." },
+    posts: { "зав. кафедры ИСПИ": "зав. каф.", "профессор каф. ИСПИ": "проф.", "доцент каф. ИСПИ": "доц.", "ст. преп. каф. ИСПИ": "ст. преп.", "ассистент каф. ИСПИ": "асс." },
     minGap: 480,
   },
 };
