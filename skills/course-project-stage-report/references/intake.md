@@ -16,7 +16,7 @@ in the sources; the title page prints `И. О. Фамилия` itself. Ask again
 user changes a field.
 
 **I3. Должность.** No `Должность` in `RULES.MD` → ask for exactly one of `зав. кафедры
-ИСПИ`, `профессор каф. ИСПИ`, `доцент каф. ИСПИ`, `ст. преп. каф. ИСПИ`, `ассистент каф. ИСПИ`; record it there.
+ИСПИ`, `проф. каф. ИСПИ`, `доцент каф. ИСПИ`, `ст. преп. каф. ИСПИ`, `ассистент каф. ИСПИ`; record it there.
 
 **I4. Variant.** The assignment has individual variants and the number is unknown →
 ask for it.
