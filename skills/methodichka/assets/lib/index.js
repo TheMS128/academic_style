@@ -11,7 +11,7 @@ const JSZip = require("jszip");
 const { Document, Packer, Paragraph, TextRun, TableOfContents, AlignmentType, Footer, PageNumber } = require("docx");
 const { VLSU } = require("./profile");
 const { buildStyles, buildNumbering, S } = require("./styles");
-const { coverPage } = require("./cover");
+const { coverPage, wrap } = require("./cover");
 const { mdToDoc } = require("./md");
 
 // нижний колонтитул тела: номер страницы по центру
@@ -68,9 +68,24 @@ function bodyMarkdown(md) {
   return idx >= 0 ? lines.slice(idx + 1).join("\n") : md;
 }
 
-async function buildMethodichka({ input, out, title, year, author, profile = VLSU }) {
+// The cover header with the institute and the department of the course: the institute
+// goes after «(ВлГУ)», the department replaces the profile's «Кафедра …» line. Without
+// them the profile's header stays as it is.
+function coverHeader(header, institute, department, profile) {
+  if (!institute && !department) return header;
+  if (department && /^кафедра(\s|$)/i.test(department)) throw new Error("--department: название без слова «Кафедра»");
+  let at = header.findIndex((l) => /^Кафедра\s/.test(l));
+  const own = at >= 0 ? header[at] : null;
+  if (at < 0) at = header.length;
+  const fit = (l) => wrap(l, profile.size.titleHeader, profile.page.width - profile.page.margin.left - profile.page.margin.right);
+  const lines = [...(institute ? fit(institute) : []), ...(department ? fit(`Кафедра ${department}`) : own ? [own] : [])];
+  return [...header.slice(0, at), ...lines, ...header.slice(at + 1)];
+}
+
+async function buildMethodichka({ input, out, title, year, author, institute, department, profile = VLSU }) {
   const md = fs.readFileSync(input, "utf8");
-  const p = { ...profile, cover: { ...profile.cover, year: year || new Date().getFullYear(), author } };
+  const header = coverHeader(profile.cover.header, institute, department, profile);
+  const p = { ...profile, cover: { ...profile.cover, header, year: year || new Date().getFullYear(), author } };
   const page = { margin: p.page.margin, size: { width: p.page.width, height: p.page.height } };
 
   const { children, numbering } = mdToDoc(bodyMarkdown(md), p, { baseDir: path.dirname(input) });

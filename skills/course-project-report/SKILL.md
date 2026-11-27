@@ -48,6 +48,9 @@ of every problem — open that rule, not the whole file.
 
 - No `RULES.MD` / `CONTEXT.MD` in the project root, or a field of E1 is empty → ask the
   user. Never invent a name, a group, a teacher or the document code («Шифр документа»).
+- The title page prints the department ИСПИ by default; a project of another department
+  takes the optional `Институт:` and `Кафедра:` of `RULES.MD` / `CONTEXT.MD` (E1), asked
+  for, never guessed.
 - No `<core>/SKILL.md` or no `<lab>/SKILL.md` → stop and say which skill is not installed
   next to this one.
 - A fact the note needs and the project does not contain — a measured result, a cost, a

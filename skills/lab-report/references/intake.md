@@ -15,8 +15,17 @@ the values, no build before they are filled.
 in the sources; the title page prints `И. О. Фамилия` itself. Ask again whenever the
 user changes a field.
 
-**I3. Должность.** No `Должность` in `RULES.MD` → ask for exactly one of `зав. кафедры
-ИСПИ`, `проф. каф. ИСПИ`, `доцент каф. ИСПИ`, `ст. преп. каф. ИСПИ`, `ассистент каф. ИСПИ`; record it there.
+**I3. Кафедра и должность.** The title page prints the department ИСПИ unless
+`RULES.MD` / `CONTEXT.MD` set the optional `Институт:` and `Кафедра:` (`CONTEXT.MD` wins).
+The course is taught by another department — the discipline is not an ИСПИ one, the
+user names another department or institute, or a sample title page shows one → ask for
+the full name of the institute and of the department as the department's own title pages
+print them (`Институт машиностроения и автомобильного транспорта`, `«Технология
+машиностроения»`, without the word «Кафедра») and record them; never guess them. No
+`Должность` in `RULES.MD` → for ИСПИ ask for exactly one of `зав. кафедры ИСПИ`,
+`проф. каф. ИСПИ`, `доцент каф. ИСПИ`, `ст. преп. каф. ИСПИ`, `ассистент каф. ИСПИ`; for
+another department ask for the post as it should be printed (`директор ИМиАТ, доцент`);
+record it there.
 
 **I4. Variant.** The assignment has individual variants and the number is unknown →
 ask for it.
@@ -53,5 +62,5 @@ genuinely unclear (S3); a requirement vs an example of the methodichka (D2).
 
 | Answer | Goes to |
 | --- | --- |
-| title fields, Должность, theory flag | `RULES.MD` / `CONTEXT.MD` (after the first build: `meta.json`) |
+| title fields, Должность, Институт / Кафедра, theory flag | `RULES.MD` / `CONTEXT.MD` (after the first build: `meta.json`) |
 | variant, «Ознакомиться», optional exercises, facts, tall-figure choice | `reports/<lab>/notes.md` (format D4) |

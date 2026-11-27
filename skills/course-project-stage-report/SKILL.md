@@ -59,6 +59,9 @@ A mixed lab takes its skeleton from the main family and borrows blocks from the 
 
 - No `RULES.MD` / `CONTEXT.MD` in the project root → I1. Never invent a name, a group or
   a teacher.
+- The title page prints the department ИСПИ by default. A course of another department
+  needs `Институт:` and `Кафедра:` in `RULES.MD` / `CONTEXT.MD` (I3); the names are asked,
+  never guessed, and `Должность` is then free text.
 - The skill's own files (`<skill>`, outside any project) are edited only when
   the user asks in this conversation: say in one sentence what and why, wait for the
   go-ahead. A rule that got in the way is reported, never quietly
