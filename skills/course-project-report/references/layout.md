@@ -32,7 +32,10 @@ the lines of the university's name are long. The blocks sit where the samples ha
 «КУРСОВОЙ ПРОЕКТ» at `title.workTop`, the signatures at `title.signTop`, the city on the
 last line above the frame. «Выполнил:» and «Принял:» stand in one column and what belongs
 to them in the next, set with a tab stop. A topic longer than a line breaks before its
-quoted name. `title.posts` maps the post of `RULES.MD` to its short form.
+quoted name. `title.posts` maps the post of `RULES.MD` to its short form; a post not in
+the map (another department) is printed as written. The optional fields `Кафедра` and
+`Университет` replace the «Кафедра …» line and the university's lines of
+`title.headerLines` (lab-report's `meta.js → titleHeader`).
 
 ## Sections
 

@@ -9,7 +9,7 @@
 
 const { Paragraph, TextRun } = require("docx");
 const { S } = require("./styles");
-const { initialsFirst, workHeading } = require("./meta");
+const { initialsFirst, workHeading, titleHeader } = require("./meta");
 
 // approximate Times New Roman advance widths, em
 function widthEm(text) {
@@ -52,7 +52,7 @@ function titlePage(t, p) {
   const height = page.height - page.margin.top - page.margin.bottom;
   const signWidth = width - p.indent.signLeft;
 
-  const header = tp.headerLines;
+  const header = titleHeader(t, tp.headerLines, (l) => wrap(l, size.titleHeader, width));
   const titleLines = [
     workHeading(t),
     ...wrap(`по дисциплине «${t["Дисциплина"]}»`, size.titleBig, width),

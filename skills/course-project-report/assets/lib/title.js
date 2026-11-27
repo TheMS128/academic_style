@@ -3,7 +3,7 @@
 // and long lines are broken here, not by Word, so the height of each block is known and
 // the gaps are computed: the page cannot spill onto a second one.
 
-const { docx, wrap } = require("./deps");
+const { docx, wrap, labMeta } = require("./deps");
 const { Paragraph, TextRun, Tab } = docx;
 const { S, titleWidth } = require("./styles");
 const { mm } = require("./profile");
@@ -16,7 +16,8 @@ function titlePage(t, p) {
   const fit = (text, w) => wrap(text, p.size.title, w * 0.93);
   const lh = tp.lineHeight;
 
-  const header = tp.headerLines.flatMap((l) => (l ? fit(l, width) : [""]));
+  // the optional fields «Кафедра» / «Университет» replace the profile's department and university
+  const header = labMeta.titleHeader(t, tp.headerLines).flatMap((l) => (l ? fit(l, width) : [""]));
   // a topic that takes more than one line breaks before the quoted name, when both halves fit
   let topic = fit(t["Тема"], width);
   const quote = t["Тема"].indexOf(" «");

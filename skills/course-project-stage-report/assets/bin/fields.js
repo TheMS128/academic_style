@@ -7,27 +7,39 @@
 
 const fs = require("fs");
 const path = require("path");
-const { FIELDS, readSources, findRepoRoot, invalidFields, theoryFlag } = require("../lib/meta");
+const { FIELDS, readSources, findRepoRoot, invalidFields, theoryFlag, titleHeader } = require("../lib/meta");
 const { VLSU } = require("../lib/profile");
 
 const reportDir = path.resolve(process.argv[2] || ".");
 const metaFile = path.join(reportDir, "meta.json");
 const repoRoot = findRepoRoot(reportDir);
 
-let rows, title;
+let rows, title, sources = {};
 if (fs.existsSync(metaFile)) {
   title = JSON.parse(fs.readFileSync(metaFile, "utf8")).title || {};
   rows = FIELDS.map(([key]) => [key, title[key], "meta.json"]);
+  for (const key of ["Университет", "Кафедра"]) if (title[key]) sources[key] = "meta.json";
 } else {
-  title = readSources(repoRoot).fields;
+  ({ fields: title, sources } = readSources(repoRoot));
   rows = FIELDS.map(([key, file]) => [key, title[key], file]);
 }
 const bad = new Map(invalidFields(title, VLSU).map((m) => [m.split(":")[0], m.slice(m.indexOf("—") + 2)]));
-const header = VLSU.title.headerLines;
+// the university and the department: the optional fields «Университет» / «Кафедра» when
+// set, otherwise those of the profile
+const own = VLSU.title.headerLines;
+const ownDept = own.find((l) => /^Кафедра\s/.test(l)) || "";
+const ownUniv = (own.find((l) => /^\([^()]+\)$/.test(l)) || "").replace(/[()]/g, "");
 rows.push(
-  ["Институт", header.slice(3, 6).join(" "), "профиль ВлГУ"],
-  ["Кафедра", header[6].replace(/^Кафедра\s+/, ""), "профиль ВлГУ"],
+  title["Университет"]
+    ? ["Университет", title["Университет"], sources["Университет"]]
+    : ["Университет", ownUniv + " (по умолчанию; другой — поле «Университет:» в RULES.MD / CONTEXT.MD)", "профиль ВлГУ"],
+  title["Кафедра"]
+    ? ["Кафедра", title["Кафедра"], sources["Кафедра"]]
+    : ["Кафедра", ownDept.replace(/^Кафедра\s+/, "") + " (по умолчанию; другая — поле «Кафедра:» в RULES.MD / CONTEXT.MD)", "профиль ВлГУ"],
 );
+if (title["Кафедра"] || title["Университет"]) {
+  console.log(`Шапка титульника: ${titleHeader(title, own).join(" / ")}\n`);
+}
 
 console.log("| Поле | Значение | Источник |");
 console.log("| --- | --- | --- |");

@@ -79,14 +79,20 @@ function readKey(text, key) {
 // Values the title page can print. Returns «Поле: причина» for every bad value.
 const NAME = /^[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)? [А-ЯЁ]\.(?: ?[А-ЯЁ]\.)?$/;
 function invalidFields(fields, profile = VLSU) {
-  const posts = profile.title.posts || [];
+  // the list of posts belongs to the profile's department; a course of another
+  // department (field «Кафедра») takes the post as the user writes it
+  const posts = fields["Кафедра"] ? [] : profile.title.posts || [];
   const rules = {
     "Год": [(v) => /^\d{4}$/.test(v), "четыре цифры"],
     "Номер работы": [(v) => /^\d+$/.test(v), "число"],
     "Тип работы": [(v) => /^(Лабораторная|Практическая|Курсовой проект)$/.test(v), "«Лабораторная», «Практическая» или «Курсовой проект»"],
     "Выполнил": [(v) => NAME.test(v), "формат «Фамилия И. О.»"],
     "Принял": [(v) => NAME.test(v), "формат «Фамилия И. О.», должность — отдельным полем"],
-    "Должность": [(v) => !posts.length || posts.includes(v), `одно из: ${posts.join("; ")}`],
+    "Должность": [(v) => !posts.length || posts.includes(v), `одно из: ${posts.join("; ")} (или укажите «Кафедра:» курса — тогда должность пишется свободно)`],
+    "Кафедра": [(v) => !/^кафедра(\s|$)/i.test(v) && v.length <= 120, "название без слова «Кафедра», например «Технология машиностроения»"],
+    "Университет": fields["Кафедра"]
+      ? [(v) => /^[«А-ЯЁ]/.test(v) && v.length <= 200, "полное название, как на титульниках этого вуза, например «Московский государственный технический университет имени Н. Э. Баумана» (МГТУ им. Н. Э. Баумана)"]
+      : [() => false, "указать вместе с ним и «Кафедра:» — кафедра ИСПИ принадлежит ВлГУ"],
   };
   return Object.entries(rules)
     .filter(([key, [ok]]) => fields[key] && !ok(fields[key]))
@@ -155,7 +161,56 @@ function readSources(repoRoot) {
     if (value) fields[key] = value;
     else missing.push(`${key} (${file})`);
   }
-  return { fields, missing };
+  const { fields: optional, sources } = readOptional(repoRoot);
+  return { fields: { ...fields, ...optional }, missing, sources };
+}
+
+// Optional title fields: the university and the department of a course taught outside the
+// profile's own. CONTEXT.MD (the course at hand) wins over RULES.MD (the student's
+// default). Without them the title page prints the profile's university and department.
+const OPTIONAL_FIELDS = ["Университет", "Кафедра"];
+function readOptional(repoRoot) {
+  const fields = {}, sources = {};
+  for (const key of OPTIONAL_FIELDS) {
+    for (const file of ["CONTEXT.MD", "RULES.MD"]) {
+      const full = path.join(repoRoot, file);
+      const value = fs.existsSync(full) ? readKey(fs.readFileSync(full, "utf8"), key) : null;
+      if (value) { fields[key] = value; sources[key] = file; break; }
+    }
+  }
+  return { fields, sources };
+}
+
+// Where the university's name stands in the profile's header: from the line that opens
+// with «, to the line that closes it with », plus an abbreviation line «(ВлГУ)» after it.
+function universityLines(headerLines) {
+  const start = headerLines.findIndex((l) => /^«/.test(l));
+  if (start < 0) return null;
+  let end = headerLines.findIndex((l, k) => k >= start && /»$/.test(l));
+  if (end < 0) return null;
+  if (/^\([^()]+\)$/.test(headerLines[end + 1] || "")) end++;
+  return { start, end };
+}
+
+// The header lines of the title page. «Университет» replaces the profile's university
+// (its abbreviation in brackets at the end, if given, goes to a line of its own, as
+// «(ВлГУ)» does); «Кафедра» replaces the profile's «Кафедра …» line. `fit` breaks those
+// user lines to the width of the page; the profile's own lines are left as they are.
+function titleHeader(t, headerLines, fit = (l) => [l]) {
+  if (!t["Университет"] && !t["Кафедра"]) return headerLines;
+  let lines = [...headerLines];
+  if (t["Кафедра"]) {
+    const at = lines.findIndex((l) => /^Кафедра\s/.test(l));
+    const dept = fit(`Кафедра ${t["Кафедра"]}`);
+    lines = at >= 0 ? [...lines.slice(0, at), ...dept, ...lines.slice(at + 1)] : [...lines, ...dept];
+  }
+  const where = t["Университет"] && universityLines(lines);
+  if (where) {
+    const m = t["Университет"].match(/^(.*\S)\s*(\([^()]+\))$/);
+    const name = m ? [...fit(m[1]), m[2]] : fit(t["Университет"]);
+    lines = [...lines.slice(0, where.start), ...name, ...lines.slice(where.end + 1)];
+  }
+  return lines;
 }
 
 function loadMeta(reportDir, repoRoot, profile = VLSU) {
@@ -219,5 +274,5 @@ function appXml() {
 module.exports = {
   FIELDS, initialsFirst, surname, disciplineAbbr, reportFileName, readKey, isPlaceholder, invalidFields,
   workTypeGenitive, conclusionStamp, workHeading, isCourseProject, theoryFlag, findRepoRoot, readSources, loadMeta, saveMeta, nextDocProps, coreXml, appXml,
-  requireProjectFiles,
+  requireProjectFiles, OPTIONAL_FIELDS, readOptional, titleHeader,
 };
