@@ -46,11 +46,22 @@ function wrap(text, size, width) {
   return lines;
 }
 
+// The signature block: every line starts at one left edge, profile.indent.signLeft. A line
+// that does not fit moves the whole block left in steps of 0.5 cm until the longest line
+// fits; at the left margin what is still too long is wrapped. Measured as wrap() does.
+const SHIFT_STEP = 284; // 0.5 cm, twips
+function signIndent(lines, size, width, start) {
+  const need = (l) => (widthEm(l) * size * 10) / 0.95;
+  const longest = lines.filter(Boolean).reduce((a, b) => (need(b) > need(a) ? b : a), "");
+  let left = start;
+  while (left > 0 && need(longest) > width - left) left = Math.max(0, left - SHIFT_STEP);
+  return { left, longest };
+}
+
 function titlePage(t, p) {
   const { page, size, title: tp } = p;
   const width = page.width - page.margin.left - page.margin.right;
   const height = page.height - page.margin.top - page.margin.bottom;
-  const signWidth = width - p.indent.signLeft;
 
   const header = titleHeader(t, tp.headerLines, (l) => wrap(l, size.titleHeader, width));
   const titleLines = [
@@ -59,15 +70,24 @@ function titlePage(t, p) {
     "",
     ...wrap(`Тема: «${t["Тема"]}»`, size.titleBig, width),
   ];
-  const signLines = [
+  const signRaw = [
     "Выполнил:",
-    ...wrap(`студент гр. ${t["Группа"]}`, size.body, signWidth),
-    ...wrap(initialsFirst(t["Выполнил"]), size.body, signWidth),
+    `студент гр. ${t["Группа"]}`,
+    initialsFirst(t["Выполнил"]),
     "",
     "Принял:",
-    ...wrap(t["Должность"], size.body, signWidth),
-    ...wrap(initialsFirst(t["Принял"]), size.body, signWidth),
+    t["Должность"],
+    initialsFirst(t["Принял"]),
   ];
+  const sign = signIndent(signRaw, size.body, width, p.indent.signLeft);
+  const signWidth = width - sign.left;
+  const signLines = signRaw.flatMap((l) => (l ? wrap(l, size.body, signWidth) : [""]));
+  const warnings = [];
+  if (sign.left !== p.indent.signLeft && sign.left <= width / 2) {
+    const cm = (tw) => (tw / 567).toFixed(1).replace(".", ",");
+    warnings.push(`блок «Выполнил / Принял» сдвинут влево до ${cm(sign.left)} см от левого поля (обычно ${cm(p.indent.signLeft)} см) — на середину листа и дальше: в него не влезает строка «${sign.longest}». ` +
+      "Сократите её в RULES.MD / CONTEXT.MD (должность — до «доц. каф. …», «ст. преп. каф. …», учёную степень — до «к. т. н.» или уберите) и пересоберите.");
+  }
   const city = `${t["Город"]} ${t["Год"]} г.`;
 
   const lh = tp.lineHeight;
@@ -81,18 +101,21 @@ function titlePage(t, p) {
     throw new Error("Титульник не помещается на страницу: сократите тему или уменьшите profile.title.signTop");
   }
 
-  const block = (style, lines, before) => new Paragraph({
+  const block = (style, lines, before, indent) => new Paragraph({
     style,
     ...(before ? { spacing: { before } } : {}),
+    ...(indent ? { indent } : {}),
     children: lines.map((text, i) => new TextRun({ text, ...(i ? { break: 1 } : {}) })),
   });
 
-  return [
+  const out = [
     block(S.titleHeader, header, 0),
     block(S.titleBig, titleLines, titleTop - headerH),
-    block(S.titleSign, signLines, signTop - titleTop - titleH),
+    block(S.titleSign, signLines, signTop - titleTop - titleH, sign.left !== p.indent.signLeft ? { left: sign.left } : null),
     block(S.title, [city], cityTop - signTop - signH),
   ];
+  out.warnings = warnings; // read by buildReport and printed by run()
+  return out;
 }
 
-module.exports = { titlePage, wrap };
+module.exports = { titlePage, wrap, signIndent };

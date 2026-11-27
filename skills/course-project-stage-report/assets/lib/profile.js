@@ -29,7 +29,9 @@ const VLSU = {
       "Кафедра информационных систем и программной инженерии",
     ],
     // the only values the «Должность» field accepts
-    posts: ["зав. кафедры ИСПИ", "проф. каф. ИСПИ", "доцент каф. ИСПИ", "ст. преп. каф. ИСПИ", "ассистент каф. ИСПИ"],
+    // the short forms are the default (intake I3); the full ones of older projects are still accepted
+    posts: ["зав. каф. ИСПИ", "проф. каф. ИСПИ", "доц. каф. ИСПИ", "ст. преп. каф. ИСПИ", "асс. каф. ИСПИ",
+      "зав. кафедры ИСПИ", "доцент каф. ИСПИ", "ассистент каф. ИСПИ"],
     // exact line heights of the title styles, twips (about 1.15 x font size)
     lineHeight: { header: 276, big: 540, body: 322 },
     // block positions from the top of the text area, twips (text area height 14570)

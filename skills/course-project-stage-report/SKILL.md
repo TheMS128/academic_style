@@ -90,7 +90,8 @@ A mixed lab takes its skeleton from the main family and borrows blocks from the 
 7. **Preview**: `node <assets>/bin/preview.js "<docx>" reports/<lab>/preview.png` — expect
    «раздел 1: 1 стр.» and look at the PNG. docx-preview does not break flowing text into
    pages: the page flow is final only in Word Online — tell the user.
-8. **Reply** with the file path and the lint / preview result in a line or two. The
+8. **Reply** with the file path and the lint / preview result in a line or two, and a
+   «ВНИМАНИЕ (титульник)» of the build in full with a shorter post to propose (I3). The
    document itself contains no preamble.
 
 A single section, listing or fragment asked for on its own is plain text that starts
