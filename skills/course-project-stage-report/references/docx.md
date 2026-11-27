@@ -99,11 +99,12 @@ rendering).
   «университет», after «учреждение».
 - The teacher's post is the separate field `Должность`, printed above the name; its
   allowed values are `profile.title.posts` — unless the optional `Кафедра` is set.
-- The optional fields `Институт` and `Кафедра` (`CONTEXT.MD` over `RULES.MD`, frozen into
-  `meta.json`) are for a course of another department: the institute line goes after
-  «(ВлГУ)», «Кафедра <value>» replaces the profile's «Кафедра …» line (`meta.js →
-  titleHeader`), both broken to the page width. Without them the header is the
-  profile's, byte for byte; one more header line still leaves the page one sheet.
+- The optional fields `Кафедра` and `Университет` (`CONTEXT.MD` over `RULES.MD`, frozen
+  into `meta.json`) are for a course of another department or university: «Кафедра
+  <value>» replaces the profile's «Кафедра …» line, `Университет` replaces the lines from
+  «Владимирский…» to «(ВлГУ)», its abbreviation in brackets on a line of its own
+  (`meta.js → titleHeader`); the user's lines are broken to the page width. Without them
+  the header is the profile's, byte for byte.
 
 ## Document properties
 
@@ -129,7 +130,7 @@ placeholders `<…>` / `(…)` count as empty; `Год` four digits, `Номер
 `Тип работы` Лабораторная / Практическая / Курсовой проект (its `Номер работы` is the
 stage; the title block prints «Курсовой проект», Тема names the stage), names `Фамилия И. О.`, `Должность` one of
 `profile.title.posts` (any value when `Кафедра` is set), `Кафедра` without the word
-«Кафедра».
+«Кафедра», `Университет` only together with `Кафедра`.
 
 `preview.js` renders with docx-preview in headless Edge. It is faithful for styles, the
 title page, lists and tables, but breaks pages only at section and page breaks: it checks

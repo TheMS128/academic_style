@@ -47,7 +47,7 @@ function loadMeta(dir, repoRoot) {
     if (value) fields[key] = value;
     else missing.push(`${key} (${source})`);
   }
-  // «Институт» and «Кафедра» are optional: a course of another department
+  // «Кафедра» and «Университет» are optional: a course of another department or university
   Object.assign(fields, labMeta.readOptional(repoRoot).fields);
   if (missing.length) throw new Error("Не заполнены поля титульного листа и основной надписи: " + missing.join(", "));
   const bad = check(fields);

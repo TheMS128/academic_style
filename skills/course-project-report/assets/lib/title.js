@@ -16,7 +16,7 @@ function titlePage(t, p) {
   const fit = (text, w) => wrap(text, p.size.title, w * 0.93);
   const lh = tp.lineHeight;
 
-  // the optional fields «Институт» / «Кафедра» replace the profile's department line
+  // the optional fields «Кафедра» / «Университет» replace the profile's department and university
   const header = labMeta.titleHeader(t, tp.headerLines).flatMap((l) => (l ? fit(l, width) : [""]));
   // a topic that takes more than one line breaks before the quoted name, when both halves fit
   let topic = fit(t["Тема"], width);

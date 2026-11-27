@@ -18,27 +18,27 @@ let rows, title, sources = {};
 if (fs.existsSync(metaFile)) {
   title = JSON.parse(fs.readFileSync(metaFile, "utf8")).title || {};
   rows = FIELDS.map(([key]) => [key, title[key], "meta.json"]);
-  for (const key of ["Институт", "Кафедра"]) if (title[key]) sources[key] = "meta.json";
+  for (const key of ["Университет", "Кафедра"]) if (title[key]) sources[key] = "meta.json";
 } else {
   ({ fields: title, sources } = readSources(repoRoot));
   rows = FIELDS.map(([key, file]) => [key, title[key], file]);
 }
 const bad = new Map(invalidFields(title, VLSU).map((m) => [m.split(":")[0], m.slice(m.indexOf("—") + 2)]));
-// the institute and the department: the optional fields «Институт» / «Кафедра» when set,
-// otherwise the department of the profile
+// the university and the department: the optional fields «Университет» / «Кафедра» when
+// set, otherwise those of the profile
 const own = VLSU.title.headerLines;
 const ownDept = own.find((l) => /^Кафедра\s/.test(l)) || "";
+const ownUniv = (own.find((l) => /^\([^()]+\)$/.test(l)) || "").replace(/[()]/g, "");
 rows.push(
-  title["Институт"]
-    ? ["Институт", title["Институт"], sources["Институт"]]
-    : ["Институт", "не печатается (необязательное поле «Институт:» в RULES.MD / CONTEXT.MD)", "—"],
+  title["Университет"]
+    ? ["Университет", title["Университет"], sources["Университет"]]
+    : ["Университет", ownUniv + " (по умолчанию; другой — поле «Университет:» в RULES.MD / CONTEXT.MD)", "профиль ВлГУ"],
   title["Кафедра"]
     ? ["Кафедра", title["Кафедра"], sources["Кафедра"]]
     : ["Кафедра", ownDept.replace(/^Кафедра\s+/, "") + " (по умолчанию; другая — поле «Кафедра:» в RULES.MD / CONTEXT.MD)", "профиль ВлГУ"],
 );
-if (title["Кафедра"] || title["Институт"]) {
-  const shown = titleHeader(title, own).slice(own.indexOf("(ВлГУ)") + 1);
-  console.log(`Шапка титульника после «(ВлГУ)»: ${shown.join(" / ")}\n`);
+if (title["Кафедра"] || title["Университет"]) {
+  console.log(`Шапка титульника: ${titleHeader(title, own).join(" / ")}\n`);
 }
 
 console.log("| Поле | Значение | Источник |");

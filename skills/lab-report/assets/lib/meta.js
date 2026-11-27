@@ -90,7 +90,9 @@ function invalidFields(fields, profile = VLSU) {
     "Принял": [(v) => NAME.test(v), "формат «Фамилия И. О.», должность — отдельным полем"],
     "Должность": [(v) => !posts.length || posts.includes(v), `одно из: ${posts.join("; ")} (или укажите «Кафедра:» курса — тогда должность пишется свободно)`],
     "Кафедра": [(v) => !/^кафедра(\s|$)/i.test(v) && v.length <= 120, "название без слова «Кафедра», например «Технология машиностроения»"],
-    "Институт": [(v) => /^[А-ЯЁ]/.test(v) && v.length <= 160, "полное название с прописной буквы, например «Институт машиностроения и автомобильного транспорта»"],
+    "Университет": fields["Кафедра"]
+      ? [(v) => /^[«А-ЯЁ]/.test(v) && v.length <= 200, "полное название, как на титульниках этого вуза, например «Московский государственный технический университет имени Н. Э. Баумана» (МГТУ им. Н. Э. Баумана)"]
+      : [() => false, "указать вместе с ним и «Кафедра:» — кафедра ИСПИ принадлежит ВлГУ"],
   };
   return Object.entries(rules)
     .filter(([key, [ok]]) => fields[key] && !ok(fields[key]))
@@ -163,10 +165,10 @@ function readSources(repoRoot) {
   return { fields: { ...fields, ...optional }, missing, sources };
 }
 
-// Optional title fields: the institute and the department of a course taught outside the
-// profile's department. CONTEXT.MD (the course at hand) wins over RULES.MD (the student's
-// default). Without them the title page prints the profile's own department, as before.
-const OPTIONAL_FIELDS = ["Институт", "Кафедра"];
+// Optional title fields: the university and the department of a course taught outside the
+// profile's own. CONTEXT.MD (the course at hand) wins over RULES.MD (the student's
+// default). Without them the title page prints the profile's university and department.
+const OPTIONAL_FIELDS = ["Университет", "Кафедра"];
 function readOptional(repoRoot) {
   const fields = {}, sources = {};
   for (const key of OPTIONAL_FIELDS) {
@@ -179,19 +181,36 @@ function readOptional(repoRoot) {
   return { fields, sources };
 }
 
-// The header lines of the title page. The profile's line «Кафедра …» gives way to the
-// institute and the department of the title fields when they are set; `fit` breaks
-// those user lines to the width of the page (the profile's own lines are left as they are).
+// Where the university's name stands in the profile's header: from the line that opens
+// with «, to the line that closes it with », plus an abbreviation line «(ВлГУ)» after it.
+function universityLines(headerLines) {
+  const start = headerLines.findIndex((l) => /^«/.test(l));
+  if (start < 0) return null;
+  let end = headerLines.findIndex((l, k) => k >= start && /»$/.test(l));
+  if (end < 0) return null;
+  if (/^\([^()]+\)$/.test(headerLines[end + 1] || "")) end++;
+  return { start, end };
+}
+
+// The header lines of the title page. «Университет» replaces the profile's university
+// (its abbreviation in brackets at the end, if given, goes to a line of its own, as
+// «(ВлГУ)» does); «Кафедра» replaces the profile's «Кафедра …» line. `fit` breaks those
+// user lines to the width of the page; the profile's own lines are left as they are.
 function titleHeader(t, headerLines, fit = (l) => [l]) {
-  if (!t["Институт"] && !t["Кафедра"]) return headerLines;
-  let at = headerLines.findIndex((l) => /^Кафедра\s/.test(l));
-  const own = at >= 0 ? headerLines[at] : null;
-  if (at < 0) at = headerLines.length;
-  const lines = [
-    ...(t["Институт"] ? fit(t["Институт"]) : []),
-    ...(t["Кафедра"] ? fit(`Кафедра ${t["Кафедра"]}`) : own ? [own] : []),
-  ];
-  return [...headerLines.slice(0, at), ...lines, ...headerLines.slice(at + 1)];
+  if (!t["Университет"] && !t["Кафедра"]) return headerLines;
+  let lines = [...headerLines];
+  if (t["Кафедра"]) {
+    const at = lines.findIndex((l) => /^Кафедра\s/.test(l));
+    const dept = fit(`Кафедра ${t["Кафедра"]}`);
+    lines = at >= 0 ? [...lines.slice(0, at), ...dept, ...lines.slice(at + 1)] : [...lines, ...dept];
+  }
+  const where = t["Университет"] && universityLines(lines);
+  if (where) {
+    const m = t["Университет"].match(/^(.*\S)\s*(\([^()]+\))$/);
+    const name = m ? [...fit(m[1]), m[2]] : fit(t["Университет"]);
+    lines = [...lines.slice(0, where.start), ...name, ...lines.slice(where.end + 1)];
+  }
+  return lines;
 }
 
 function loadMeta(reportDir, repoRoot, profile = VLSU) {

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// CLI: node render.js <input.md> <output.docx> --title "Название" [--year 2026] [--author "И. О. Фамилия"] [--institute "…"] [--department "…"]
+// CLI: node render.js <input.md> <output.docx> --title "Название" [--year 2026] [--author "И. О. Фамилия"] [--university "…"] [--department "…"]
 
 const { buildMethodichka } = require("../lib");
 
@@ -11,7 +11,7 @@ function arg(name, def) {
 const input = process.argv[2];
 const out = process.argv[3];
 if (!input || !out) {
-  console.error("Использование: node render.js <input.md> <output.docx> --title \"…\" [--year 2026] [--author \"И. О. Фамилия\"] [--institute \"…\"] [--department \"…\"]");
+  console.error("Использование: node render.js <input.md> <output.docx> --title \"…\" [--year 2026] [--author \"И. О. Фамилия\"] [--university \"…\"] [--department \"…\"]");
   process.exit(1);
 }
 
@@ -21,7 +21,7 @@ buildMethodichka({
   title: arg("title", "Учебная дисциплина"),
   year: Number(arg("year", new Date().getFullYear())),
   author: arg("author", ""),
-  institute: arg("institute", ""),
+  university: arg("university", ""),
   department: arg("department", ""),
 })
   .then((r) => console.log(`${r.out}: ${r.bytes} байт`))

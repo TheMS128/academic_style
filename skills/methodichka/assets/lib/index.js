@@ -68,23 +68,34 @@ function bodyMarkdown(md) {
   return idx >= 0 ? lines.slice(idx + 1).join("\n") : md;
 }
 
-// The cover header with the institute and the department of the course: the institute
-// goes after «(ВлГУ)», the department replaces the profile's «Кафедра …» line. Without
+// The cover header with the university and the department of the course: the department
+// replaces the profile's «Кафедра …» line, the university the lines from «Владимирский…»
+// to «(ВлГУ)» (an abbreviation in brackets at its end goes to a line of its own). Without
 // them the profile's header stays as it is.
-function coverHeader(header, institute, department, profile) {
-  if (!institute && !department) return header;
+function coverHeader(header, university, department, profile) {
+  if (!university && !department) return header;
   if (department && /^кафедра(\s|$)/i.test(department)) throw new Error("--department: название без слова «Кафедра»");
-  let at = header.findIndex((l) => /^Кафедра\s/.test(l));
-  const own = at >= 0 ? header[at] : null;
-  if (at < 0) at = header.length;
+  if (university && !department) throw new Error("--university задаётся вместе с --department: кафедра ИСПИ принадлежит ВлГУ");
   const fit = (l) => wrap(l, profile.size.titleHeader, profile.page.width - profile.page.margin.left - profile.page.margin.right);
-  const lines = [...(institute ? fit(institute) : []), ...(department ? fit(`Кафедра ${department}`) : own ? [own] : [])];
-  return [...header.slice(0, at), ...lines, ...header.slice(at + 1)];
+  let lines = [...header];
+  const at = lines.findIndex((l) => /^Кафедра\s/.test(l));
+  const dept = fit(`Кафедра ${department}`);
+  lines = at >= 0 ? [...lines.slice(0, at), ...dept, ...lines.slice(at + 1)] : [...lines, ...dept];
+  if (university) {
+    const start = lines.findIndex((l) => /^«/.test(l));
+    let end = lines.findIndex((l, k) => k >= start && /»$/.test(l));
+    if (start >= 0 && end >= 0) {
+      if (/^\([^()]+\)$/.test(lines[end + 1] || "")) end++;
+      const m = university.match(/^(.*\S)\s*(\([^()]+\))$/);
+      lines = [...lines.slice(0, start), ...(m ? [...fit(m[1]), m[2]] : fit(university)), ...lines.slice(end + 1)];
+    }
+  }
+  return lines;
 }
 
-async function buildMethodichka({ input, out, title, year, author, institute, department, profile = VLSU }) {
+async function buildMethodichka({ input, out, title, year, author, university, department, profile = VLSU }) {
   const md = fs.readFileSync(input, "utf8");
-  const header = coverHeader(profile.cover.header, institute, department, profile);
+  const header = coverHeader(profile.cover.header, university, department, profile);
   const p = { ...profile, cover: { ...profile.cover, header, year: year || new Date().getFullYear(), author } };
   const page = { margin: p.page.margin, size: { width: p.page.width, height: p.page.height } };
 

@@ -13,7 +13,7 @@ only that file.
 | `Выполнил` | `RULES.MD` | `Иванов И. И.` |
 | `Группа` | `RULES.MD` | `ПРИ-123` |
 | `Должность` | `RULES.MD` | `доцент каф. ИСПИ` — the post of the teacher; free text when `Кафедра` is set |
-| `Институт` | `CONTEXT.MD` or `RULES.MD`, optional | `Институт машиностроения и автомобильного транспорта` — printed under the university |
+| `Университет` | `CONTEXT.MD` or `RULES.MD`, optional, only with `Кафедра` | `«Московский государственный технический университет имени Н. Э. Баумана» (МГТУ им. Н. Э. Баумана)` — replaces ВлГУ |
 | `Кафедра` | `CONTEXT.MD` or `RULES.MD`, optional | `«Технология машиностроения»` — replaces the department ИСПИ, without the word «Кафедра» |
 | `Дисциплина` | `CONTEXT.MD` | `Технологии программирования` |
 | `Тема` | `CONTEXT.MD` | the topic, without the words «курсовой проект» |
