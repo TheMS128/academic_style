@@ -23,10 +23,13 @@ the department as its own title pages print it (`«Технология маши
 the word «Кафедра»); a work for another university also needs its full name with the
 abbreviation in brackets (`«Московский государственный технический университет имени
 Н. Э. Баумана» (МГТУ им. Н. Э. Баумана)`). Record them; never guess them. No
-`Должность` in `RULES.MD` → for ИСПИ ask for exactly one of `зав. кафедры ИСПИ`,
-`проф. каф. ИСПИ`, `доцент каф. ИСПИ`, `ст. преп. каф. ИСПИ`, `ассистент каф. ИСПИ`; for
-another department ask for the post as it should be printed (`директор ИМиАТ, доцент`);
-record it there.
+`Должность` in `RULES.MD` → for ИСПИ ask for exactly one of the short forms `зав. каф.
+ИСПИ`, `проф. каф. ИСПИ`, `доц. каф. ИСПИ`, `ст. преп. каф. ИСПИ`, `асс. каф. ИСПИ` (the
+full `зав. кафедры ИСПИ`, `доцент каф. ИСПИ`, `ассистент каф. ИСПИ` of older projects are
+still accepted); for another department ask for the post as it should be printed, short
+forms first (`доц. каф. ТМС`, `директор ИМиАТ, доц.`); record it there. A post too long
+for the signature block moves the block left (docx.md); when the build warns that it went
+past the middle of the page, propose a shorter form to the user.
 
 **I4. Variant.** The assignment has individual variants and the number is unknown →
 ask for it.

@@ -43,13 +43,14 @@ async function buildReport({ reportDir, body, description = "", keywords = "", r
 
   const { children, numberingRefs, counts } = compose(body, { figdir: figdir || path.join(reportDir, "figures"), profile });
   const page = { margin: profile.page.margin, size: { width: profile.page.width, height: profile.page.height } };
+  const titleChildren = titlePage(t, profile);
   const doc = new Document({
     styles: buildStyles(profile),
     numbering: buildNumbering(numberingRefs, profile),
     sections: [
       {
         properties: { page, ...(profile.title.verticalAlign ? { verticalAlign: profile.title.verticalAlign } : {}) },
-        children: titlePage(t, profile),
+        children: titleChildren,
       },
       { properties: { page }, children },
     ],
@@ -63,7 +64,7 @@ async function buildReport({ reportDir, body, description = "", keywords = "", r
 
   const rules = path.join(repoRoot, "RULES.MD");
   const theory = theoryFlag(fs.existsSync(rules) ? fs.readFileSync(rules, "utf8") : "", t["Дисциплина"]);
-  return { out, bytes: buf.length, metaCreated: meta.fresh, metaFile: meta.file, ...counts, docProps, problems: await lint(out, { theory }) };
+  return { out, titleWarnings: titleChildren.warnings || [], bytes: buf.length, metaCreated: meta.fresh, metaFile: meta.file, ...counts, docProps, problems: await lint(out, { theory }) };
 }
 
 // for build.js: short summary, non-zero exit code on build or lint errors
@@ -72,6 +73,7 @@ function run(opts) {
     .then((r) => {
       console.log(`${path.basename(r.out)}: ${r.bytes} байт, рисунков ${r.figures}, таблиц ${r.tables}, ревизия ${r.docProps.revision}`);
       if (r.metaCreated) console.log(`создан ${r.metaFile} — поля титульника зафиксированы`);
+      for (const w of r.titleWarnings || []) console.log(`ВНИМАНИЕ (титульник): ${w}`);
       for (const x of r.problems) console.log(formatProblem(x));
       if (!r.problems.length) console.log("lint: замечаний нет");
       if (r.problems.some((x) => x.level === "error")) process.exitCode = 1;

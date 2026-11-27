@@ -97,6 +97,11 @@ rendering).
   `signTop`. `preview.js` confirms section 1 is one page.
 - Header block: each line its own paragraph with deliberate breaks — after
   «университет», after «учреждение».
+- The signature block «Выполнил / Принял» starts at `indent.signLeft`. A line that does
+  not fit (a long post) moves the whole block left in steps of 0.5 cm until it fits, its
+  lines still starting at one edge (`title.js → signIndent`); at the left margin what is
+  still too long wraps. When the block goes to the middle of the page or further, the
+  build prints «ВНИМАНИЕ (титульник)» with the line to shorten.
 - The teacher's post is the separate field `Должность`, printed above the name; its
   allowed values are `profile.title.posts` — unless the optional `Кафедра` is set.
 - The optional fields `Кафедра` and `Университет` (`CONTEXT.MD` over `RULES.MD`, frozen
