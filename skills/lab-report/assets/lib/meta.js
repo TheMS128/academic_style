@@ -112,7 +112,9 @@ const conclusionStamp = (type) => isCourseProject(type)
 // «Курсовой проект» — the stage itself is named in Тема («Этап 1. …»).
 const workHeading = (t) => isCourseProject(t["Тип работы"])
   ? "Курсовой проект"
-  : `${t["Тип работы"]} работа №${t["Номер работы"]}`;
+  : t["Тип работы"] === "Реферат"
+    ? "Реферат"
+    : `${t["Тип работы"]} работа №${t["Номер работы"]}`;
 
 // RULES.MD line «Теоретический блок: требуется / не требуется (<дисциплина>)» for this
 // discipline → "required" | "not"; no line or a placeholder → undefined

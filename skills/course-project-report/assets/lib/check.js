@@ -20,7 +20,8 @@ function blockText(b) {
   }
 }
 
-function check(body, { counts }) {
+// opts.required — the parts a document must have; opts.noun — «в записке» for messages
+function check(body, { counts }, { required = ["abstract", "intro", "chapter", "conclusion", "sources"], noun = "записке" } = {}) {
   const problems = [];
   const err = (id, msg) => problems.push({ level: "error", id, msg });
   const warn = (id, msg) => problems.push({ level: "warn", id, msg });
@@ -30,7 +31,7 @@ function check(body, { counts }) {
   const ORDER = ["abstract", "intro", "chapter", "conclusion", "sources", "appendix"];
   const NAMES = { abstract: "аннотация", intro: "введение", chapter: "главы", conclusion: "заключение", sources: "список использованных источников", appendix: "приложения" };
   const seen = body.map(kindOf).filter((k) => ORDER.includes(k));
-  for (const k of ORDER.slice(0, 5)) if (!seen.includes(k)) err("K1", `в записке нет части «${NAMES[k]}»`);
+  for (const k of required) if (!seen.includes(k)) err("K1", `в ${noun} нет части «${NAMES[k]}»`);
   for (const k of ["abstract", "intro", "conclusion", "sources"]) if (seen.filter((x) => x === k).length > 1) err("K1", `часть «${NAMES[k]}» встречается больше одного раза`);
   for (let i = 1; i < seen.length; i++)
     if (ORDER.indexOf(seen[i]) < ORDER.indexOf(seen[i - 1])) { err("K1", `часть «${NAMES[seen[i]]}» стоит после части «${NAMES[seen[i - 1]]}»`); break; }
@@ -129,9 +130,9 @@ function check(body, { counts }) {
   return rest;
 }
 
-function lint(body, composed) {
-  const profile = core.loadProfile(PROFILE);
-  const own = check(body, composed);
+function lint(body, composed, { profile: profileFile = PROFILE, ...opts } = {}) {
+  const profile = core.loadProfile(profileFile);
+  const own = check(body, composed, opts);
   const text = fold(core.check(composed.entries.filter((e) => e.kind !== "source"), profile));
   return [...own, ...text].sort((a, b) => (a.level === b.level ? 0 : a.level === "error" ? -1 : 1));
 }

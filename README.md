@@ -23,7 +23,7 @@ claude plugin install academic-style@academic-style
 Скиллы плагина вызываются с его именем: `/academic-style:core`,
 `/academic-style:lab-report`, `/academic-style:practice-report`,
 `/academic-style:methodichka`, `/academic-style:course-project-report`, `/academic-style:course-project-stage-report`,
-`/academic-style:diagram`. Скиллам `lab-report` и `methodichka` для сборки `.docx`
+`/academic-style:diagram`, `/academic-style:essay`. Скиллам `lab-report` и `methodichka` для сборки `.docx`
 нужен Node.js и разовая установка зависимостей — `npm i` в папке `assets` каждого.
 
 ## Зачем разделение
@@ -45,6 +45,7 @@ claude plugin install academic-style@academic-style
 | `lab-report` | Отчёт по лабораторной работе: структура глав, титульный лист, сборка `.docx` | `core` | есть, текст пишет через ядро |
 | `practice-report` | Отчёт по практической работе: то же, что `lab-report`, с двумя отличиями | `lab-report`, `core` | есть |
 | `methodichka` | Методические указания к лабораторным работам из Markdown в `.docx` | `core` (для текста) | есть |
+| `essay` | Реферат: титул по шаблону ЛР, содержание, главы, источники; пересборка реферата из чужого `.docx` | `lab-report`, `course-project-report`, `core` | есть |
 | `diagram` | Схемы и диаграммы для отчётов и записок: отбор элементов, рисование (PlantUML, Graphviz, свой рисовальщик), проверка наложений скриптом | — | есть |
 | `course-project-report` | Пояснительная записка курсового проекта: рамка и основная надпись по ГОСТ 2.104, аннотация, содержание, главы, источники, приложения | `lab-report` (библиотеки сборки), `core` | есть |
 | `course-project-stage-report` | Этапы курсового проекта отдельными отчётами и техническое задание по ГОСТ 34.602-2020 | — | перенесён как есть: со своей копией правил текста и сборщика, на ядро не переведён |
@@ -112,6 +113,7 @@ claude plugin install academic-style@academic-style
 | `skills/lab-report/` | отчёт по лабораторной работе: правила структуры, профиль жанра, сборщик `.docx`, линт документа |
 | `skills/practice-report/` | отчёт по практической работе: два отличия от лабораторной и профиль поверх её профиля |
 | `skills/methodichka/` | методические указания: сборщик `.docx` из Markdown и профиль жанра |
+| `skills/essay/` | реферат: правила частей, профиль жанра, сборщик на библиотеках ЛР и КП, импорт готового `.docx` для пересборки |
 | `skills/diagram/` | схемы и диаграммы: правила отбора элементов, рисовальщик, проверка наложений, перевод в PNG |
 | `skills/course-project-report/` | пояснительная записка курсового проекта: части записки, сборщик с рамкой и основной надписью, профиль жанра |
 | `skills/course-project-stage-report/` | этапы курсового проекта и ТЗ по ГОСТ 34.602-2020: прежний скилл, перенесён как есть |

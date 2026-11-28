@@ -42,7 +42,7 @@ const KP = {
     conclusion: "ЗАКЛЮЧЕНИЕ", sources: "СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ", appendix: "ПРИЛОЖЕНИЕ",
   },
   appendixLetters: "АБВГДЕЖИКЛМНПРСТУФХЦШЩЭЮЯ",                 // ГОСТ 2.105: without Ё, З, Й, О, Ч, Ъ, Ы, Ь
-  toc: { levels: 2, listsItself: true },                       // «Аннотация» and «Содержание» are entries of the contents
+  toc: { levels: 2, listsItself: false },                      // «Аннотация» and «Содержание» stay out of the contents (ГОСТ 7.32)
   // the title page is the lab report's (title.js); here only where it stands in the frame
   // and the short posts the title block prints
   title: {

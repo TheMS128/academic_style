@@ -19,7 +19,8 @@ chapter and retells no section. The English text is a translation of the Russian
 a second abstract.
 
 **K3. Содержание.** Built from the headings: the structural parts, the chapters and the
-subchapters. Points of the third level stay out of it.
+subchapters. Points of the third level stay out of it, and so do «Аннотация» and
+«Содержание» itself (ГОСТ 7.32) — also after Word updates the contents.
 
 **K4. Введение.** One to one and a half pages, no subheadings, no figures. It holds, in
 this order: why the task matters — through the concrete situation the system is made for,

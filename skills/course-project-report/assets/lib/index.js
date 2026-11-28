@@ -35,7 +35,11 @@ function tocXml(toc) {
     `<w:hyperlink w:anchor="${e.bookmark}" w:history="1"><w:r><w:t xml:space="preserve">${esc(e.text)}</w:t></w:r><w:r><w:tab/></w:r>` +
     fld("begin") + instr(`PAGEREF ${e.bookmark} \\h`) + fld("separate") + "<w:r><w:t></w:t></w:r>" + fld("end") +
     "</w:hyperlink></w:p>";
-  return toc.map(entry).join("") + `<w:p><w:pPr><w:pStyle w:val="${S.toc1}"/></w:pPr>${fld("end")}</w:p>`;
+  // wrapped as Word wraps its own table of contents (a content control of the gallery
+  // «Table of Contents»): Word, Word Online and LibreOffice then show it as an automatic
+  // contents with «Обновить таблицу», and fill the page numbers on update
+  const paras = toc.map(entry).join("") + `<w:p><w:pPr><w:pStyle w:val="${S.toc1}"/></w:pPr>${fld("end")}</w:p>`;
+  return `<w:sdt><w:sdtPr><w:docPartObj><w:docPartGallery w:val="Table of Contents"/><w:docPartUnique/></w:docPartObj></w:sdtPr><w:sdtContent>${paras}</w:sdtContent></w:sdt>`;
 }
 
 async function pack(doc, { title, docProps, description, keywords, profile, toc, stamp }) {
@@ -132,4 +136,4 @@ function run(opts) {
     });
 }
 
-module.exports = { buildProject, run, KP, ...blocks };
+module.exports = { buildProject, run, pack, KP, ...blocks };

@@ -14,6 +14,8 @@
 // the abstract: paragraphs in Russian and in English
 const abstract = (ru, en) => ({ kind: "abstract", ru, en });
 
+// the contents of a document with no abstract (the essay); in the note it follows the abstract
+const contents = () => ({ kind: "contents" });
 const intro = () => ({ kind: "part", part: "intro" });
 const conclusion = () => ({ kind: "part", part: "conclusion" });
 
@@ -43,4 +45,4 @@ const sources = (items) => ({ kind: "sources", items });
 // «ПРИЛОЖЕНИЕ А» and its title; everything up to the next appendix belongs to it
 const appendix = (key, title) => ({ kind: "appendix", key, title });
 
-module.exports = { abstract, intro, conclusion, chapter, section, point, p, list, steps, figure, table, listing, sources, appendix };
+module.exports = { abstract, contents, intro, conclusion, chapter, section, point, p, list, steps, figure, table, listing, sources, appendix };
