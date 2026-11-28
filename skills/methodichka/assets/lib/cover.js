@@ -5,7 +5,8 @@
 // блоками вычисляются: страница не «плывёт» между Word и Word Online и не переползает
 // на вторую. Резерв в одну большую строку под городом поглощает непредвиденный перенос.
 // При profile.title.verticalAlign = "both" секция ещё и выравнивается по вертикали, и
-// Word прижимает строку города к нижнему полю. На обложке всё полужирное.
+// Word прижимает строку города к нижнему полю. Обложка набрана как титул отчёта по
+// лабораторной (lab-report): те же кегли, интервалы и места блоков, без полужирного.
 
 const { Paragraph, TextRun } = require("docx");
 const { S } = require("./styles");
@@ -61,7 +62,7 @@ function coverPage(title, p) {
     ...c.subtitle.split("\n").flatMap((line) => wrap(line, size.titleBig, width)),
   ];
   const signLines = c.author ? ["Составитель:", ...wrap(c.author, size.body, signWidth)] : [];
-  const city = `${c.city} ${c.year}`;
+  const city = `${c.city} ${c.year} г.`;
 
   const lh = tp.lineHeight;
   const headerH = header.length * lh.header;
@@ -78,7 +79,7 @@ function coverPage(title, p) {
   const block = (style, lines, before) => new Paragraph({
     style,
     ...(before ? { spacing: { before } } : {}),
-    children: lines.map((text, i) => new TextRun({ text, bold: true, ...(i ? { break: 1 } : {}) })),
+    children: lines.map((text, i) => new TextRun({ text, ...(i ? { break: 1 } : {}) })),
   });
 
   const out = [

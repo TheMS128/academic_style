@@ -5,7 +5,7 @@
 const VLSU = {
   page: { width: 11906, height: 16838, margin: { top: 1134, bottom: 1134, left: 1701, right: 850 } }, // A4, twips
   font: { body: "Times New Roman", code: "Courier New" },
-  size: { body: 28, code: 22, titleHeader: 28, titleBig: 44 }, // half-points
+  size: { body: 28, code: 22, titleHeader: 24, titleBig: 44 }, // the cover as the lab report's title page // half-points
   indent: { firstLine: 709, listLeft: 720, listHanging: 360, signLeft: 6237 },
   gap: { chapter: 400, subchapter: 200, block: 280, table: 200, code: 200 }, // table/code = 10 pt
   figure: { defaultPx: 580 }, // ширина рисунка, px @ 96 dpi
@@ -13,10 +13,10 @@ const VLSU = {
   language: { body: "ru-RU", code: "en-US" },
   title: {
     // высоты строк титульных стилей (нужны styles.js), twips (~1.15 × кегль)
-    lineHeight: { header: 322, big: 540, body: 322 },
+    lineHeight: { header: 276, big: 540, body: 322 },
     // позиции блоков от верха текстовой области, twips (высота области 14570)
-    titleCenter: 7285,  // вертикальный центр блока названия = центр листа
-    signTop: 10800,     // верх блока «Составитель» (правее, между названием и городом)
+    titleCenter: 5300,  // вертикальный центр блока названия — как на титуле отчёта
+    signTop: 8600,      // верх блока «Составитель» — там же, где подписи на титуле отчёта
     minGap: 400,        // наименьший зазор между блоками
     slack: 540,         // свободное место под городом; поглощает один незапланированный перенос
     verticalAlign: "both", // секция выровнена по вертикали — Word прижимает город к нижнему полю

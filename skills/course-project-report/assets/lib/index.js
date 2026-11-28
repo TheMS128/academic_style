@@ -86,12 +86,13 @@ async function buildProject({ dir, body, description = "", keywords = "", repoRo
   const bigContents = st.contents === "big";
   const abstractBottom = st.abstract === "frame" ? tx.bottom : under(st[st.abstract]);
 
+  const titleChildren = titlePage(t, profile);
   const doc = new Document({
     features: { updateFields: true },
     styles: buildStyles(profile),
     numbering: buildNumbering(composed.lists, profile),
     sections: [
-      { properties: { page: titleSheet }, headers: { default: hdr("frame") }, children: titlePage(t, profile) },
+      { properties: { page: titleSheet }, headers: { default: hdr("frame") }, children: titleChildren },
       { properties: { page: page(abstractBottom) }, headers: { default: hdr(st.abstract) }, children: parts.abstract },
       {
         properties: { page: page(under(bigContents ? st.big : st.small)), ...(bigContents ? { titlePage: true } : {}) },

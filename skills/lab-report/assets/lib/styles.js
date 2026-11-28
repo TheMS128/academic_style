@@ -50,16 +50,28 @@ function buildStyles(p) {
       style(S.chapter, "Глава", { basedOn: S.body, next: S.body, run: { bold: true }, paragraph: { alignment: CENTER, indent: noIndent, spacing: { before: p.gap.chapter }, keepNext: true, outlineLevel: 0 } }),
       style(S.subchapter, "Подглава", { basedOn: S.body, next: S.body, run: { bold: true }, paragraph: { alignment: LEFT, spacing: { before: p.gap.subchapter }, keepNext: true, outlineLevel: 1 } }),
 
-      // exact line heights: title.js computes the page layout from them
-      style(S.title, "Титульник", { run: plainRun, paragraph: { alignment: CENTER, indent: noIndent, spacing: { before: 0, after: 0, line: p.title.lineHeight.body, lineRule: LineRuleType.EXACT } } }),
-      style(S.titleHeader, "Титульник — шапка", { basedOn: S.title, run: { size: p.size.titleHeader }, paragraph: { spacing: { line: p.title.lineHeight.header, lineRule: LineRuleType.EXACT } } }),
-      style(S.titleBig, "Титульник — название", { basedOn: S.title, run: { size: p.size.titleBig }, paragraph: { spacing: { line: p.title.lineHeight.big, lineRule: LineRuleType.EXACT } } }),
-      style(S.titleSign, "Титульник — подписи", { basedOn: S.title, paragraph: { alignment: LEFT, indent: { left: p.indent.signLeft } } }),
+      ...titleStyles(p),
 
       style(S.codeLabel, "Листинг — заголовок", { basedOn: S.body, next: S.code, paragraph: { alignment: LEFT, indent: noIndent, spacing: { before: p.gap.block }, keepNext: true } }),
       style(S.code, "Листинг", { run: { font: p.font.code, size: p.size.code, color: "000000", language: { value: p.language.code } }, paragraph: { alignment: LEFT, indent: noIndent, spacing: flat } }),
     ],
   };
+}
+
+// The four styles of the title page. The course project builds its title page with this
+// skill's title.js and takes these styles too, so every title page of the plugin looks
+// the same; exact line heights, since title.js computes the page layout from them.
+function titleStyles(p) {
+  const { CENTER, LEFT } = AlignmentType;
+  const style = (id, name, def) => ({ id, name, quickFormat: true, ...def });
+  const plainRun = { font: p.font.body, size: p.size.body, color: "000000" };
+  const exact = (line) => ({ line, lineRule: LineRuleType.EXACT });
+  return [
+    style(S.title, "Титульник", { run: plainRun, paragraph: { alignment: CENTER, indent: { firstLine: 0 }, spacing: { before: 0, after: 0, ...exact(p.title.lineHeight.body) } } }),
+    style(S.titleHeader, "Титульник — шапка", { basedOn: S.title, run: { size: p.size.titleHeader }, paragraph: { spacing: exact(p.title.lineHeight.header) } }),
+    style(S.titleBig, "Титульник — название", { basedOn: S.title, run: { size: p.size.titleBig }, paragraph: { spacing: exact(p.title.lineHeight.big) } }),
+    style(S.titleSign, "Титульник — подписи", { basedOn: S.title, paragraph: { alignment: LEFT, indent: { left: p.indent.signLeft } } }),
+  ];
 }
 
 // one decimal numbering definition per list, so every list restarts at 1
@@ -75,4 +87,4 @@ function buildNumbering(refs, p) {
   };
 }
 
-module.exports = { S, buildStyles, buildNumbering };
+module.exports = { S, buildStyles, buildNumbering, titleStyles };
