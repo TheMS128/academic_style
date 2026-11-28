@@ -132,4 +132,4 @@ function run(opts) {
     });
 }
 
-module.exports = { buildProject, run, KP, ...blocks };
+module.exports = { buildProject, run, pack, KP, ...blocks };

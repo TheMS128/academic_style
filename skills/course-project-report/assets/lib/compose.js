@@ -114,6 +114,15 @@ function compose(body, { figdir, profile: p, pages }) {
     out.push(new Paragraph({ style, ...extra, children: runs(t) }));
     if (kind) entries.push({ kind, text: text(t), heads: [...heads] });
   };
+  // the contents: a section of its own, the TOC field is written in by the packer
+  const contents = () => {
+    out = parts.contents;
+    sectionStart = true;
+    heading(S.chapter, p.headings.contents, 1, { outline: p.toc.listsItself });
+    out.push(new Paragraph({ style: S.toc1, children: [new TextRun(TOC_MARK)] }));
+    out = parts.main;
+    sectionStart = true;
+  };
   const newList = (kind) => {
     const reference = `kp-list-${lists.length + 1}`;
     lists.push({ reference, kind });
@@ -131,12 +140,10 @@ function compose(body, { figdir, profile: p, pages }) {
           out.push(new Paragraph({ style: S.centered, children: [new TextRun({ text: p.headings.abstractEn, bold: true })] }));
           b.en.forEach((t) => para(S.body, t, null));           // English: outside the Russian lint
         }
-        out = parts.contents;
-        sectionStart = true;
-        heading(S.chapter, p.headings.contents, 1, { outline: p.toc.listsItself });
-        out.push(new Paragraph({ style: S.toc1, children: [new TextRun(TOC_MARK)] }));
-        out = parts.main;
-        sectionStart = true;
+        contents();
+        break;
+      case "contents":                                  // a document with no abstract (essay)
+        contents();
         break;
       case "part":
         inAppendix = false;

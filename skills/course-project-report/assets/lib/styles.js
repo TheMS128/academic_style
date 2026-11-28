@@ -30,7 +30,7 @@ const titleWidth = (p) => p.page.width - mm(p.frame.left + p.title.side) - mm(p.
 const titleProfile = (p) => require("./title").titleProfile(p);
 const { labStyles } = require("./deps");
 
-function buildStyles(p) {
+function buildStyles(p, { title = titleProfile(p) } = {}) {
   const { CENTER, LEFT, RIGHT, JUSTIFIED } = AlignmentType;
   const style = (id, name, def) => ({ id, name, quickFormat: true, ...def });
   const body = { before: 0, after: 0, line: p.line.body, lineRule: LineRuleType.AUTO };
@@ -64,7 +64,7 @@ function buildStyles(p) {
       style(S.centered, "КП — заголовок внутри раздела", { basedOn: S.body, next: S.body, paragraph: { alignment: CENTER, indent: noIndent, spacing: { before: p.gap.chapter, after: p.gap.chapter }, keepNext: true } }),
 
       // the title page is the lab report's, with its styles (lab-report styles.js → titleStyles)
-      ...labStyles.titleStyles(titleProfile(p)),
+      ...labStyles.titleStyles(title),
 
       style(S.toc1, "toc 1", { basedOn: S.body, next: S.body, paragraph: { alignment: LEFT, indent: noIndent, tabStops: tocTab } }),
       style(S.toc2, "toc 2", { basedOn: S.body, next: S.body, paragraph: { alignment: LEFT, indent: { firstLine: 0, left: 284 }, tabStops: tocTab } }),
