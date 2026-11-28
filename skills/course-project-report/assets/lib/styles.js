@@ -20,15 +20,15 @@ const S = {
   section: "KpPodglava",
   point: "KpPunkt",
   centered: "KpZagolovokVnutri",
-  title: "KpTitul",
-  titleBig: "KpTitulRabota",
-  titleSign: "KpTitulPodpisi",
   toc1: "TOC1",
   toc2: "TOC2",
 };
 
 const textWidth = (p) => p.page.width - mm(p.text.left) - mm(p.text.right);
 const titleWidth = (p) => p.page.width - mm(p.frame.left + p.title.side) - mm(p.frame.right + p.title.side);
+// required late: title.js needs deps, which need nothing from here
+const titleProfile = (p) => require("./title").titleProfile(p);
+const { labStyles } = require("./deps");
 
 function buildStyles(p) {
   const { CENTER, LEFT, RIGHT, JUSTIFIED } = AlignmentType;
@@ -38,7 +38,6 @@ function buildStyles(p) {
   const run = { font: p.font.body, size: p.size.body, color: "000000" };
   const exact = (line) => ({ before: 0, after: 0, line, lineRule: LineRuleType.EXACT });
   const tocTab = [{ type: TabStopType.RIGHT, position: textWidth(p), leader: LeaderType.DOT }];
-  const titleRun = { font: p.font.title, size: p.size.title, italics: p.title.italic, color: "000000" };
 
   return {
     default: {
@@ -64,10 +63,8 @@ function buildStyles(p) {
       style(S.point, "КП — пункт", { basedOn: S.body, next: S.body, run: { bold: true }, paragraph: { alignment: LEFT, spacing: { before: p.gap.point, after: p.gap.point }, keepNext: true, keepLines: true, outlineLevel: 2 } }),
       style(S.centered, "КП — заголовок внутри раздела", { basedOn: S.body, next: S.body, paragraph: { alignment: CENTER, indent: noIndent, spacing: { before: p.gap.chapter, after: p.gap.chapter }, keepNext: true } }),
 
-      // exact line heights: title.js computes the page from them
-      style(S.title, "КП — титульный лист", { run: titleRun, paragraph: { alignment: CENTER, indent: noIndent, spacing: exact(p.title.lineHeight.body) } }),
-      style(S.titleBig, "КП — титульный лист, вид работы", { basedOn: S.title, run: { size: p.size.titleBig, bold: true }, paragraph: { spacing: exact(p.title.lineHeight.big) } }),
-      style(S.titleSign, "КП — титульный лист, подписи", { basedOn: S.title, paragraph: { alignment: LEFT, indent: { left: p.title.signLabel }, tabStops: [{ type: TabStopType.LEFT, position: p.title.signValue }] } }),
+      // the title page is the lab report's, with its styles (lab-report styles.js → titleStyles)
+      ...labStyles.titleStyles(titleProfile(p)),
 
       style(S.toc1, "toc 1", { basedOn: S.body, next: S.body, paragraph: { alignment: LEFT, indent: noIndent, tabStops: tocTab } }),
       style(S.toc2, "toc 2", { basedOn: S.body, next: S.body, paragraph: { alignment: LEFT, indent: { firstLine: 0, left: 284 }, tabStops: tocTab } }),

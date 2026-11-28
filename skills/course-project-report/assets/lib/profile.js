@@ -22,8 +22,8 @@ const KP = {
     line: 19050, thin: 3175,                                   // EMU: 1.5 pt and 0.25 pt
     size: { label: 16, name: 14, title: 20, code: 32, group: 28, sheet: 20 }, // half-points
   },
-  font: { body: "Times New Roman", code: "Courier New", title: "Arial", stamp: "Arial" },
-  size: { body: 28, code: 22, title: 28, titleBig: 32 },       // half-points
+  font: { body: "Times New Roman", code: "Courier New", stamp: "Arial" },
+  size: { body: 28, code: 22 },                                // half-points; the title page takes the lab report's
   line: { body: 360, code: 240 },                              // 1.5 and 1.0
   indent: { firstLine: 720, nested: 1440 },                    // twips
   gap: { chapter: 240, sectionBefore: 240, sectionAfter: 360, point: 240, figure: 360 },
@@ -43,26 +43,12 @@ const KP = {
   },
   appendixLetters: "АБВГДЕЖИКЛМНПРСТУФХЦШЩЭЮЯ",                 // ГОСТ 2.105: without Ё, З, Й, О, Ч, Ъ, Ы, Ь
   toc: { levels: 2, listsItself: true },                       // «Аннотация» and «Содержание» are entries of the contents
+  // the title page is the lab report's (title.js); here only where it stands in the frame
+  // and the short posts the title block prints
   title: {
-    headerLines: [
-      "Федеральное государственное бюджетное образовательное учреждение высшего образования",
-      "«Владимирский государственный университет",
-      "имени Александра Григорьевича и Николая Григорьевича Столетовых»",
-      "",
-      "Кафедра информационных систем и программной инженерии",
-    ],
-    work: "КУРСОВОЙ ПРОЕКТ",
-    italic: true,
     side: 3,                                                   // text of the title page from the frame, mm: its lines are long
     below: 5,                                                  // the city line above the frame, mm
-    lineHeight: { body: 480, big: 560 },                       // exact, twips
-    workTop: 5200,                                             // top of «КУРСОВОЙ ПРОЕКТ» from the top of the text area
-    signTop: 9170,                                             // top of the signatures block
-    // the signatures are two columns: «Выполнил:» / «Принял:» and what stands against them
-    signLabel: 4990, signValue: 6690,                          // from the left edge of the text, twips
-    // the teacher's post as it is printed before the name
     posts: { "зав. каф. ИСПИ": "зав. каф.", "доц. каф. ИСПИ": "доц.", "асс. каф. ИСПИ": "асс.", "зав. кафедры ИСПИ": "зав. каф.", "проф. каф. ИСПИ": "проф.", "доцент каф. ИСПИ": "доц.", "ст. преп. каф. ИСПИ": "ст. преп.", "ассистент каф. ИСПИ": "асс." },
-    minGap: 480,
   },
 };
 
