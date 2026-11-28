@@ -104,7 +104,7 @@ function compose(body, { figdir, profile: p, pages }) {
     const bookmark = `_Toc${String(toc.length + 1).padStart(6, "0")}`;
     const lines = label.split("\n");
     const children = lines.map((l, i) => new TextRun({ text: l, ...(i ? { break: 1 } : {}) }));
-    out.push(new Paragraph({ style, ...(sectionStart && level === 1 ? { pageBreakBefore: false } : {}), children: outline ? [new Bookmark({ id: bookmark, children })] : children }));
+    out.push(new Paragraph({ style, ...(sectionStart && level === 1 ? { pageBreakBefore: false } : {}), ...(outline ? {} : { outlineLevel: 9 }), children: outline ? [new Bookmark({ id: bookmark, children })] : children }));
     sectionStart = false;
     if (outline && level <= p.toc.levels) toc.push({ level, text: tocText, bookmark });
     heads = level === 1 ? [tocText] : [...heads.slice(0, level - 1), tocText];
@@ -134,7 +134,7 @@ function compose(body, { figdir, profile: p, pages }) {
     switch (b.kind) {
       case "abstract":
         out = parts.abstract;
-        heading(S.chapter, p.headings.abstract, 1);
+        heading(S.chapter, p.headings.abstract, 1, { outline: p.toc.listsItself });
         b.ru.forEach((t) => para(S.body, t));
         if (b.en && b.en.length) {
           out.push(new Paragraph({ style: S.centered, children: [new TextRun({ text: p.headings.abstractEn, bold: true })] }));
@@ -186,7 +186,7 @@ function compose(body, { figdir, profile: p, pages }) {
       case "appendix": {
         inAppendix = true;
         const label = `${p.headings.appendix} ${nums.app.get(b.key)}`;
-        heading(S.chapter, `${label}\n${b.title.toUpperCase()}`, 1, { tocText: `${label} ${b.title.toUpperCase()}` });
+        heading(S.chapter, `${label} \n${b.title.toUpperCase()}`, 1, { tocText: `${label} ${b.title.toUpperCase()}` });
         break;
       }
       default:
